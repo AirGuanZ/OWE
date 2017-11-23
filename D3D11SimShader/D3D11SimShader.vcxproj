@@ -20,7 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\SimShaderConstantBuffer.h" />
+    <ClInclude Include="..\Src\SimShaderGenBuffer.h" />
     <ClInclude Include="..\Src\SimShaderObjectBinding.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Src\SimShaderGenBuffer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

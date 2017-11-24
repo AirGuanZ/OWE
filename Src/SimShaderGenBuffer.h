@@ -10,7 +10,7 @@ Created by AirGuanZ
 
 namespace _SimShaderAux
 {
-    ID3D11Buffer *_GenConstantBuffer(size_t byteSize, bool dynamic, const D3D11_SUBRESOURCE_DATA *data);
+    ID3D11Buffer *_GenConstantBuffer(ID3D11Device *devCon, size_t byteSize, bool dynamic, const D3D11_SUBRESOURCE_DATA *data);
 }
 
 #endif //__SIMSHADER_GEN_BUFFER_H__

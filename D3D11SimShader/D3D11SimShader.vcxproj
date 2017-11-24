@@ -22,6 +22,7 @@
     <ClInclude Include="..\Src\SimShaderConstantBuffer.h" />
     <ClInclude Include="..\Src\SimShaderGenBuffer.h" />
     <ClInclude Include="..\Src\SimShaderObjectBinding.h" />
+    <ClInclude Include="..\Src\SimShaderUncopiable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\SimShaderGenBuffer.cpp" />

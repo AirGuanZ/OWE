@@ -17,7 +17,7 @@ public:
 
     }
 
-    const char *what(void)
+    const char *what(void) const
     {
         return std::exception::what();
     }

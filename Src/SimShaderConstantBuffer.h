@@ -26,11 +26,14 @@ namespace _SimShaderAux
     template<typename _BufferType, ShaderStageSelector _StageSelector, bool _IsDynamic>
     class _ConstantBufferObject;
 
+    template<ShaderStageSelector StageSelector>
+    class _ConstantBufferManager;
+
     template<ShaderStageSelector _ShaderSelector>
     class _ConstantBufferObjectBase
     {
     public:
-        _ConstantBufferObjectBase(UINT slot_, ID3D11Buffer *buf)
+        _ConstantBufferObjectBase(UINT slot, ID3D11Buffer *buf)
             : slot_(slot), buf_(buf)
         {
 
@@ -77,16 +80,22 @@ namespace _SimShaderAux
           public _Uncopiable
     {
     private:
+        friend class _ConstantBufferManager<_StageSelector>;
+
         _ConstantBufferObject(ID3D11DeviceContext *devCon, UINT slot, const _BufferType *data)
             : _ConstantBufferObjectBase(slot, nullptr)
         {
             assert(devCon && data);
-            buf_ = _GenConstantBuffer(devCon, sizeof(_BufferType), false, data);
+            D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
+            buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, &dataDesc);
+            if(!buf_)
+                throw SimShaderError("Failed to create constant buffer");
         }
 
         ~_ConstantBufferObject(void)
         {
-
+            if(buf_)
+                buf_->Release();
         }
     };
 
@@ -105,16 +114,27 @@ namespace _SimShaderAux
         }
 
     private:
-        _ConstantBufferObject(ID3D11DeviceContext *devCon, UINT slot, const _BufferType *data = nullptr)
+        friend class _ConstantBufferManager<_StageSelector>;
+
+        _ConstantBufferObject(ID3D11Device *dev, UINT slot, const _BufferType *data = nullptr)
             : _ConstantBufferObjectBase(slot, nullptr)
         {
-            assert(devCon);
-            buf_ = _GenConstantBuffer(devCon, sizeof(_BufferType), true, data);
+            assert(dev);
+            if(data)
+            {
+                D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
+                buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, &dataDesc);
+            }
+            else
+                buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, nullptr);
+            if(!buf_)
+                throw SimShaderError("Failed to create constant buffer");
         }
 
         ~_ConstantBufferObject(void)
         {
-
+            if(buf_)
+                buf_->Release();
         }
     };
 
@@ -128,8 +148,8 @@ namespace _SimShaderAux
         {
             for(const auto it : CBs_)
             {
-                if(it->second.obj)
-                    delete it->second.obj;
+                if(it.second.obj)
+                    delete it.second.obj;
             }
         }
 
@@ -183,21 +203,23 @@ namespace _SimShaderAux
 
         template<typename BufferType, bool IsDynamic>
         _ConstantBufferObject<BufferType, StageSelector, IsDynamic> *
-        GetConstantBuffer(ID3D11DeviceContext *devCon, const std::string &name, const BufferType *data = nullptr)
+        GetConstantBuffer(ID3D11Device *dev, const std::string &name, const BufferType *data = nullptr)
         {
-            assert(devCon);
+            using ResultType = _ConstantBufferObject<BufferType, StageSelector, IsDynamic>;
+
+            assert(dev);
             assert(IsDynamic || data);
 
             auto it = CBs_.find(name);
             if(it == CBs_.end())
-                throw SimShaderError("Constant buffer not found: " + name);
+                throw SimShaderError(("Constant buffer not found: " + name).c_str());
             _CBRec &rec = it->second;
 
             if(rec.obj)
             {
                 if(typeid(rec.obj) != typeid(_ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
                     throw SimShaderError("Inconsistent constant buffer type");
-                return rec.obj;
+                return reinterpret_cast<ResultType*>(rec.obj);
             }
 
             if(IsDynamic != rec.dynamic)
@@ -205,16 +227,25 @@ namespace _SimShaderAux
             if(sizeof(BufferType) != rec.byteSize)
                 throw SimShaderError("Inconstent constant buffer size");
 
-            rec.obj = new _ConstantBufferObject<BufferType, StageSelector, IsDynamic>(devCon, rec.slot, data);
-            return rec.obj;
+            rec.obj = new ResultType(dev, rec.slot, data);
+            return reinterpret_cast<ResultType*>(rec.obj);
         }
 
-        void Apply(void)
+        void Bind(void)
         {
             for(auto it : CBs_)
             {
                 if(it->second.obj)
                     it->second.obj->Bind();
+            }
+        }
+
+        void Unbind(void)
+        {
+            for(auto it : CBs_)
+            {
+                if(it->second.obj)
+                    it->second.obj->Unbind();
             }
         }
 

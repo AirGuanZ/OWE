@@ -17,10 +17,10 @@ namespace _SimShaderAux
         D3D11_BUFFER_DESC bufDesc =
         {
             byteSize,                                                //ByteWidth
-            (dynamic ? D3D11_USAGE_DEFAULT : D3D11_USAGE_IMMUTABLE), //Usage
+            dynamic ? D3D11_USAGE_DEFAULT : D3D11_USAGE_IMMUTABLE,   //Usage
             D3D11_BIND_CONSTANT_BUFFER,                              //BindFlags
-            (dynamic ? D3D11_CPU_ACCESS_WRITE : 0),                  //CPUAccessFlags
-            0, 0                                                     //MiscFlags, StructureByteStride
+            dynamic ? D3D11_CPU_ACCESS_WRITE : 0U,                   //CPUAccessFlags
+            0U, 0U                                                   //MiscFlags, StructureByteStride
         };
         if(FAILED(dev->CreateBuffer(&bufDesc, data, &buf)))
             return nullptr;

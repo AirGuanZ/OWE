@@ -61,6 +61,38 @@ namespace _SimShaderAux
 
         }
     }
+
+    void GetShaderTextures(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
+    {
+        assert(ref && rt);
+        rt->clear();
+
+        D3D11_SHADER_DESC shaderDesc;
+        ref->GetDesc(&shaderDesc);
+        for(int rscIdx = 0; rscIdx != shaderDesc.BoundResources; ++rscIdx)
+        {
+            D3D11_SHADER_INPUT_BIND_DESC bdDesc;
+            ref->GetResourceBindingDesc(rscIdx, &bdDesc);
+            if(bdDesc.Type == D3D_SIT_TEXTURE)
+                rt->insert(std::make_pair(std::string(bdDesc.Name), bdDesc.BindPoint));
+        }
+    }
+
+    void GetShaderSamplers(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
+    {
+        assert(ref && rt);
+        rt->clear();
+
+        D3D11_SHADER_DESC shaderDesc;
+        ref->GetDesc(&shaderDesc);
+        for(int rscIdx = 0; rscIdx != shaderDesc.BoundResources; ++rscIdx)
+        {
+            D3D11_SHADER_INPUT_BIND_DESC bdDesc;
+            ref->GetResourceBindingDesc(rscIdx, &bdDesc);
+            if(bdDesc.Type == D3D_SIT_SAMPLER)
+                rt->insert(std::make_pair(std::string(bdDesc.Name), bdDesc.BindPoint));
+        }
+    }
 }
 
 #endif //__SIMSHADER_REFLECTION_H__

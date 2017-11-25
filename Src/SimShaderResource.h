@@ -83,12 +83,12 @@ namespace _SimShaderAux
             }
         }
 
-        void AddShaderResource(const std::string &name, UINT slot, ID3D11ShaderResource *initSRV)
+        void AddShaderResource(const std::string &name, UINT slot, ID3D11ShaderResource *initSRV = nullptr)
         {
             auto it = SRs_.find(name);
             if(it != SRs_.end())
                 throw SimShaderError("Shader resource name repeated: " + name);
-            SRs_[name] = _SRRec{ slot, new _ShaderResourceObject<StageSelector>(slot, initSRV) };
+            SRs_[name] = _SRRec{ slot, new RscObj(slot, initSRV) };
         }
 
         RscObj *GetShaderResourceObject(const std::string &name)
@@ -123,7 +123,7 @@ namespace _SimShaderAux
         struct _SRRec
         {
             UINT slot;
-            _ShaderResourceObject<StageSelector> *obj;
+            RscObj *obj;
         };
 
         std::map<std::string, _SRRec> SRs_;

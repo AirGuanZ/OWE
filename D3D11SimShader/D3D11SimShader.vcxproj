@@ -25,6 +25,7 @@
     <ClInclude Include="..\Src\SimShaderObjectBinding.h" />
     <ClInclude Include="..\Src\SimShaderReflection.h" />
     <ClInclude Include="..\Src\SimShaderResource.h" />
+    <ClInclude Include="..\Src\SimShaderSampler.h" />
     <ClInclude Include="..\Src\SimShaderUncopiable.h" />
   </ItemGroup>
   <ItemGroup>

@@ -28,6 +28,9 @@
     <ClInclude Include="..\Src\SimShaderReflection.h">
       <Filter>SimShader</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\SimShaderSampler.h">
+      <Filter>SimShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\SimShaderGenBuffer.cpp">

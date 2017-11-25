@@ -158,47 +158,7 @@ namespace _SimShaderAux
             assert(!name.empty() && byteSize > 0);
             if(CBs_.find(name) != CBs_.end())
                 throw SimShaderError("Constant buffer name repeated: " + name);
-            CBs_[name] = _CBRec{ slot, byteSize, true, nullptr };
-        }
-
-        void SetBufferImmutable(const std::string &name)
-        {
-            auto it = CBs_.find(name);
-            if(it == CBs_.end())
-                throw SimShaderError("Constant buffer not found: " + name);
-            it->second.dynamic = false;
-        }
-
-        void SetBuffersImmutable(const std::vector<std::string> &names)
-        {
-            for(const std::string &name : names)
-                SetBufferImmutable(name);
-        }
-
-        void SetBufferMutable(const std::string &name)
-        {
-            auto it = CBs_.find(name);
-            if(it == CBs_.end())
-                throw SimShaderError("Constant buffer not found: " + name);
-            it->second.dynamic = true;
-        }
-
-        void SetBuffersMutable(const std::vector<std::string> &names)
-        {
-            for(const std::string &name : names)
-                SetBufferMutable(name);
-        }
-
-        void SetAllBuffersImmutable(void)
-        {
-            for(auto it : CBs_)
-                it->second.dynamic = false;
-        }
-
-        void SetAllBuffersMutable(void)
-        {
-            for(auto it : CBs_)
-                it->second.dynamic = true;
+            CBs_[name] = _CBRec{ slot, byteSize, nullptr };
         }
 
         template<typename BufferType, bool IsDynamic>
@@ -222,8 +182,6 @@ namespace _SimShaderAux
                 return reinterpret_cast<ResultType*>(rec.obj);
             }
 
-            if(IsDynamic != rec.dynamic)
-                throw SimShaderError("Inconsistent constant buffer usage");
             if(sizeof(BufferType) != rec.byteSize)
                 throw SimShaderError("Inconstent constant buffer size");
 
@@ -254,7 +212,6 @@ namespace _SimShaderAux
         {
             UINT slot;
             UINT byteSize;
-            bool dynamic;
             _ConstantBufferObjectBase<StageSelector> *obj;
         };
         using CBTable = std::map<std::string, _CBRec>;

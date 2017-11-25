@@ -83,7 +83,7 @@ namespace _SimShaderAux
             }
         }
 
-        void AddShaderResource(const std::string &name, UINT slot, ID3D11ShaderResource *initSRV = nullptr)
+        void AddShaderResource(const std::string &name, UINT slot, ID3D11ShaderResourceView *initSRV = nullptr)
         {
             auto it = SRs_.find(name);
             if(it != SRs_.end())

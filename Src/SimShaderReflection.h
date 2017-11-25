@@ -17,7 +17,7 @@ Created by AirGuanZ
 
 namespace _SimShaderAux
 {
-    ID3D11ShaderReflection *GetShaderReflection(void *shaderData, SIZE_T length)
+    ID3D11ShaderReflection *_GetShaderReflection(void *shaderData, SIZE_T length)
     {
         assert(ata);
         ID3D11ShaderReflection *rt = nullptr;
@@ -32,7 +32,7 @@ namespace _SimShaderAux
         UINT byteSize;
     };
 
-    void GetConstantBuffers(ID3D11ShaderReflection *ref, std::map<std::string, _CBInfo> *rt)
+    void _GetConstantBuffers(ID3D11ShaderReflection *ref, std::map<std::string, _CBInfo> *rt)
     {
         assert(ref && rt);
         rt->clear();
@@ -62,7 +62,7 @@ namespace _SimShaderAux
         }
     }
 
-    void GetShaderTextures(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
+    void _GetShaderTextures(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
     {
         assert(ref && rt);
         rt->clear();
@@ -78,7 +78,7 @@ namespace _SimShaderAux
         }
     }
 
-    void GetShaderSamplers(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
+    void _GetShaderSamplers(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
     {
         assert(ref && rt);
         rt->clear();

@@ -139,14 +139,14 @@ namespace _SimShaderAux
     };
 
     template<ShaderStageSelector StageSelector>
-    class _ConstantBufferManager
+    class _ConstantBufferManager : public _Uncopiable
     {
     public:
         _ConstantBufferManager(void) = default;
 
         ~_ConstantBufferManager(void)
         {
-            for(const auto it : CBs_)
+            for(auto it : CBs_)
             {
                 if(it.second.obj)
                     delete it.second.obj;
@@ -158,7 +158,7 @@ namespace _SimShaderAux
             assert(!name.empty() && byteSize > 0);
             if(CBs_.find(name) != CBs_.end())
                 throw SimShaderError("Constant buffer name repeated: " + name);
-            CBs_[name] = { slot, byteSize, true, nullptr };
+            CBs_[name] = _CBRec{ slot, byteSize, true, nullptr };
         }
 
         void SetBufferImmutable(const std::string &name)
@@ -231,21 +231,21 @@ namespace _SimShaderAux
             return reinterpret_cast<ResultType*>(rec.obj);
         }
 
-        void Bind(void)
+        void Bind(ID3D11DeviceContext *DC)
         {
             for(auto it : CBs_)
             {
                 if(it->second.obj)
-                    it->second.obj->Bind();
+                    it->second.obj->Bind(DC);
             }
         }
 
-        void Unbind(void)
+        void Unbind(ID3D11DeviceContext *DC)
         {
             for(auto it : CBs_)
             {
                 if(it->second.obj)
-                    it->second.obj->Unbind();
+                    it->second.obj->Unbind(DC);
             }
         }
 

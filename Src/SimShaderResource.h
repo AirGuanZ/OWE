@@ -6,6 +6,8 @@ Created by AirGuanZ
 #ifndef __SIMSHADER_RESOURCE_H__
 #define __SIMSHADER_RESOURCE_H__
 
+#include <map>
+
 #include "SimShaderFatalError.h"
 #include "SimShaderObjectBinding.h"
 #include "SimShaderUncopiable.h"
@@ -65,12 +67,66 @@ namespace _SimShaderAux
     };
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderResourceManager
+    class _ShaderResourceManager : public _Uncopiable
     {
     public:
+        using RscObj = _ShaderResourceObject<StageSelector>;
+
+        _ShaderResourceManager(void) = default;
+
+        ~ShaderResourceManager(void)
+        {
+            for(auto it : SRs_)
+            {
+                if(it.second.obj)
+                    delete it.second.obj;
+            }
+        }
+
+        void AddShaderResource(const std::string &name, UINT slot, ID3D11ShaderResource *initSRV)
+        {
+            auto it = SRs_.find(name);
+            if(it != SRs_.end())
+                throw SimShaderError("Shader resource name repeated: " + name);
+            SRs_[name] = _SRRec{ slot, new _ShaderResourceObject<StageSelector>(slot, initSRV) };
+        }
+
+        RscObj *GetShaderResourceObject(const std::string &name)
+        {
+            auto it = SRs_.find(name);
+            it(it == SRs_.end())
+                throw SimShaderError("Shader resource not found: " + name);
+            
+            assert(it.second.obj != nullptr);
+            return it.second.obj;
+        }
+
+        void Bind(ID3D11DeviceContext *DC)
+        {
+            for(auto it : SRs_)
+            {
+                assert(it.second.obj);
+                it.second.obj->Bind(DC);
+            }
+        }
+
+        void Unbind(ID3D11DeviceContext *DC)
+        {
+            for(auto it : SRs_)
+            {
+                assert(it.second.obj);
+                it.second.obj->Unbind(DC);
+            }
+        }
 
     private:
-        
+        struct _SRRec
+        {
+            UINT slot;
+            _ShaderResourceObject<StageSelector> *obj;
+        };
+
+        std::map<std::string, _SRRec> SRs_;
     };
 }
 

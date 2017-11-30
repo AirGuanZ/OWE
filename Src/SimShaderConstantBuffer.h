@@ -208,6 +208,15 @@ namespace _SimShaderAux
         }
 
     private:
+        friend class _ShaderStage<StageSelector>;
+        
+        _ConstantBuffer(const std::map<std::string, _CBRec> &src)
+            : CBs_(src)
+        {
+
+        }
+
+    private:
         struct _CBRec
         {
             UINT slot;

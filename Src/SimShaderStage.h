@@ -66,27 +66,87 @@ namespace _SimShaderAux
             assert(DC != nullptr);
             DC->PSSetShader(shader, nullptr, 0);
         }
-    }; 
+    };
 
     template<ShaderStageSelector StageSelector>
     class _ShaderStage : public _Uncopiable
     {
     public:
         using StageSpec = _ShaderStageSpec<StageSelector>;
-        using D3DShaderType = typename StageSpec::D3DShaderType;
 
-        _ShaderStage(ID3D11Device *dev, void shaderByteCode, SIZE_T length);
-        ~_ShaderStage(void);
+        _ShaderStage(ID3D11Device *dev, void *shaderByteCode, SIZE_T length)
+        {
+            assert(dev != nullptr);
+            assert(shaderByteCode != nullptr && length > 0);
 
-        void BindShader(ID3D11DeviceContext *DC);
-        void UnbindShader(ID3D11DeviceContext *DC);
+            shader_ = StageSpec::InitShader(dev, shaderByteCode, length);
 
-        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void);
-        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void);
-        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void);
+            //初始化各种empty XX records
+
+            ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode, length);
+            if(!ref)
+                throw SimShaderError("Failed to initialize shader reflection");
+
+            std::map<std::string, _CBInfo> CBInfos;
+            _GetConstantBuffers(ref, &CBInfos);
+            for(auto it : CBInfos)
+                emptyCBRec_[it.first] = { it.second.slot, it.second.byteSize, nullptr };
+            CBInfos.clear();
+
+            std::map<std::string, UINT> STexInfos;
+            _GetShaderTextures(ref, &STexInfos);
+            for(auto it : STexInfos)
+                emptySRRec_[it.first] = { it.second, nullptr };
+            STexInfos.clear();
+
+            std::map<std::string, UINT> SSamInfos;
+            _GetShaderSamplers(ref, &SSamInfos);
+            for(auto it : SSamInfos)
+                emptySSRec_[it.first] = { it.second, nullptr };
+            SSamInfos.clear();
+
+            ref->Release();
+        }
+
+        ~_ShaderStage(void)
+        {
+            if(shader_)
+                shader_->Release();
+        }
+
+        void BindShader(ID3D11DeviceContext *DC)
+        {
+            assert(DC != nullptr);
+            StageSpec::BindShader(DC, shader_);
+        }
+
+        void UnbindShader(ID3D11DeviceContext *DC)
+        {
+            assert(DC != nullptr);
+            StageSpec::BindShader(DC, nullptr);
+        }
+
+        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void)
+        {
+            return new _ConstantBufferManager<StageSelector>(emptyCBRec_);
+        }
+
+        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void)
+        {
+            return new _ShaderResourceManager<StageSelector>(emptySRRec_);
+        }
+
+        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void)
+        {
+            return new _ShaderSamplerManager<StageSelector>(emptySSRec_);
+        }
 
     private:
-        D3DShaderType *shader_;
+        typename StageSpec::D3DShaderType *shader_;
+
+        std::map<std::string, typename _ConstantBufferManager<StageSelector>::_CBRec> emptyCBRec_;
+        std::map<std::string, typename _ShaderResourceManager<StageSelector>::_SRRec> emptySRRec_;
+        std::map<std::string, typename _ShaderSamplerManager<StageSelector>::_SSRec> emptySSRec_;
     };
 }
 

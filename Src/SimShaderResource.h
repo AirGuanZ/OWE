@@ -72,7 +72,11 @@ namespace _SimShaderAux
     public:
         using RscObj = _ShaderResourceObject<StageSelector>;
 
-        _ShaderResourceManager(void) = default;
+        _ShaderResourceManager(const std::map<std::string, _SRRec> &src)
+            : SRs_(src)
+        {
+
+        }
 
         ~ShaderResourceManager(void)
         {

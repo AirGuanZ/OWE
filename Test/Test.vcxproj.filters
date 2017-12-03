@@ -11,13 +11,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Test_ShaderStage.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Test_ShaderStage.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

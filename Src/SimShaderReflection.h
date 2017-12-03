@@ -19,7 +19,7 @@ namespace _SimShaderAux
 {
     ID3D11ShaderReflection *_GetShaderReflection(void *shaderData, SIZE_T length)
     {
-        assert(ata);
+        assert(shaderData != nullptr && length > 0);
         ID3D11ShaderReflection *rt = nullptr;
         if(FAILED(D3DReflect(shaderData, length, IID_ID3D11ShaderReflection, reinterpret_cast<void**>(&rt))))
             return nullptr;
@@ -57,7 +57,7 @@ namespace _SimShaderAux
             }
 
             assert(regIdx != -1);
-            rt->insert(std::make_pair(std::string(bufDesc.Name), _CBInfo{ regIdx, bufDesc.Size }));
+            rt->insert(std::make_pair(std::string(bufDesc.Name), _CBInfo{ static_cast<UINT>(regIdx), bufDesc.Size }));
 
         }
     }

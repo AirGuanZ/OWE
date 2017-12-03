@@ -26,6 +26,9 @@ namespace _SimShaderAux
     template<typename _BufferType, ShaderStageSelector _StageSelector, bool _IsDynamic>
     class _ConstantBufferObject;
 
+    template<ShaderStageSelector>
+    class _ShaderStage;
+
     template<ShaderStageSelector StageSelector>
     class _ConstantBufferManager;
 
@@ -209,14 +212,7 @@ namespace _SimShaderAux
 
     private:
         friend class _ShaderStage<StageSelector>;
-        
-        _ConstantBuffer(const std::map<std::string, _CBRec> &src)
-            : CBs_(src)
-        {
 
-        }
-
-    private:
         struct _CBRec
         {
             UINT slot;
@@ -224,7 +220,14 @@ namespace _SimShaderAux
             _ConstantBufferObjectBase<StageSelector> *obj;
         };
         using CBTable = std::map<std::string, _CBRec>;
+        
+        _ConstantBufferManager(const CBTable &src)
+            : CBs_(src)
+        {
 
+        }
+
+    private:
         CBTable CBs_;
     };
 }

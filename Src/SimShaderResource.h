@@ -17,6 +17,9 @@ namespace _SimShaderAux
     template<ShaderStageSelector StageSelector>
     class _ShaderResourceObject;
 
+    template<ShaderStageSelector>
+    class _ShaderStage;
+
     template<ShaderStageSelector StageSelector>
     class _ShaderResourceManager;
 
@@ -72,13 +75,7 @@ namespace _SimShaderAux
     public:
         using RscObj = _ShaderResourceObject<StageSelector>;
 
-        _ShaderResourceManager(const std::map<std::string, _SRRec> &src)
-            : SRs_(src)
-        {
-
-        }
-
-        ~ShaderResourceManager(void)
+        ~_ShaderResourceManager(void)
         {
             for(auto it : SRs_)
             {
@@ -124,12 +121,21 @@ namespace _SimShaderAux
         }
 
     private:
+        friend class _ShaderStage<StageSelector>;
+
         struct _SRRec
         {
             UINT slot;
             RscObj *obj;
         };
 
+        _ShaderResourceManager(const std::map<std::string, _SRRec> &src)
+            : SRs_(src)
+        {
+
+        }
+
+    private:
         std::map<std::string, _SRRec> SRs_;
     };
 }

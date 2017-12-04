@@ -1,7 +1,12 @@
+#include <iostream>
 #include <stdexcept>
 
 #include <d3d11.h>
+#include <DirectXMath.h>
+
 #include <SimShaderStage.h>
+
+//=====================================基本渲染环境=====================================
 
 constexpr UINT CLIENT_WIDTH = 640;
 constexpr UINT CLIENT_HEIGHT = 480;
@@ -19,11 +24,9 @@ ID3D11DepthStencilState *depthStencilState_ = nullptr;
 ID3D11DepthStencilView *depthStencilView_ = nullptr;
 ID3D11RenderTargetView *renderTargetView_ = nullptr;
 
-ID3D11Buffer *vtxBuf_ = nullptr;
-ID3D10Blob *shaderByteCode_ = nullptr;
-
 bool mainLoopDone_ = false;
 
+bool InitD3DContext(void);
 void DestroyD3DContext(void);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -41,7 +44,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void InitD3DContext(void)
+bool InitD3DContext(void)
 {
     //=================创建渲染窗口=================
 
@@ -113,28 +116,19 @@ void InitD3DContext(void)
         &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc,
         &swapChain_, &D3D_, nullptr, &DC_);
     if(FAILED(hr))
-    {
-        DestroyD3DContext();
-        throw std::runtime_error("Failed to create D3D device and swap chain");
-    }
+        return false;
 
     //=================取得渲染对象视图=================
 
     ID3D11Texture2D *backbuffer;
     hr = swapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backbuffer));
     if(FAILED(hr))
-    {
-        DestroyD3DContext();
-        throw std::runtime_error("Failed to get backbuffer of swapChain");
-    }
+        return false;
 
     hr = D3D_->CreateRenderTargetView(backbuffer, nullptr, &renderTargetView_);
     backbuffer->Release();
     if(FAILED(hr))
-    {
-        DestroyD3DContext();
-        throw std::runtime_error("Failed to create render target view");
-    }
+        return false;
 
     //=================准备深度模板缓存=================
 
@@ -153,10 +147,7 @@ void InitD3DContext(void)
 
     hr = D3D_->CreateTexture2D(&depthStencilBufDesc, nullptr, &depthStencilBuffer_);
     if(FAILED(hr))
-    {
-        DestroyD3DContext();
-        throw std::runtime_error("Failed to create depth stencil buffer");
-    }
+        return false;
 
     D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
     D3D11_DEPTH_STENCILOP_DESC depthStencilOp;
@@ -175,10 +166,7 @@ void InitD3DContext(void)
 
     hr = D3D_->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState_);
     if(FAILED(hr))
-    {
-        DestroyD3DContext();
-        throw std::runtime_error("Failed to create depth stencil state");
-    }
+        return false;
 
     D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
     depthStencilViewDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -187,10 +175,7 @@ void InitD3DContext(void)
     depthStencilViewDesc.Texture2D.MipSlice = 0;
     hr = D3D_->CreateDepthStencilView(depthStencilBuffer_, &depthStencilViewDesc, &depthStencilView_);
     if(FAILED(hr))
-    {
-        DestroyD3DContext();
-        throw std::runtime_error("Failed to create depth stencil view");
-    }
+        return false;
 
     DC_->OMSetRenderTargets(1, &renderTargetView_, depthStencilView_);
     DC_->OMSetDepthStencilState(depthStencilState_, 0);
@@ -205,22 +190,12 @@ void InitD3DContext(void)
     vp.MaxDepth = 1.0f;
     vp.MinDepth = 0.0f;
     DC_->RSSetViewports(1, &vp);
+
+    return true;
 }
 
 void DestroyD3DContext(void)
 {
-    if(vtxBuf_)
-    {
-        vtxBuf_->Release();
-        vtxBuf_ = nullptr;
-    }
-
-    if(shaderByteCode_)
-    {
-        shaderByteCode_->Release();
-        shaderByteCode_ = nullptr;
-    }
-
     if(depthStencilState_)
     {
         depthStencilState_->Release();
@@ -270,9 +245,133 @@ void DestroyD3DContext(void)
     }
 }
 
+ID3D11InputLayout *inputLayout_ = nullptr;
+ID3D11Buffer *vtxBuf_ = nullptr;
+ID3D10Blob *vtxShaderByteCode_ = nullptr;
+ID3D10Blob *pxlShaderByteCode_ = nullptr;
+
+using namespace _SimShaderAux;
+
+_ShaderStage<SS_VS> *VSStage_ = nullptr;
+_ShaderStage<SS_PS> *PSStage_ = nullptr;
+
+_ConstantBufferManager<SS_PS> *PSCBs_ = nullptr;
+
+struct PSCBColor
+{
+    DirectX::XMFLOAT3 color;
+    float pad0;
+};
+
+//=====================================场景内容=====================================
+
+bool InitScene(void)
+{
+    HRESULT hr;
+
+    //=============着色器编译=============
+
+    ID3D10Blob *shaderErr = nullptr;
+    hr = D3DCompileFromFile(
+        L"Data\\Test_ShaderStage\\test.vs",
+        nullptr, nullptr, "main",
+        "vs_5_0", 0, 0, &vtxShaderByteCode_, &shaderErr);
+    if(FAILED(hr))
+    {
+        if(shaderErr)
+        {
+            std::cout << shaderErr->GetBufferPointer() << std::endl;
+            shaderErr->Release();
+        }
+        return false;
+    }
+    else if(shaderErr)
+        shaderErr->Release();
+
+    shaderErr = nullptr;
+    hr = D3DCompileFromFile(
+        L"Data\\Test_ShaderStage\\test.ps",
+        nullptr, nullptr, "main",
+        "ps_5_0", 0, 0, &pxlShaderByteCode_, &shaderErr);
+    if(FAILED(hr))
+    {
+        if(shaderErr)
+        {
+            std::cout << shaderErr->GetBufferPointer() << std::endl;
+            shaderErr->Release();
+        }
+        return false;
+    }
+    else if(shaderErr)
+        shaderErr->Release();
+
+    VSStage_ = new _ShaderStage<SS_VS>(D3D_, vtxShaderByteCode_->GetBufferPointer(),
+                                             vtxShaderByteCode_->GetBufferSize());
+    PSStage_ = new _ShaderStage<SS_PS>(D3D_, pxlShaderByteCode_->GetBufferPointer(),
+                                             pxlShaderByteCode_->GetBufferSize());
+    PSCBs_ = PSStage_->CreateConstantBufferManager();
+
+    //=============顶点缓存初始化=============
+
+    DirectX::XMFLOAT2 vtxBufData[] =
+    {
+        { -1.0f, -1.0f },
+        { 0.0f, 1.0f },
+        { 1.0f, -1.0f }
+    };
+
+    D3D11_BUFFER_DESC vtxBufDesc;
+    vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    vtxBufDesc.ByteWidth = sizeof(vtxBufData);
+    vtxBufDesc.CPUAccessFlags = 0;
+    vtxBufDesc.MiscFlags = 0;
+    vtxBufDesc.StructureByteStride = sizeof(DirectX::XMFLOAT2);
+    vtxBufDesc.Usage = D3D11_USAGE_IMMUTABLE;
+
+    D3D11_SUBRESOURCE_DATA vtxDataDesc = { vtxBufData, 0, 0 };
+
+    hr = D3D_->CreateBuffer(&vtxBufDesc, &vtxDataDesc, &vtxBuf_);
+    if(FAILED(hr))
+        return false;
+
+    //=============InputLayout=============
+
+    D3D11_INPUT_ELEMENT_DESC inputDesc[] =
+    {
+        { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+    };
+    hr = D3D_->CreateInputLayout(
+        inputDesc, 1,
+        vtxShaderByteCode_->GetBufferPointer(),
+        vtxShaderByteCode_->GetBufferSize(),
+        &inputLayout_);
+    if(FAILED(hr))
+        return false;
+
+    return true;
+}
+
+void DestroyScene(void)
+{
+
+}
+
 void Test_ShaderStage(void)
 {
-    InitD3DContext();
+    if(!InitD3DContext())
+    {
+        DestroyD3DContext();
+        std::cout << "Failed to initialize D3D render context" << std::endl;
+        return;
+    }
+
+    if(!InitScene())
+    {
+        DestroyScene();
+        std::cout << "Failed to initialize D3D scene" << std::endl;
+        DestroyD3DContext();
+        return;
+    }
 
     MSG msg;
     mainLoopDone_ = false;
@@ -280,6 +379,25 @@ void Test_ShaderStage(void)
     {
         float backgroundColor[4] = { 0.0f, 1.0f, 1.0f, 0.0f };
         DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
+        DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+        PSCBColor CBColor = { { 1.0f, 1.0f, 0.0f }, 0.0f };
+        PSCBs_->GetConstantBuffer<PSCBColor, true>(D3D_, "Color")->SetBufferData(DC_, CBColor);
+
+        DC_->IASetInputLayout(inputLayout_);
+        UINT vtxStride = sizeof(DirectX::XMFLOAT2), vtxOffset = 0;
+        DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &vtxOffset);
+
+        VSStage_->BindShader(DC_);
+        PSStage_->BindShader(DC_);
+        PSCBs_->Bind(DC_);
+
+        DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+        DC_->Draw(3, 0);
+
+        PSCBs_->Unbind(DC_);
+        PSStage_->UnbindShader(DC_);
+        VSStage_->UnbindShader(DC_);
 
         swapChain_->Present(1, 0);
 
@@ -295,5 +413,12 @@ void Test_ShaderStage(void)
 
 int main(void)
 {
-    Test_ShaderStage();
+    try
+    {
+        Test_ShaderStage();
+    }
+    catch(const SimShaderError &err)
+    {
+        std::cout << err.what() << std::endl;
+    }
 }

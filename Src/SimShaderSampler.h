@@ -18,6 +18,9 @@ namespace _SimShaderAux
     class _ShaderSamplerObject;
 
     template<ShaderStageSelector StageSelector>
+    class _ShaderStage;
+
+    template<ShaderStageSelector StageSelector>
     class _ShaderSamplerManager;
 
     template<ShaderStageSelector StageSelector>
@@ -120,12 +123,14 @@ namespace _SimShaderAux
         }
 
     private:
+        friend class _ShaderStage<StageSelector>;
         struct _SSRec
         {
             UINT slot;
             SSObj *obj;
         };
 
+    private:
         std::map<std::string, _SSRec> SSs_;
     };
 }

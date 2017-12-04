@@ -180,7 +180,7 @@ namespace _SimShaderAux
 
             if(rec.obj)
             {
-                if(typeid(rec.obj) != typeid(_ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
+                if(typeid(*rec.obj) != typeid(_ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
                     throw SimShaderError("Inconsistent constant buffer type");
                 return reinterpret_cast<ResultType*>(rec.obj);
             }
@@ -196,8 +196,8 @@ namespace _SimShaderAux
         {
             for(auto it : CBs_)
             {
-                if(it->second.obj)
-                    it->second.obj->Bind(DC);
+                if(it.second.obj)
+                    it.second.obj->Bind(DC);
             }
         }
 
@@ -205,8 +205,8 @@ namespace _SimShaderAux
         {
             for(auto it : CBs_)
             {
-                if(it->second.obj)
-                    it->second.obj->Unbind(DC);
+                if(it.second.obj)
+                    it.second.obj->Unbind(DC);
             }
         }
 

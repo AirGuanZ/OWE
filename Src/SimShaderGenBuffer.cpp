@@ -14,14 +14,22 @@ namespace _SimShaderAux
         assert(dynamic == true || data != nullptr);
 
         ID3D11Buffer *buf = nullptr;
-        D3D11_BUFFER_DESC bufDesc =
+        D3D11_BUFFER_DESC bufDesc;
+        bufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bufDesc.ByteWidth = byteSize;
+        bufDesc.MiscFlags = 0;
+        bufDesc.StructureByteStride = 0;
+        if(dynamic)
         {
-            byteSize,                                                //ByteWidth
-            dynamic ? D3D11_USAGE_DEFAULT : D3D11_USAGE_IMMUTABLE,   //Usage
-            D3D11_BIND_CONSTANT_BUFFER,                              //BindFlags
-            dynamic ? D3D11_CPU_ACCESS_WRITE : 0U,                   //CPUAccessFlags
-            0U, 0U                                                   //MiscFlags, StructureByteStride
-        };
+            bufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+            bufDesc.Usage = D3D11_USAGE_DYNAMIC;
+        }
+        else
+        {
+            bufDesc.CPUAccessFlags = 0;
+            bufDesc.Usage = D3D11_USAGE_IMMUTABLE;
+        }
+
         if(FAILED(dev->CreateBuffer(&bufDesc, data, &buf)))
             return nullptr;
         return buf;

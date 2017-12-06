@@ -6,6 +6,7 @@ Created by AirGuanZ
 #ifndef __SIMSHADER_CONSTANT_BUFFER_H__
 #define __SIMSHADER_CONSTANT_BUFFER_H__
 
+#include <cstring>
 #include <map>
 #include <typeinfo>
 #include <vector>
@@ -90,7 +91,7 @@ namespace _SimShaderAux
         {
             assert(devCon && data);
             D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
-            buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, &dataDesc);
+            buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), false, &dataDesc);
             if(!buf_)
                 throw SimShaderError("Failed to create constant buffer");
         }
@@ -113,7 +114,11 @@ namespace _SimShaderAux
         void SetBufferData(ID3D11DeviceContext *devCon, const BufferType &data)
         {
             assert(devCon != nullptr && buf_);
-            devCon->UpdateSubresource(buf_, 0, nullptr, &data, 0, 0);
+            //devCon->UpdateSubresource(buf_, 0, nullptr, &data, 0, 0);
+            D3D11_MAPPED_SUBRESOURCE mappedRsc;
+            devCon->Map(buf_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedRsc);
+            std::memcpy(mappedRsc.pData, &data, sizeof(_BufferType));
+            devCon->Unmap(buf_, 0);
         }
 
     private:

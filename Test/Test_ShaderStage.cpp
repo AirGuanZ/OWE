@@ -255,6 +255,7 @@ using namespace _SimShaderAux;
 _ShaderStage<SS_VS> *VSStage_ = nullptr;
 _ShaderStage<SS_PS> *PSStage_ = nullptr;
 
+_ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
 _ConstantBufferManager<SS_PS> *PSCBs_ = nullptr;
 
 struct PSCBColor
@@ -309,6 +310,7 @@ bool InitScene(void)
                                              vtxShaderByteCode_->GetBufferSize());
     PSStage_ = new _ShaderStage<SS_PS>(D3D_, pxlShaderByteCode_->GetBufferPointer(),
                                              pxlShaderByteCode_->GetBufferSize());
+    VSCBs_ = VSStage_->CreateConstantBufferManager();
     PSCBs_ = PSStage_->CreateConstantBufferManager();
 
     //=============¶¥µã»º´æ³õÊ¼»¯=============
@@ -381,7 +383,10 @@ void Test_ShaderStage(void)
         DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
         DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-        PSCBColor CBColor = { { 1.0f, 1.0f, 0.0f }, 0.0f };
+        DirectX::XMFLOAT4 CBPosOffset = { 0.2f, 0.0f, 0.0f, 0.0f };
+        VSCBs_->GetConstantBuffer<DirectX::XMFLOAT4, true>(D3D_, "Trans")->SetBufferData(DC_, CBPosOffset);
+
+        PSCBColor CBColor = { { 1.0f, 0.0f, 0.0f }, 0.0f };
         PSCBs_->GetConstantBuffer<PSCBColor, true>(D3D_, "Color")->SetBufferData(DC_, CBColor);
 
         DC_->IASetInputLayout(inputLayout_);
@@ -390,12 +395,14 @@ void Test_ShaderStage(void)
 
         VSStage_->BindShader(DC_);
         PSStage_->BindShader(DC_);
+        VSCBs_->Bind(DC_);
         PSCBs_->Bind(DC_);
 
         DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         DC_->Draw(3, 0);
 
         PSCBs_->Unbind(DC_);
+        VSCBs_->Unbind(DC_);
         PSStage_->UnbindShader(DC_);
         VSStage_->UnbindShader(DC_);
 

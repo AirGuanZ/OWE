@@ -269,10 +269,8 @@ bool InitScene(void)
     else if(shaderErr)
         shaderErr->Release();
 
-    VSStage_ = new _ShaderStage<SS_VS>(D3D_, vtxShaderByteCode_->GetBufferPointer(),
-                                             vtxShaderByteCode_->GetBufferSize());
-    PSStage_ = new _ShaderStage<SS_PS>(D3D_, pxlShaderByteCode_->GetBufferPointer(),
-                                             pxlShaderByteCode_->GetBufferSize());
+    VSStage_ = new _ShaderStage<SS_VS>(D3D_, vtxShaderByteCode_);
+    PSStage_ = new _ShaderStage<SS_PS>(D3D_, pxlShaderByteCode_);
     VSCBs_ = VSStage_->CreateConstantBufferManager();
     PSCBs_ = PSStage_->CreateConstantBufferManager();
 

@@ -10,6 +10,7 @@ Created by AirGuanZ
 
 #include "SimShaderFatalError.h"
 #include "SimShaderObjectBinding.h"
+#include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderUncopiable.h"
 
 namespace _SimShaderAux
@@ -29,8 +30,7 @@ namespace _SimShaderAux
     public:
         void SetShaderResource(ID3D11ShaderResourceView *SRV)
         {
-            if(SRV_)
-                SRV_->Release();
+            ReleaseCOMObjects(SRV_);
             SRV_ = SRV;
             if(SRV_)
                 SRV_->AddRef();
@@ -60,8 +60,7 @@ namespace _SimShaderAux
 
         ~_ShaderResourceObject(void)
         {
-            if(SRV_)
-                SRV_->Release();
+            ReleaseCOMObjects(SRV_);
         }
 
     private:

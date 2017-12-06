@@ -11,6 +11,7 @@ Created by AirGuanZ
 
 #include "SimShaderObjectBinding.h"
 #include "SimShaderReflection.h"
+#include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderUncopiable.h"
 
 #include "SimShaderConstantBuffer.h"
@@ -74,16 +75,19 @@ namespace _SimShaderAux
     public:
         using StageSpec = _ShaderStageSpec<StageSelector>;
 
-        _ShaderStage(ID3D11Device *dev, void *shaderByteCode, SIZE_T length)
+        _ShaderStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
+            : shaderByteCode_(shaderByteCode)
         {
-            assert(dev != nullptr);
-            assert(shaderByteCode != nullptr && length > 0);
+            assert(dev != nullptr && shaderByteCode != nullptr);
 
-            shader_ = StageSpec::InitShader(dev, shaderByteCode, length);
+            shaderByteCode->AddRef();
+            shader_ = StageSpec::InitShader(dev, shaderByteCode->GetBufferPointer(),
+                                                 shaderByteCode->GetBufferSize());
 
             //初始化各种empty XX records
 
-            ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode, length);
+            ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode->GetBufferPointer(),
+                                                               shaderByteCode->GetBufferSize());
             if(!ref)
                 throw SimShaderError("Failed to initialize shader reflection");
 
@@ -105,13 +109,12 @@ namespace _SimShaderAux
                 emptySSRec_[it.first] = { it.second, nullptr };
             SSamInfos.clear();
 
-            ref->Release();
+            ReleaseCOMObjects(ref);
         }
 
         ~_ShaderStage(void)
         {
-            if(shader_)
-                shader_->Release();
+            ReleaseCOMObjects(shader_, shaderByteCode_);
         }
 
         void BindShader(ID3D11DeviceContext *DC)
@@ -141,8 +144,21 @@ namespace _SimShaderAux
             return new _ShaderSamplerManager<StageSelector>(emptySSRec_);
         }
 
+        void *GetShaderByteCode(void)
+        {
+            assert(shaderByteCode_);
+            return shaderByteCode_->GetBufferPointer();
+        }
+
+        UINT GetShaderByteCodeSize(void)
+        {
+            assert(shaderByteCode_);
+            shaderByteCode_->GetBufferSize();
+        }
+
     private:
         typename StageSpec::D3DShaderType *shader_;
+        ID3D10Blob *shaderByteCode_;
 
         std::map<std::string, typename _ConstantBufferManager<StageSelector>::_CBRec> emptyCBRec_;
         std::map<std::string, typename _ShaderResourceManager<StageSelector>::_SRRec> emptySRRec_;

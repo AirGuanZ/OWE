@@ -10,6 +10,7 @@ Created by AirGuanZ
 
 #include "SimShaderFatalError.h"
 #include "SimShaderObjectBinding.h"
+#include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderUncopiable.h"
 
 namespace _SimShaderAux
@@ -29,8 +30,7 @@ namespace _SimShaderAux
     public:
         void SetSampler(ID3D11SamplerState *sampler)
         {
-            if(sampler_)
-                sampler_->Release();
+            ReleaseCOMObjects(sampler_);
             sampler_ = sampler;
             if(sampler_)
                 sampler_->AddRef();
@@ -58,8 +58,7 @@ namespace _SimShaderAux
 
         ~_ShaderSamplerObject(void)
         {
-            if(sampler_)
-                sampler_->Release();
+            ReleaseCOMObjects(sampler_);
         }
 
     private:

@@ -14,6 +14,7 @@ Created by AirGuanZ
 #include "SimShaderFatalError.h"
 #include "SimShaderGenBuffer.h"
 #include "SimShaderObjectBinding.h"
+#include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderUncopiable.h"
 
 namespace _SimShaderAux
@@ -98,8 +99,7 @@ namespace _SimShaderAux
 
         ~_ConstantBufferObject(void)
         {
-            if(buf_)
-                buf_->Release();
+            ReleaseCOMObjects(buf_);
         }
     };
 
@@ -141,8 +141,7 @@ namespace _SimShaderAux
 
         ~_ConstantBufferObject(void)
         {
-            if(buf_)
-                buf_->Release();
+            ReleaseCOMObjects(buf_);
         }
     };
 
@@ -155,10 +154,7 @@ namespace _SimShaderAux
         ~_ConstantBufferManager(void)
         {
             for(auto it : CBs_)
-            {
-                if(it.second.obj)
-                    delete it.second.obj;
-            }
+                SafeDeleteObjects(it.second.obj);
         }
 
         void AddBuffer(const std::string &name, UINT slot, UINT byteSize)

@@ -4,7 +4,10 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+#include <SimShaderReleaseCOMObjects.h>
 #include <SimShaderStage.h>
+
+using namespace _SimShaderAux;
 
 //=====================================基本渲染环境=====================================
 
@@ -196,47 +199,9 @@ bool InitD3DContext(void)
 
 void DestroyD3DContext(void)
 {
-    if(depthStencilState_)
-    {
-        depthStencilState_->Release();
-        depthStencilState_ = nullptr;
-    }
-
-    if(depthStencilView_)
-    {
-        depthStencilView_->Release();
-        depthStencilView_ = nullptr;
-    }
-
-    if(depthStencilBuffer_)
-    {
-        depthStencilBuffer_->Release();
-        depthStencilBuffer_ = nullptr;
-    }
-
-    if(renderTargetView_)
-    {
-        renderTargetView_->Release();
-        renderTargetView_ = nullptr;
-    }
-
-    if(swapChain_)
-    {
-        swapChain_->Release();
-        swapChain_ = nullptr;
-    }
-
-    if(DC_)
-    {
-        DC_->Release();
-        DC_ = nullptr;
-    }
-
-    if(D3D_)
-    {
-        D3D_->Release();
-        D3D_ = nullptr;
-    }
+    ReleaseCOMObjects(renderTargetView_, depthStencilView_, depthStencilState_,  depthStencilBuffer_);
+    ReleaseCOMObjects(D3D_, DC_);
+    ReleaseCOMObjects(swapChain_);
 
     if(hWnd_)
     {
@@ -245,12 +210,12 @@ void DestroyD3DContext(void)
     }
 }
 
+//=====================================场景内容=====================================
+
 ID3D11InputLayout *inputLayout_ = nullptr;
 ID3D11Buffer *vtxBuf_ = nullptr;
 ID3D10Blob *vtxShaderByteCode_ = nullptr;
 ID3D10Blob *pxlShaderByteCode_ = nullptr;
-
-using namespace _SimShaderAux;
 
 _ShaderStage<SS_VS> *VSStage_ = nullptr;
 _ShaderStage<SS_PS> *PSStage_ = nullptr;
@@ -263,8 +228,6 @@ struct PSCBColor
     DirectX::XMFLOAT3 color;
     float pad0;
 };
-
-//=====================================场景内容=====================================
 
 bool InitScene(void)
 {
@@ -355,7 +318,9 @@ bool InitScene(void)
 
 void DestroyScene(void)
 {
-
+    ReleaseCOMObjects(inputLayout_, vtxBuf_);
+    ReleaseCOMObjects(vtxShaderByteCode_, pxlShaderByteCode_);
+    SafeDeleteObjects(VSStage_, PSStage_, VSCBs_, PSCBs_);
 }
 
 void Test_ShaderStage(void)

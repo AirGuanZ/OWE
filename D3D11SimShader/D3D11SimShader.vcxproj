@@ -24,6 +24,7 @@
     <ClInclude Include="..\Src\SimShaderGenBuffer.h" />
     <ClInclude Include="..\Src\SimShaderObjectBinding.h" />
     <ClInclude Include="..\Src\SimShaderReflection.h" />
+    <ClInclude Include="..\Src\SimShaderReleaseCOMObjects.h" />
     <ClInclude Include="..\Src\SimShaderResource.h" />
     <ClInclude Include="..\Src\SimShaderSampler.h" />
     <ClInclude Include="..\Src\SimShaderStage.h" />

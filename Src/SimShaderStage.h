@@ -29,6 +29,33 @@ namespace _SimShaderAux
     public:
         using D3DShaderType = ID3D11VertexShader;
 
+        static std::string DefaultCompileTarget(void)
+        {
+            return "vs_5_0";
+        }
+
+        static ID3D10Blob *CompileShader(
+            const std::string &src, std::string *errMsg,
+            const std::string &target, const std::string &entry)
+        {
+            if(errMsg)
+                *errMsg = "";
+
+            ID3D10Blob *rt = nullptr, *err = nullptr;
+            HRESULT hr = D3DCompile(src.data(), src.size(),
+                                    nullptr, nullptr, nullptr, entry.c_str(),
+                                    target.c_str(), 0, 0, &rt, &err);
+            if(FAILED(hr))
+            {
+                if(err && errMsg)
+                    *errMsg = reinterpret_cast<char*>(err->GetBufferPointer());
+                ReleaseCOMObjects(rt);
+            }
+
+            ReleaseCOMObjects(err);
+            return rt;
+        }
+
         static D3DShaderType *InitShader(ID3D11Device *dev, void *shaderCompiled, SIZE_T length)
         {
             assert(dev != nullptr);
@@ -51,6 +78,33 @@ namespace _SimShaderAux
     {
     public:
         using D3DShaderType = ID3D11PixelShader;
+
+        static std::string DefaultCompileTarget(void)
+        {
+            return "ps_5_0";
+        }
+
+        static ID3D10Blob *CompileShader(
+            const std::string &src, std::string *errMsg,
+            const std::string &target, const std::string &entry)
+        {
+            if(errMsg)
+                *errMsg = "";
+
+            ID3D10Blob *rt = nullptr, *err = nullptr;
+            HRESULT hr = D3DCompile(src.data(), src.size(),
+                nullptr, nullptr, nullptr, entry.c_str(),
+                target.c_str(), 0, 0, &rt, &err);
+            if(FAILED(hr))
+            {
+                if(err && errMsg)
+                    *errMsg = reinterpret_cast<char*>(err->GetBufferPointer());
+                ReleaseCOMObjects(rt);
+            }
+
+            ReleaseCOMObjects(err);
+            return rt;
+        }
 
         static D3DShaderType *InitShader(ID3D11Device *dev, void *shaderCompiled, SIZE_T length)
         {
@@ -75,41 +129,48 @@ namespace _SimShaderAux
     public:
         using StageSpec = _ShaderStageSpec<StageSelector>;
 
+        _ShaderStage(ID3D11Device *dev,
+                     const std::string &src, std::string *errMsg = nullptr,
+                     const std::string &target = StageSpec::DefaultCompileTarget(),
+                     const std::string &entry = "main")
+        {
+            assert(dev != nullptr);
+
+            std::string dummyErrMsg;
+            if(!errMsg)
+                errMsg = &dummyErrMsg;
+
+            shaderByteCode_ = StageSpec::CompileShader(src, *errMsg, target, entry);
+            if(!shaderByteCode_)
+                throw SimShaderError("Failed to compile shader source code: \n" + *errMsg);
+
+            shader_ = StageSpec::InitShader(dev, shaderByteCode_->GetBufferPointer(),
+                                                 shaderByteCode_->GetBufferSize());
+            if(!shader_)
+            {
+                ReleaseCOMObjects(shaderByteCode_);
+                throw SimShaderError("Failed to create D3D shader object");
+            }
+
+            InitializeShaderRecords();
+        }
+
         _ShaderStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
             : shaderByteCode_(shaderByteCode)
         {
             assert(dev != nullptr && shaderByteCode != nullptr);
 
-            shaderByteCode->AddRef();
-            shader_ = StageSpec::InitShader(dev, shaderByteCode->GetBufferPointer(),
-                                                 shaderByteCode->GetBufferSize());
+            shaderByteCode_ = shaderByteCode;
+            shaderByteCode_->AddRef();
+            shader_ = StageSpec::InitShader(dev, shaderByteCode_->GetBufferPointer(),
+                                                 shaderByteCode_->GetBufferSize());
+            if(!shader_)
+            {
+                ReleaseCOMObjects(shaderByteCode_);
+                throw SimShaderError("Failed to create D3D shader object");
+            }
 
-            //初始化各种empty XX records
-
-            ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode->GetBufferPointer(),
-                                                               shaderByteCode->GetBufferSize());
-            if(!ref)
-                throw SimShaderError("Failed to initialize shader reflection");
-
-            std::map<std::string, _CBInfo> CBInfos;
-            _GetConstantBuffers(ref, &CBInfos);
-            for(auto it : CBInfos)
-                emptyCBRec_[it.first] = { it.second.slot, it.second.byteSize, nullptr };
-            CBInfos.clear();
-
-            std::map<std::string, UINT> STexInfos;
-            _GetShaderTextures(ref, &STexInfos);
-            for(auto it : STexInfos)
-                emptySRRec_[it.first] = { it.second, nullptr };
-            STexInfos.clear();
-
-            std::map<std::string, UINT> SSamInfos;
-            _GetShaderSamplers(ref, &SSamInfos);
-            for(auto it : SSamInfos)
-                emptySSRec_[it.first] = { it.second, nullptr };
-            SSamInfos.clear();
-
-            ReleaseCOMObjects(ref);
+            InitializeShaderRecords();
         }
 
         ~_ShaderStage(void)
@@ -154,6 +215,35 @@ namespace _SimShaderAux
         {
             assert(shaderByteCode_);
             shaderByteCode_->GetBufferSize();
+        }
+
+    private:
+        void InitializeShaderRecords(void)
+        {
+            ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode_->GetBufferPointer(),
+                                                               shaderByteCode_->GetBufferSize());
+            if(!ref)
+                throw SimShaderError("Failed to initialize shader reflection");
+
+            std::map<std::string, _CBInfo> CBInfos;
+            _GetConstantBuffers(ref, &CBInfos);
+            for(auto it : CBInfos)
+                emptyCBRec_[it.first] = { it.second.slot, it.second.byteSize, nullptr };
+            CBInfos.clear();
+
+            std::map<std::string, UINT> STexInfos;
+            _GetShaderTextures(ref, &STexInfos);
+            for(auto it : STexInfos)
+                emptySRRec_[it.first] = { it.second, nullptr };
+            STexInfos.clear();
+
+            std::map<std::string, UINT> SSamInfos;
+            _GetShaderSamplers(ref, &SSamInfos);
+            for(auto it : SSamInfos)
+                emptySSRec_[it.first] = { it.second, nullptr };
+            SSamInfos.clear();
+
+            ReleaseCOMObjects(ref);
         }
 
     private:

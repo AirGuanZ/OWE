@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Src\SimShader.h" />
     <ClInclude Include="..\Src\SimShaderConstantBuffer.h" />
     <ClInclude Include="..\Src\SimShaderFatalError.h" />
     <ClInclude Include="..\Src\SimShaderGenBuffer.h" />

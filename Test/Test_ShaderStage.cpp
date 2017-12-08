@@ -6,6 +6,7 @@
 
 #include <SimShaderReleaseCOMObjects.h>
 #include <SimShaderStage.h>
+#include <SimShader.h>
 
 using namespace _SimShaderAux;
 
@@ -228,6 +229,8 @@ struct PSCBColor
     DirectX::XMFLOAT3 color;
     float pad0;
 };
+
+_Shader<SS_VS, SS_PS> shader_;
 
 bool InitScene(void)
 {

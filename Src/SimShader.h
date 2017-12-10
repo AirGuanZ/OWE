@@ -9,6 +9,7 @@ Created by AirGuanZ
 #include <tuple>
 #include <utility>
 
+#include "SimShaderFatalError.h"
 #include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderStage.h"
 
@@ -187,5 +188,21 @@ namespace _SimShaderAux
         std::tuple<_ShaderStage<StageSelectors>*...> stages_;
     };
 }
+
+using SimError = _SimShaderAux::SimShaderError;
+
+using SimShaderStageSelector = _SimShaderAux::ShaderStageSelector;
+
+constexpr SimShaderStageSelector SS_VS = _SimShaderAux::SS_VS;
+constexpr SimShaderStageSelector SS_PS = _SimShaderAux::SS_PS;
+
+template<SimShaderStageSelector StageSelector>
+using SimConstantBufferManager = _SimShaderAux::_ConstantBufferManager<StageSelector>;
+
+template<SimShaderStageSelector StageSelector>
+using SimShaderStage = _SimShaderAux::_ShaderStage<StageSelector>;
+
+template<SimShaderStageSelector...StageSelectors>
+using SimShader = _SimShaderAux::_Shader<StageSelectors...>;
 
 #endif //__SIMSHADER_H__

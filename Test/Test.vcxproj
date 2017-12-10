@@ -19,10 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Test_ShaderStage.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="TestApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Test_BasicShader.cpp" />
+    <ClInclude Include="Test_BasicShader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

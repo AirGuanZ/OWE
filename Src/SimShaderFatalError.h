@@ -8,19 +8,22 @@ Created by AirGuanZ
 
 #include <stdexcept>
 
-class SimShaderError : public std::exception
+namespace _SimShaderAux
 {
-public:
-    SimShaderError(const char *msg)
-        : exception(msg)
+    class SimShaderError : public std::exception
     {
+    public:
+        SimShaderError(const char *msg)
+            : exception(msg)
+        {
 
-    }
+        }
 
-    const char *what(void) const
-    {
-        return std::exception::what();
-    }
-};
+        const char *what(void) const
+        {
+            return std::exception::what();
+        }
+    };
+}
 
 #endif //__SIMSHADER_FATAL_ERROR_H__

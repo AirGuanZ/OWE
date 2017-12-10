@@ -9,6 +9,7 @@ Created by AirGuanZ
 #include <tuple>
 #include <utility>
 
+#include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderStage.h"
 
 namespace _SimShaderAux
@@ -86,7 +87,7 @@ namespace _SimShaderAux
         void operator()(T *pStage)
         {
             assert(pStage != nullptr);
-            pStage->Bind(DC_);
+            pStage->BindShader(DC_);
         }
         ID3D11DeviceContext *DC_;
     };
@@ -108,7 +109,7 @@ namespace _SimShaderAux
         void operator()(T *pStage)
         {
             assert(pStage != nullptr);
-            pStage->Unbind(DC_);
+            pStage->UnbindShader(DC_);
         }
         ID3D11DeviceContext *DC_;
     };
@@ -138,7 +139,7 @@ namespace _SimShaderAux
                        const std::string &target = _ShaderStage<StageSelector>::StageSpec::DefaultCompileTarget(),
                        const std::string &entry = "main")
         {
-            auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors>()>(stages_);
+            auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
             SafeDelObjects(pStage);
             pStage = new _ShaderStage<StageSelector>(dev, src, errMsg, target, entry);
         }
@@ -146,8 +147,8 @@ namespace _SimShaderAux
         template<ShaderStageSelector StageSelector>
         void InitStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
         {
-            auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors>()>(stages_);
-            SafeDelObjects(pStage);
+            auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
+            SafeDeleteObjects(pStage);
             pStage = new _ShaderStage<StageSelector>(dev, shaderByteCode);
         }
 
@@ -167,7 +168,7 @@ namespace _SimShaderAux
         template<ShaderStageSelector StageSelector>
         _ShaderStage<StageSelector> *GetStage(void)
         {
-            return std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors>()>(stages_);
+            return std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
         }
 
         void BindStages(ID3D11DeviceContext *DC)

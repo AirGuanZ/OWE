@@ -1,11 +1,7 @@
-/*#include <iostream>
-#include <stdexcept>
-
+#include <iostream>
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-#include <SimShaderReleaseCOMObjects.h>
-#include <SimShaderStage.h>
 #include <SimShader.h>
 
 using namespace _SimShaderAux;
@@ -200,7 +196,7 @@ bool InitD3DContext(void)
 
 void DestroyD3DContext(void)
 {
-    ReleaseCOMObjects(renderTargetView_, depthStencilView_, depthStencilState_,  depthStencilBuffer_);
+    ReleaseCOMObjects(renderTargetView_, depthStencilView_, depthStencilState_, depthStencilBuffer_);
     ReleaseCOMObjects(D3D_, DC_);
     ReleaseCOMObjects(swapChain_);
 
@@ -215,22 +211,17 @@ void DestroyD3DContext(void)
 
 ID3D11InputLayout *inputLayout_ = nullptr;
 ID3D11Buffer *vtxBuf_ = nullptr;
-ID3D10Blob *vtxShaderByteCode_ = nullptr;
-ID3D10Blob *pxlShaderByteCode_ = nullptr;
-
-_ShaderStage<SS_VS> *VSStage_ = nullptr;
-_ShaderStage<SS_PS> *PSStage_ = nullptr;
-
-_ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
-_ConstantBufferManager<SS_PS> *PSCBs_ = nullptr;
-
-struct PSCBColor
-{
-    DirectX::XMFLOAT3 color;
-    float pad0;
-};
 
 _Shader<SS_VS, SS_PS> shader_;
+
+struct VSCBSize
+{
+    DirectX::XMFLOAT2 size;
+    float pad0;
+    float pad1;
+};
+
+_ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
 
 bool InitScene(void)
 {
@@ -238,11 +229,12 @@ bool InitScene(void)
 
     //=============着色器编译=============
 
+    ID3D10Blob *shaderByteCode = nullptr;
     ID3D10Blob *shaderErr = nullptr;
     hr = D3DCompileFromFile(
-        L"Data\\Test_ShaderStage\\test.vs",
+        L"Data\\Test_ConstantBuffer\\test.vs",
         nullptr, nullptr, "main",
-        "vs_5_0", 0, 0, &vtxShaderByteCode_, &shaderErr);
+        "vs_5_0", 0, 0, &shaderByteCode, &shaderErr);
     if(FAILED(hr))
     {
         if(shaderErr)
@@ -254,12 +246,14 @@ bool InitScene(void)
     }
     else if(shaderErr)
         shaderErr->Release();
+    shader_.InitStage<SS_VS>(D3D_, shaderByteCode);
+    shaderByteCode->Release();
 
     shaderErr = nullptr;
     hr = D3DCompileFromFile(
-        L"Data\\Test_ShaderStage\\test.ps",
+        L"Data\\Test_ConstantBuffer\\test.ps",
         nullptr, nullptr, "main",
-        "ps_5_0", 0, 0, &pxlShaderByteCode_, &shaderErr);
+        "ps_5_0", 0, 0, &shaderByteCode, &shaderErr);
     if(FAILED(hr))
     {
         if(shaderErr)
@@ -271,11 +265,10 @@ bool InitScene(void)
     }
     else if(shaderErr)
         shaderErr->Release();
+    shader_.InitStage<SS_PS>(D3D_, shaderByteCode);
+    shaderByteCode->Release();
 
-    VSStage_ = new _ShaderStage<SS_VS>(D3D_, vtxShaderByteCode_);
-    PSStage_ = new _ShaderStage<SS_PS>(D3D_, pxlShaderByteCode_);
-    VSCBs_ = VSStage_->CreateConstantBufferManager();
-    PSCBs_ = PSStage_->CreateConstantBufferManager();
+    VSCBs_ = shader_.GetStage<SS_VS>()->CreateConstantBufferManager();
 
     //=============顶点缓存初始化=============
 
@@ -285,7 +278,7 @@ bool InitScene(void)
         { 0.0f, 1.0f },
         { 1.0f, -1.0f }
     };
-
+    
     D3D11_BUFFER_DESC vtxBufDesc;
     vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
     vtxBufDesc.ByteWidth = sizeof(vtxBufData);
@@ -308,8 +301,8 @@ bool InitScene(void)
     };
     hr = D3D_->CreateInputLayout(
         inputDesc, 1,
-        vtxShaderByteCode_->GetBufferPointer(),
-        vtxShaderByteCode_->GetBufferSize(),
+        shader_.GetStage<SS_VS>()->GetShaderByteCode(),
+        shader_.GetStage<SS_VS>()->GetShaderByteCodeSize(),
         &inputLayout_);
     if(FAILED(hr))
         return false;
@@ -320,57 +313,45 @@ bool InitScene(void)
 void DestroyScene(void)
 {
     ReleaseCOMObjects(inputLayout_, vtxBuf_);
-    ReleaseCOMObjects(vtxShaderByteCode_, pxlShaderByteCode_);
-    SafeDeleteObjects(VSStage_, PSStage_, VSCBs_, PSCBs_);
+    shader_.DestroyAllStages();
+    SafeDeleteObjects(VSCBs_);
 }
 
-void Test_ShaderStage(void)
+void Test_BasicShader(void)
 {
-    if(!InitD3DContext())
-    {
-        DestroyD3DContext();
-        std::cout << "Failed to initialize D3D render context" << std::endl;
-        return;
-    }
-
-    if(!InitScene())
+    if(!InitD3DContext() || !InitScene())
     {
         DestroyScene();
-        std::cout << "Failed to initialize D3D scene" << std::endl;
         DestroyD3DContext();
+        std::cout << "Failed to initialize render context" << std::endl;
         return;
     }
 
     MSG msg;
     mainLoopDone_ = false;
+    float t = 0.0f;
     while(!mainLoopDone_)
     {
-        float backgroundColor[4] = { 0.0f, 1.0f, 1.0f, 0.0f };
+        float backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
         DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
         DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-        DirectX::XMFLOAT4 CBPosOffset = { 0.2f, 0.0f, 0.0f, 0.0f };
-        VSCBs_->GetConstantBuffer<DirectX::XMFLOAT4, true>(D3D_, "Trans")->SetBufferData(DC_, CBPosOffset);
-
-        PSCBColor CBColor = { { 1.0f, 0.0f, 0.0f }, 0.0f };
-        PSCBs_->GetConstantBuffer<PSCBColor, true>(D3D_, "Color")->SetBufferData(DC_, CBColor);
+        float sizeComponent = std::sin(t += 0.01f);
+        VSCBSize CBSize = { { sizeComponent, sizeComponent }, 0.0f, 0.0f };
+        VSCBs_->GetConstantBuffer<VSCBSize, true>(D3D_, "Trans")->SetBufferData(DC_, CBSize);
 
         DC_->IASetInputLayout(inputLayout_);
         UINT vtxStride = sizeof(DirectX::XMFLOAT2), vtxOffset = 0;
         DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &vtxOffset);
 
-        VSStage_->BindShader(DC_);
-        PSStage_->BindShader(DC_);
+        shader_.BindStages(DC_);
         VSCBs_->Bind(DC_);
-        PSCBs_->Bind(DC_);
 
         DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         DC_->Draw(3, 0);
 
-        PSCBs_->Unbind(DC_);
         VSCBs_->Unbind(DC_);
-        PSStage_->UnbindShader(DC_);
-        VSStage_->UnbindShader(DC_);
+        shader_.UnbindStages(DC_);
 
         swapChain_->Present(1, 0);
 
@@ -389,10 +370,10 @@ int main(void)
 {
     try
     {
-        Test_ShaderStage();
+        Test_BasicShader();
     }
     catch(const SimShaderError &err)
     {
         std::cout << err.what() << std::endl;
     }
-}*/
+}

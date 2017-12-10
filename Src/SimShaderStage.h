@@ -214,7 +214,7 @@ namespace _SimShaderAux
         UINT GetShaderByteCodeSize(void)
         {
             assert(shaderByteCode_);
-            shaderByteCode_->GetBufferSize();
+            return shaderByteCode_->GetBufferSize();
         }
 
     private:

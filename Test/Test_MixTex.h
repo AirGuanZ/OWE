@@ -1,20 +1,16 @@
 /*================================================================
-Filename: Test_MixTex
+Filename: Test_MixTex.h
 Date: 2017.12.11
 Created by AirGuanZ
 ================================================================*/
 #ifndef __TEST_MIX_TEX_H__
 #define __TEST_MIX_TEX_H__
 
-#include <iostream>
 #include <fstream>
-#include <iterator>
+#include <string>
 
-#include <d3d11.h>
-#include <DirectXMath.h>
-#include <SimpleMath.h>
 #include <DDSTextureLoader.h>
-
+#include <SimpleMath.h>
 #include <SimShader.h>
 
 #include "TestApp.h"
@@ -24,7 +20,7 @@ class Test_MixTex : public TestApp
     ID3D11InputLayout *inputLayout_ = nullptr;
     ID3D11Buffer *vtxBuf_ = nullptr;
 
-    SimShader<SS_VS, SS_PS> shader_;
+    SimShader::Shader<SS_VS, SS_PS> shader_;
 
     ID3D11Resource *tex1_ = nullptr;
     ID3D11Resource *tex2_ = nullptr;
@@ -34,8 +30,8 @@ class Test_MixTex : public TestApp
 
     ID3D11SamplerState *sampler_ = nullptr;
 
-    SimShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
-    SimShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
+    SimShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
+    SimShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
 
     struct Vertex
     {
@@ -47,7 +43,7 @@ class Test_MixTex : public TestApp
     {
         std::ifstream fin(filename, std::ifstream::in);
         if(!fin)
-            throw SimError(("Failed to open file: " + filename).c_str());
+            throw SimShader::Error(("Failed to open file: " + filename).c_str());
         return std::string(std::istreambuf_iterator<char>(fin),
                            std::istreambuf_iterator<char>());
     }
@@ -63,24 +59,24 @@ class Test_MixTex : public TestApp
             shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.vs"));
             shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.ps"));
         }
-        catch(const SimError &err)
+        catch(const SimShader::Error &err)
         {
             std::cout << err.what() << std::endl;
         }
 
-        PSSRs_ = shader_.GetStage<SS_PS>()->CreateShaderResourceManager();
-        PSSSs_ = shader_.GetStage<SS_PS>()->CreateShaderSamplerManager();
+        PSSRs_ = shader_.CreateShaderResourceManager<SS_PS>();
+        PSSSs_ = shader_.CreateShaderSamplerManager<SS_PS>();
 
         //=============∂•µ„ª∫¥Ê≥ı ºªØ=============
 
         Vertex vtxBufData[] =
         {
-            { { -1.0f, -1.0f }, { 0.0f, 0.0f } },
-            { { -1.0f, 1.0f }, { 0.0f, 1.0f } },
-            { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
-            { { -1.0f, -1.0f }, { 0.0f, 0.0f } },
-            { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
-            { { 1.0f, -1.0f }, { 1.0f, 0.0f } }
+            { { -1.0f, -1.0f }, { 0.0f, 1.0f } },
+            { { -1.0f, +1.0f }, { 0.0f, 0.0f } },
+            { { +1.0f, +1.0f }, { 1.0f, 0.0f } },
+            { { -1.0f, -1.0f }, { 0.0f, 1.0f } },
+            { { +1.0f, +1.0f }, { 1.0f, 0.0f } },
+            { { +1.0f, -1.0f }, { 1.0f, 1.0f } }
         };
 
         D3D11_BUFFER_DESC vtxBufDesc;

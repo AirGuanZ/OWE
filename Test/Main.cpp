@@ -13,7 +13,7 @@ int main(void)
         Test_MixTex app;
         app.Run();
     }
-    catch(const SimError &err)
+    catch(const SimShader::Error &err)
     {
         std::cout << err.what() << std::endl;
     }

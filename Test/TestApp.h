@@ -9,8 +9,6 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-#include <SimShader.h>
-
 class TestApp
 {
 protected:
@@ -28,7 +26,6 @@ protected:
     ID3D11RenderTargetView *renderTargetView_ = nullptr;
 
     bool InitD3DContext(void);
-
     void DestroyD3DContext(void);
 };
 

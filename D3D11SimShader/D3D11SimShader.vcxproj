@@ -31,9 +31,6 @@
     <ClInclude Include="..\Src\SimShaderStage.h" />
     <ClInclude Include="..\Src\SimShaderUncopiable.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Src\SimShaderGenBuffer.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{3567985E-08F9-44DB-A6E3-6C64EDC469F2}</ProjectGuid>

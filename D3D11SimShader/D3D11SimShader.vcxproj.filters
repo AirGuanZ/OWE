@@ -41,9 +41,4 @@
       <Filter>SimShader</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Src\SimShaderGenBuffer.cpp">
-      <Filter>SimShader</Filter>
-    </ClCompile>
-  </ItemGroup>
 </Project>

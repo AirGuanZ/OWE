@@ -19,7 +19,7 @@ class Test_BasicShader : public TestApp
     ID3D11InputLayout *inputLayout_ = nullptr;
     ID3D11Buffer *vtxBuf_ = nullptr;
 
-    SimShader<SS_VS, SS_PS> shader_;
+    SimShader::Shader<SS_VS, SS_PS> shader_;
 
     struct VSCBSize
     {
@@ -28,7 +28,7 @@ class Test_BasicShader : public TestApp
         float pad1;
     };
 
-    SimConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
+    SimShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
 
     bool InitScene(void)
     {

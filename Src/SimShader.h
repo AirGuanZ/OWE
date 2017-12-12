@@ -171,6 +171,24 @@ namespace _SimShaderAux
             return std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
         }
 
+        template<ShaderStageSelector StageSelector>
+        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void)
+        {
+            return GetStage<StageSelector>()->CreateConstantBufferManager();
+        }
+
+        template<ShaderStageSelector StageSelector>
+        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void)
+        {
+            return GetStage<StageSelector>()->CreateShaderResourceManager();
+        }
+
+        template<ShaderStageSelector StageSelector>
+        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void)
+        {
+            return GetStage<StageSelector>()->CreateShaderSamplerManager();
+        }
+
         void BindStages(ID3D11DeviceContext *DC)
         {
             _ShaderStageBinder binder = { DC };
@@ -188,26 +206,41 @@ namespace _SimShaderAux
     };
 }
 
-using SimError = _SimShaderAux::SimShaderError;
+namespace SimShader
+{
+    using Error = _SimShaderAux::SimShaderError;
 
-using SimShaderStageSelector = _SimShaderAux::ShaderStageSelector;
+    using ShaderStageSelector = _SimShaderAux::ShaderStageSelector;
 
-constexpr SimShaderStageSelector SS_VS = _SimShaderAux::SS_VS;
-constexpr SimShaderStageSelector SS_PS = _SimShaderAux::SS_PS;
+    constexpr ShaderStageSelector SS_VS = _SimShaderAux::SS_VS;
+    constexpr ShaderStageSelector SS_PS = _SimShaderAux::SS_PS;
 
-template<SimShaderStageSelector StageSelector>
-using SimConstantBufferManager = _SimShaderAux::_ConstantBufferManager<StageSelector>;
+    template<ShaderStageSelector StageSelector, typename BufferType, bool Dynamic = true>
+    using ConstantBufferObject = _SimShaderAux::_ConstantBufferObject<BufferType, StageSelector, Dynamic>;
 
-template<SimShaderStageSelector StageSelector>
-using SimShaderResourceManager = _SimShaderAux::_ShaderResourceManager<StageSelector>;
+    template<ShaderStageSelector StageSelector>
+    using ShaderResourceObject = _SimShaderAux::_ShaderResourceObject<StageSelector>;
 
-template<SimShaderStageSelector StageSelector>
-using SimShaderSamplerManager = _SimShaderAux::_ShaderSamplerManager<StageSelector>;
+    template<ShaderStageSelector StageSelector>
+    using ShaderSamplerObject = _SimShaderAux::_ShaderSamplerObject<StageSelector>;
 
-template<SimShaderStageSelector StageSelector>
-using SimShaderStage = _SimShaderAux::_ShaderStage<StageSelector>;
+    template<ShaderStageSelector StageSelector>
+    using ConstantBufferManager = _SimShaderAux::_ConstantBufferManager<StageSelector>;
 
-template<SimShaderStageSelector...StageSelectors>
-using SimShader = _SimShaderAux::_Shader<StageSelectors...>;
+    template<ShaderStageSelector StageSelector>
+    using ShaderResourceManager = _SimShaderAux::_ShaderResourceManager<StageSelector>;
+
+    template<ShaderStageSelector StageSelector>
+    using ShaderSamplerManager = _SimShaderAux::_ShaderSamplerManager<StageSelector>;
+
+    template<ShaderStageSelector StageSelector>
+    using ShaderStage = _SimShaderAux::_ShaderStage<StageSelector>;
+
+    template<ShaderStageSelector...StageSelectors>
+    using Shader = _SimShaderAux::_Shader<StageSelectors...>;
+}
+
+using SimShader::SS_VS;
+using SimShader::SS_PS;
 
 #endif //__SIMSHADER_H__

@@ -113,7 +113,7 @@ namespace _SimShaderAux
     public:
         void SetBufferData(ID3D11DeviceContext *devCon, const BufferType &data)
         {
-            assert(devCon != nullptr && buf_);
+            assert(devCon != nullptr && buf_ != nullptr);
             D3D11_MAPPED_SUBRESOURCE mappedRsc;
             devCon->Map(buf_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedRsc);
             std::memcpy(mappedRsc.pData, &data, sizeof(_BufferType));

@@ -94,11 +94,11 @@ namespace _SimShaderAux
         RscObj *GetShaderResourceObject(const std::string &name)
         {
             auto it = SRs_.find(name);
-            it(it == SRs_.end())
+            if(it == SRs_.end())
                 throw SimShaderError("Shader resource not found: " + name);
             
-            assert(it.second.obj != nullptr);
-            return it.second.obj;
+            assert(it->second.obj != nullptr);
+            return it->second.obj;
         }
 
         void Bind(ID3D11DeviceContext *DC)
@@ -131,7 +131,8 @@ namespace _SimShaderAux
         _ShaderResourceManager(const std::map<std::string, _SRRec> &src)
             : SRs_(src)
         {
-
+            for(auto &it : SRs_)
+                it.second.obj = new _ShaderResourceObject<StageSelector>(it.second.slot);
         }
 
     private:

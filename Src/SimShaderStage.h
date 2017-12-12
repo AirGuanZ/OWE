@@ -129,20 +129,16 @@ namespace _SimShaderAux
     public:
         using StageSpec = _ShaderStageSpec<StageSelector>;
 
-        _ShaderStage(ID3D11Device *dev,
-                     const std::string &src, std::string *errMsg = nullptr,
+        _ShaderStage(ID3D11Device *dev, const std::string &src,
                      const std::string &target = StageSpec::DefaultCompileTarget(),
                      const std::string &entry = "main")
         {
             assert(dev != nullptr);
 
             std::string dummyErrMsg;
-            if(!errMsg)
-                errMsg = &dummyErrMsg;
-
-            shaderByteCode_ = StageSpec::CompileShader(src, *errMsg, target, entry);
+            shaderByteCode_ = StageSpec::CompileShader(src, &dummyErrMsg, target, entry);
             if(!shaderByteCode_)
-                throw SimShaderError("Failed to compile shader source code: \n" + *errMsg);
+                throw SimShaderError(dummyErrMsg.c_str());
 
             shader_ = StageSpec::InitShader(dev, shaderByteCode_->GetBufferPointer(),
                                                  shaderByteCode_->GetBufferSize());
@@ -227,19 +223,19 @@ namespace _SimShaderAux
 
             std::map<std::string, _CBInfo> CBInfos;
             _GetConstantBuffers(ref, &CBInfos);
-            for(auto it : CBInfos)
+            for(auto &it : CBInfos)
                 emptyCBRec_[it.first] = { it.second.slot, it.second.byteSize, nullptr };
             CBInfos.clear();
 
             std::map<std::string, UINT> STexInfos;
             _GetShaderTextures(ref, &STexInfos);
-            for(auto it : STexInfos)
+            for(auto &it : STexInfos)
                 emptySRRec_[it.first] = { it.second, nullptr };
             STexInfos.clear();
 
             std::map<std::string, UINT> SSamInfos;
             _GetShaderSamplers(ref, &SSamInfos);
-            for(auto it : SSamInfos)
+            for(auto &it : SSamInfos)
                 emptySSRec_[it.first] = { it.second, nullptr };
             SSamInfos.clear();
 

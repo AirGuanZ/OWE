@@ -1,0 +1,17 @@
+Texture2D<float4> tex1;
+Texture2D<float4> tex2;
+
+SamplerState sam;
+
+struct PSInput
+{
+    float4 pos : SV_POSITION;
+    float2 uv : TEXCOORD;
+};
+
+float4 main(PSInput input) : SV_TARGET
+{
+    float3 color1 = tex1.Sample(sam, input.uv);
+    float3 color2 = tex2.Sample(sam, input.uv);
+    return float4(saturate(color1 * color2), 1.0);
+}

@@ -39,16 +39,18 @@ namespace _SimShaderAux
         void Bind(ID3D11DeviceContext *DC)
         {
             assert(DC != nullptr);
-            _BindShaderSampler(DC, slot_, sampler_);
+            _BindShaderSampler<StageSelector>(DC, slot_, sampler_);
         }
 
         void Unbind(ID3D11DeviceContext *DC)
         {
             assert(DC != nullptr);
-            _BindShaderSampler(DC, slot_, nullptr);
+            _BindShaderSampler<StageSelector>(DC, slot_, nullptr);
         }
 
     private:
+        friend class _ShaderSamplerManager<StageSelector>;
+
         _ShaderSamplerObject(UINT slot, ID3D11SamplerState *sampler = nullptr)
             : slot_(slot), sampler_(sampler)
         {
@@ -72,8 +74,6 @@ namespace _SimShaderAux
     public:
         using SSObj = _ShaderSamplerObject<StageSelector>;
 
-        _ShaderSamplerManager(void) = default;
-
         ~_ShaderSamplerManager(void)
         {
             for(auto it : SSs_)
@@ -95,10 +95,10 @@ namespace _SimShaderAux
         {
             auto it = SSs_.find(name);
             if(it == SSs_.end())
-                throw SimShaderError("Shader sampler not found: " + name);
+                throw SimShaderError(("Shader sampler not found: " + name).c_str());
 
-            assert(it.second.obj != nullptr);
-            return it.second.obj;
+            assert(it->second.obj != nullptr);
+            return it->second.obj;
         }
 
         void Bind(ID3D11DeviceContext *DC)
@@ -128,6 +128,13 @@ namespace _SimShaderAux
             UINT slot;
             SSObj *obj;
         };
+
+        _ShaderSamplerManager(const std::map<std::string, _SSRec> &src)
+            : SSs_(src)
+        {
+            for(auto &it : SSs_)
+                it.second.obj = new _ShaderSamplerObject<StageSelector>(it.second.slot);
+        }
 
     private:
         std::map<std::string, _SSRec> SSs_;

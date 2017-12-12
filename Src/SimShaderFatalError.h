@@ -7,6 +7,7 @@ Created by AirGuanZ
 #define __SIMSHADER_FATAL_ERROR_H__
 
 #include <stdexcept>
+#include <string>
 
 namespace _SimShaderAux
 {
@@ -15,6 +16,12 @@ namespace _SimShaderAux
     public:
         SimShaderError(const char *msg)
             : exception(msg)
+        {
+
+        }
+
+        SimShaderError(const std::string &msg)
+            : exception(msg.c_str())
         {
 
         }

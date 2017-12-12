@@ -13,13 +13,19 @@
     <ClCompile Include="Main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Test_BasicShader.h">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestApp.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="Test_MixTex.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_BasicShader.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

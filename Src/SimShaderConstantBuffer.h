@@ -152,7 +152,7 @@ namespace _SimShaderAux
 
         ~_ConstantBufferManager(void)
         {
-            for(auto it : CBs_)
+            for(auto &it : CBs_)
                 SafeDeleteObjects(it.second.obj);
         }
 
@@ -173,7 +173,7 @@ namespace _SimShaderAux
             assert(dev);
             assert(IsDynamic || data);
 
-            auto it = CBs_.find(name);
+            auto &it = CBs_.find(name);
             if(it == CBs_.end())
                 throw SimShaderError(("Constant buffer not found: " + name).c_str());
             _CBRec &rec = it->second;

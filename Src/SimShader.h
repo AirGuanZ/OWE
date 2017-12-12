@@ -135,14 +135,13 @@ namespace _SimShaderAux
         }
 
         template<ShaderStageSelector StageSelector>
-        void InitStage(ID3D11Device *dev,
-                       const std::string &src, std::string *errMsg = nullptr,
+        void InitStage(ID3D11Device *dev, const std::string &src,
                        const std::string &target = _ShaderStage<StageSelector>::StageSpec::DefaultCompileTarget(),
                        const std::string &entry = "main")
         {
             auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
-            SafeDelObjects(pStage);
-            pStage = new _ShaderStage<StageSelector>(dev, src, errMsg, target, entry);
+            SafeDeleteObjects(pStage);
+            pStage = new _ShaderStage<StageSelector>(dev, src, target, entry);
         }
 
         template<ShaderStageSelector StageSelector>
@@ -198,6 +197,12 @@ constexpr SimShaderStageSelector SS_PS = _SimShaderAux::SS_PS;
 
 template<SimShaderStageSelector StageSelector>
 using SimConstantBufferManager = _SimShaderAux::_ConstantBufferManager<StageSelector>;
+
+template<SimShaderStageSelector StageSelector>
+using SimShaderResourceManager = _SimShaderAux::_ShaderResourceManager<StageSelector>;
+
+template<SimShaderStageSelector StageSelector>
+using SimShaderSamplerManager = _SimShaderAux::_ShaderSamplerManager<StageSelector>;
 
 template<SimShaderStageSelector StageSelector>
 using SimShaderStage = _SimShaderAux::_ShaderStage<StageSelector>;

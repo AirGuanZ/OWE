@@ -16,8 +16,6 @@ Created by AirGuanZ
 
 class Test_BasicShader : public TestApp
 {
-    bool mainLoopDone_ = false;
-
     ID3D11InputLayout *inputLayout_ = nullptr;
     ID3D11Buffer *vtxBuf_ = nullptr;
 
@@ -41,7 +39,7 @@ class Test_BasicShader : public TestApp
         ID3D10Blob *shaderByteCode = nullptr;
         ID3D10Blob *shaderErr = nullptr;
         hr = D3DCompileFromFile(
-            L"Data\\Test_ConstantBuffer\\test.vs",
+            L"Data\\Test_BasicShader\\test.vs",
             nullptr, nullptr, "main",
             "vs_5_0", 0, 0, &shaderByteCode, &shaderErr);
         if(FAILED(hr))
@@ -60,7 +58,7 @@ class Test_BasicShader : public TestApp
 
         shaderErr = nullptr;
         hr = D3DCompileFromFile(
-            L"Data\\Test_ConstantBuffer\\test.ps",
+            L"Data\\Test_BasicShader\\test.ps",
             nullptr, nullptr, "main",
             "ps_5_0", 0, 0, &shaderByteCode, &shaderErr);
         if(FAILED(hr))
@@ -139,7 +137,6 @@ public:
         }
 
         MSG msg;
-        mainLoopDone_ = false;
         float t = 0.0f;
         while(!(GetKeyState(VK_ESCAPE) & 0x8000))
         {

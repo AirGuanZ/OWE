@@ -6,7 +6,7 @@ Created by AirGuanZ
 #include <SimShader.h>
 #include "TestApp.h"
 
-constexpr UINT CLIENT_WIDTH = 640;
+constexpr UINT CLIENT_WIDTH = 480;
 constexpr UINT CLIENT_HEIGHT = 480;
 
 using namespace _SimShaderAux;

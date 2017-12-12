@@ -31,7 +31,15 @@
     <ClInclude Include="TestApp.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\Test_BasicShader\test.ps" />
+    <None Include="Data\Test_BasicShader\test.vs" />
+    <None Include="Data\Test_MixTex\test.ps" />
+    <None Include="Data\Test_MixTex\test.vs" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Test_MixTex\tex1.dds" />
+    <Image Include="Data\Test_MixTex\tex2.dds" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

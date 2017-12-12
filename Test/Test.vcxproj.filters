@@ -5,6 +5,18 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{6421be69-6464-4d8b-a6d0-62be82cda5c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{2c65ade6-2d75-4bec-9ec5-65106156745e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Test_BasicShader">
+      <UniqueIdentifier>{a92cc96a-20b2-4c79-be2e-efae8afb9873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Test_MixTex">
+      <UniqueIdentifier>{a2b42709-a5da-44df-9893-a04afe885bad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestApp.cpp">
@@ -15,17 +27,37 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestApp.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="Test_BasicShader.h">
+      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Test_MixTex.h">
-      <Filter>源文件</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Test_BasicShader.h">
-      <Filter>源文件</Filter>
+    <ClInclude Include="TestApp.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Data\Test_BasicShader\test.ps">
+      <Filter>Data\Test_BasicShader</Filter>
+    </None>
+    <None Include="Data\Test_BasicShader\test.vs">
+      <Filter>Data\Test_BasicShader</Filter>
+    </None>
+    <None Include="Data\Test_MixTex\test.ps">
+      <Filter>Data\Test_MixTex</Filter>
+    </None>
+    <None Include="Data\Test_MixTex\test.vs">
+      <Filter>Data\Test_MixTex</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Test_MixTex\tex1.dds">
+      <Filter>Data\Test_MixTex</Filter>
+    </Image>
+    <Image Include="Data\Test_MixTex\tex2.dds">
+      <Filter>Data\Test_MixTex</Filter>
+    </Image>
   </ItemGroup>
 </Project>

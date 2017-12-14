@@ -36,9 +36,11 @@
     <ClInclude Include="TestApp.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Test_TextureCube.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Data\Test_BasicShader\test.ps">
       <Filter>Data\Test_BasicShader</Filter>
     </None>

@@ -189,6 +189,16 @@ namespace _SimShaderAux
             return GetStage<StageSelector>()->CreateShaderSamplerManager();
         }
 
+        const void *GetShaderByteCodeWithInputSignature(void)
+        {
+            return GetStage<SS_VS>()->GetShaderByteCode();
+        }
+
+        UINT GetShaderByteCodeSizeWithInputSignature(void)
+        {
+            return GetStage<SS_VS>()->GetShaderByteCodeSize();
+        }
+
         void BindStages(ID3D11DeviceContext *DC)
         {
             _ShaderStageBinder binder = { DC };

@@ -164,7 +164,7 @@ namespace _SimShaderAux
             CBs_[name] = _CBRec{ slot, byteSize, nullptr };
         }
 
-        template<typename BufferType, bool IsDynamic>
+        template<typename BufferType, bool IsDynamic = true>
         _ConstantBufferObject<BufferType, StageSelector, IsDynamic> *
         GetConstantBuffer(ID3D11Device *dev, const std::string &name, const BufferType *data = nullptr)
         {

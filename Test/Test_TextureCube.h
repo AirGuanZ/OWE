@@ -44,6 +44,8 @@ class Test_TextureCube : public TestApp
 
     ID3D11SamplerState *sampler_ = nullptr;
 
+    ID3D11RasterizerState *raster_ = nullptr;
+
     template<typename ClassType, typename MemType>
     static constexpr size_t _MemOffset(MemType ClassType::* pMem)
     {
@@ -90,52 +92,52 @@ class Test_TextureCube : public TestApp
         Vertex vtxBufData[] =
         {
             //x+
-            { { +0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
-            { { +0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
-            { { +0.5f, +0.5f, -0.5f }, { 0.0f, 0.0f } },
-            { { +0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
-            { { +0.5f, -0.5f, +0.5f }, { 1.0f, 1.0f } },
+            { { +0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } },
             { { +0.5f, +0.5f, +0.5f }, { 0.0f, 0.0f } },
+            { { +0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
+            { { +0.5f, +0.5f, -0.5f }, { 0.0f, 0.0f } },
 
             //x-
-            { { -0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
+            { { -0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
+            { { -0.5f, +0.5f, -0.5f }, { 0.0f, 0.0f } },
+            { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
+            { { -0.5f, -0.5f, +0.5f }, { 1.0f, 1.0f } },
+            { { -0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
+
+            //y+
+            { { -0.5f, +0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } },
+            { { -0.5f, +0.5f, -0.5f }, { 0.0f, 0.0f } },
+            { { -0.5f, +0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, +0.5f, +0.5f }, { 1.0f, 1.0f } },
+            { { +0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } },
+
+            //y-
+            { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, -0.5f, +0.5f }, { 1.0f, 0.0f } },
+            { { -0.5f, -0.5f, +0.5f }, { 0.0f, 0.0f } },
+            { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
+            { { +0.5f, -0.5f, +0.5f }, { 1.0f, 0.0f } },
+
+            //z-
+            { { +0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
             { { -0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } },
-            { { -0.5f, +0.5f, +0.5f }, { 0.0f, 0.0f } },
-            { { -0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, +0.5f, -0.5f }, { 0.0f, 0.0f } },
+            { { +0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
             { { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
             { { -0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } },
 
-            //y+
-            { { -0.5f, +0.5f, -0.5f }, { 0.0f, 1.0f } },
+            //z+
+            { { -0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
             { { +0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
             { { -0.5f, +0.5f, +0.5f }, { 0.0f, 0.0f } },
-            { { -0.5f, +0.5f, -0.5f }, { 0.0f, 1.0f } },
-            { { +0.5f, +0.5f, -0.5f }, { 1.0f, 1.0f } },
-            { { +0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
-
-            //y-
-            { { +0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
-            { { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } },
-            { { +0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f } },
-            { { +0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
-            { { -0.5f, -0.5f, +0.5f }, { 1.0f, 1.0f } },
-            { { -0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f } },
-
-            //z+
-            { { +0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
-            { { -0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
-            { { +0.5f, +0.5f, +0.5f }, { 0.0f, 0.0f } },
-            { { +0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
-            { { -0.5f, -0.5f, +0.5f }, { 1.0f, 1.0f } },
-            { { -0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } },
-
-            //z-
-            { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
-            { { +0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } },
-            { { -0.5f, +0.5f, -0.5f }, { 0.0f, 0.0f } },
-            { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f } },
-            { { +0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f } },
-            { { +0.5f, +0.5f, -0.5f }, { 1.0f, 0.0f } }
+            { { -0.5f, -0.5f, +0.5f }, { 0.0f, 1.0f } },
+            { { +0.5f, -0.5f, +0.5f }, { 1.0f, 1.0f } },
+            { { +0.5f, +0.5f, +0.5f }, { 1.0f, 0.0f } }
         };
 
         D3D11_BUFFER_DESC vtxBufDesc;
@@ -176,6 +178,23 @@ class Test_TextureCube : public TestApp
         if(FAILED(hr))
             return false;
 
+        //=============Rasterizer State=============
+
+        D3D11_RASTERIZER_DESC rasDesc;
+        rasDesc.AntialiasedLineEnable = FALSE;
+        rasDesc.CullMode = D3D11_CULL_BACK;
+        rasDesc.DepthBias = 0;
+        rasDesc.DepthBiasClamp = 0.0f;
+        rasDesc.FillMode = D3D11_FILL_SOLID;
+        rasDesc.FrontCounterClockwise = TRUE;
+        rasDesc.MultisampleEnable = FALSE;
+        rasDesc.ScissorEnable = FALSE;
+        rasDesc.SlopeScaledDepthBias = 0.0f;
+
+        hr = D3D_->CreateRasterizerState(&rasDesc, &raster_);
+        if(FAILED(hr))
+            return false;
+
         return true;
     }
 
@@ -184,6 +203,7 @@ class Test_TextureCube : public TestApp
         using namespace _SimShaderAux;
         ReleaseCOMObjects(vtxBuf_, inputLayout_);
         ReleaseCOMObjects(tex_, texView_, sampler_);
+        ReleaseCOMObjects(raster_);
         SafeDeleteObjects(VSCBs_, PSSRs_, PSSSs_);
         shader_.DestroyAllStages();
     }
@@ -206,7 +226,7 @@ public:
             DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
             DirectX::SimpleMath::Matrix matRot = DirectX::SimpleMath::Matrix::CreateRotationY(horRad += 0.01f);
-            DirectX::SimpleMath::Matrix view = DirectX::SimpleMath::Matrix::CreateLookAt({ 0.0f, 4.0f, -6.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+            DirectX::SimpleMath::Matrix view = DirectX::SimpleMath::Matrix::CreateLookAt({ 0.0f, 4.0f, 6.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
             DirectX::SimpleMath::Matrix proj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(3.14159f * 45 / 180, 1.0f, 0.1f, 100.0f);
             VSCB VSCBData = { (matRot * view * proj).Transpose() };
 
@@ -222,6 +242,7 @@ public:
             shader_.BindStages(DC_);
             VSCBs_->Bind(DC_); PSSRs_->Bind(DC_); PSSSs_->Bind(DC_);
 
+            DC_->RSSetState(raster_);
             DC_->Draw(36, 0);
 
             VSCBs_->Unbind(DC_); PSSRs_->Unbind(DC_); PSSSs_->Unbind(DC_);

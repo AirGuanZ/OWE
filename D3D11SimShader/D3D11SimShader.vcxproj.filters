@@ -1,44 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="SimShader">
+    <Filter Include="Inc">
+      <UniqueIdentifier>{906cb8ab-cb8c-4106-92b5-c7873c4f050a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\SimShaderObjectBinding.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderConstantBuffer.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderGenBuffer.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderUncopiable.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderFatalError.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderResource.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderReflection.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderSampler.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderStage.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShaderReleaseCOMObjects.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\SimShader.h">
-      <Filter>SimShader</Filter>
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\SimShader.hpp">
+      <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,14 +2,14 @@
 Filename: TestApp.cpp
 Date: 2017.12.10
 Created by AirGuanZ
-================================================================*/
-#include <SimShader.h>
+================================================================*/\
+#include <stdexcept>
+#include <SimShader.hpp>
+
 #include "TestApp.h"
 
 constexpr UINT CLIENT_WIDTH = 480;
 constexpr UINT CLIENT_HEIGHT = 480;
-
-using namespace _SimShaderAux;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -174,6 +174,8 @@ bool TestApp::InitD3DContext(void)
 
 void TestApp::DestroyD3DContext(void)
 {
+    using namespace _SimShaderAux;
+
     ReleaseCOMObjects(renderTargetView_, depthStencilView_, depthStencilState_, depthStencilBuffer_);
     ReleaseCOMObjects(D3D_, DC_);
     ReleaseCOMObjects(swapChain_);

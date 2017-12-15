@@ -121,9 +121,9 @@ namespace _SimShaderAux
     public:
         _Shader(void)
         {
-            assert((IsRepeated<ShaderStageSelector, StageSelectors...>() == false));
-            assert((FindInNumList<ShaderStageSelector, SS_VS, StageSelectors...>() != -1));
-            assert((FindInNumList<ShaderStageSelector, SS_PS, StageSelectors...>() != -1));
+            static_assert((IsRepeated<ShaderStageSelector, StageSelectors...>() == false), "Shader stage repeated");
+            static_assert((FindInNumList<ShaderStageSelector, SS_VS, StageSelectors...>() != -1), "Vertex shader not found");
+            static_assert((FindInNumList<ShaderStageSelector, SS_PS, StageSelectors...>() != -1), "Pixel shader not found");
 
             _ShaderStagePtrInitializer setter;
             DoForTupleElements(setter, stages_);
@@ -222,9 +222,6 @@ namespace SimShader
 
     using ShaderStageSelector = _SimShaderAux::ShaderStageSelector;
 
-    constexpr ShaderStageSelector SS_VS = _SimShaderAux::SS_VS;
-    constexpr ShaderStageSelector SS_PS = _SimShaderAux::SS_PS;
-
     template<ShaderStageSelector StageSelector, typename BufferType, bool Dynamic = true>
     using ConstantBufferObject = _SimShaderAux::_ConstantBufferObject<BufferType, StageSelector, Dynamic>;
 
@@ -250,7 +247,7 @@ namespace SimShader
     using Shader = _SimShaderAux::_Shader<StageSelectors...>;
 }
 
-using SimShader::SS_VS;
-using SimShader::SS_PS;
+using _SimShaderAux::SS_VS;
+using _SimShaderAux::SS_PS;
 
 #endif //__SIMSHADER_H__

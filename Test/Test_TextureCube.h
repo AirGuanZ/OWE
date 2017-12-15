@@ -11,7 +11,7 @@ Created by AirGuanZ
 #include <string>
 
 #include <DDSTextureLoader.h>
-#include <SimShader.h>
+#include <SimShader.hpp>
 #include <SimpleMath.h>
 
 #include "TestApp.h"
@@ -65,7 +65,7 @@ class Test_TextureCube : public TestApp
     {
         HRESULT hr;
 
-        //=============×ÅÉ«Æ÷±àÒë=============
+        //=============Shader=============
 
         shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_TextureCube\\test.vs"));
         shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_TextureCube\\test.ps"));
@@ -221,13 +221,17 @@ public:
         float horRad = 0.0f;
         while(!(GetKeyState(VK_ESCAPE) & 0x8000))
         {
+            using DirectX::SimpleMath::Matrix;
+            
             float backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
             DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
             DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-            DirectX::SimpleMath::Matrix matRot = DirectX::SimpleMath::Matrix::CreateRotationY(horRad += 0.01f);
-            DirectX::SimpleMath::Matrix view = DirectX::SimpleMath::Matrix::CreateLookAt({ 0.0f, 4.0f, 6.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
-            DirectX::SimpleMath::Matrix proj = DirectX::SimpleMath::Matrix::CreatePerspectiveFieldOfView(3.14159f * 45 / 180, 1.0f, 0.1f, 100.0f);
+            Matrix matRot = Matrix::CreateRotationY(horRad += 0.01f);
+            Matrix view = Matrix::CreateLookAt(
+                { 0.0f, 4.0f, 6.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+            Matrix proj = Matrix::CreatePerspectiveFieldOfView(
+                3.14159f * 45 / 180, 1.0f, 0.1f, 100.0f);
             VSCB VSCBData = { (matRot * view * proj).Transpose() };
 
             VSCBs_->GetConstantBuffer<VSCB>(D3D_, "Trans")->SetBufferData(DC_, VSCBData);

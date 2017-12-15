@@ -10,7 +10,7 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-#include <SimShader.h>
+#include <SimShader.hpp>
 
 #include "TestApp.h"
 

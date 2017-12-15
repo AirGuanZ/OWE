@@ -11,7 +11,7 @@ Created by AirGuanZ
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
-#include <SimShader.h>
+#include <SimShader.hpp>
 
 #include "TestApp.h"
 

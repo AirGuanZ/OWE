@@ -96,7 +96,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(ProjectDir)..\Src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Inc\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -104,7 +104,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(ProjectDir)..\Src\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\Inc\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

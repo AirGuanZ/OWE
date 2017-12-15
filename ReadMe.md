@@ -30,17 +30,17 @@ Shader<SS_VS, SS_PS> shader;
 //着色器初始化
 bool InitShader(void)
 {
-	try
+    try
     {
-		shader.InitStage<SS_VS>(myD3DDevice, vertexShaderSourceCode);
-		shader.InitStage<SS_PS>(myD3DDevice, pixelShaderSourceCode);
+        shader.InitStage<SS_VS>(myD3DDevice, vertexShaderSourceCode);
+        shader.InitStage<SS_PS>(myD3DDevice, pixelShaderSourceCode);
     }
-  	catch(const Error &err)
+    catch(const Error &err)
     {
-    	//err.what()中包含了着色器初始化失败的错误信息
-      	return false;
+        //err.what()中包含了着色器初始化失败的错误信息
+        return false;
     }
-  	return true;
+    return true;
 }
 
 //取得Vertex Shader的Input Signature
@@ -116,7 +116,7 @@ void InitConstantBufferManagers(void)
 
 void Render(void)
 {
-  	shader.BindStages(myD3DDeviceContext);
+    shader.BindStages(myD3DDeviceContext);
   
     //渲染第一组物体
     
@@ -130,7 +130,7 @@ void Render(void)
     //...draw calls
     cbMgr2->Unbind(myD3DDeviceContext);
   
-  	shader.UnbindStages(myD3DDeviceContext);
+    shader.UnbindStages(myD3DDeviceContext);
 }
 
 void DestroyConstantBufferManagers(void)
@@ -154,7 +154,7 @@ void DestroyConstantBufferManagers(void)
 ```cpp
 void Render(void)
 {
-  	shader.BindStages(myD3DDeviceContext);
+    shader.BindStages(myD3DDeviceContext);
   
     //渲染第一组物体
   
@@ -167,12 +167,12 @@ void Render(void)
     //渲染第二组物体
     
     CBColor cbColorBlue = { { 0.0f, 0.0f, 1.0f }, 0.0f };
-  	cbMgr->GetConstantBuffer<CBColor>(myD3DDevice, "Color")->SetBufferData(myD3DDeviceContext, cbColorBlue);
+    cbMgr->GetConstantBuffer<CBColor>(myD3DDevice, "Color")->SetBufferData(myD3DDeviceContext, cbColorBlue);
     cbMgr->Bind(myD3DDeviceContext);
     //...draw calls
     cbMgr->Unbind(myD3DDeviceContext);
   
-  	shader.UnbindStages(myD3DDeviceContext);
+    shader.UnbindStages(myD3DDeviceContext);
 }
 ```
 

@@ -7,5 +7,6 @@ Created by AirGuanZ
 #define __SIMSHADER_HPP__
 
 #include "../Src/SimShader.h"
+#include "../Src/SimShaderUniforms.h"
 
 #endif //__SIMSHADER_HPP__

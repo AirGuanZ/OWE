@@ -186,28 +186,43 @@ namespace _SimShaderAux
             StageSpec::BindShader(DC, nullptr);
         }
 
-        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void)
+        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void) const
         {
             return new _ConstantBufferManager<StageSelector>(emptyCBRec_);
         }
 
-        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void)
+        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void) const
         {
             return new _ShaderResourceManager<StageSelector>(emptySRRec_);
         }
 
-        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void)
+        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void) const
         {
             return new _ShaderSamplerManager<StageSelector>(emptySSRec_);
         }
 
-        void *GetShaderByteCode(void)
+        size_t GetConstantBufferCount(void) const
+        {
+            return emptyCBRec_.size();
+        }
+
+        size_t GetShaderResourceCount(void) const
+        {
+            return emptySRRec_.size();
+        }
+
+        size_t GetShaderSamplerCount(void) const
+        {
+            return emptySSRec_.size();
+        }
+
+        const void *GetShaderByteCode(void) const
         {
             assert(shaderByteCode_);
             return shaderByteCode_->GetBufferPointer();
         }
 
-        UINT GetShaderByteCodeSize(void)
+        UINT GetShaderByteCodeSize(void) const
         {
             assert(shaderByteCode_);
             return shaderByteCode_->GetBufferSize();

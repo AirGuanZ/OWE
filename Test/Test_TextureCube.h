@@ -35,7 +35,6 @@ class Test_TextureCube : public TestApp
     SimShader::Shader<SS_VS, SS_PS> shader_;
 
     SimShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
-
     SimShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
     SimShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
 

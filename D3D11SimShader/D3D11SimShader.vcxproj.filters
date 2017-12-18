@@ -46,5 +46,8 @@
     <ClInclude Include="..\Inc\SimShader.hpp">
       <Filter>Inc</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\SimShaderUniforms.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

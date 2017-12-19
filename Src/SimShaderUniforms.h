@@ -6,7 +6,7 @@ Created by AirGuanZ
 #ifndef __SIMSHADER_UNIFORMS_H__
 #define __SIMSHADER_UNIFORMS_H__
 
-#include "SimShader.h"
+#include "SimShaderStage.h"
 
 namespace _SimShaderAux
 {
@@ -132,7 +132,7 @@ namespace _SimShaderAux
 
 namespace SimShader
 {
-    template<ShaderStageSelector...StageSelectors>
+    template<_SimShaderAux::ShaderStageSelector...StageSelectors>
     using ShaderUniforms = _SimShaderAux::_ShaderUniformManager<StageSelectors...>;
 }
 

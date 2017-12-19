@@ -129,6 +129,8 @@ namespace _SimShaderAux
     public:
         using StageSpec = _ShaderStageSpec<StageSelector>;
 
+        static constexpr ShaderStageSelector Stage = StageSelector;
+
         _ShaderStage(ID3D11Device *dev, const std::string &src,
                      const std::string &target = StageSpec::DefaultCompileTarget(),
                      const std::string &entry = "main")

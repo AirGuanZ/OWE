@@ -12,6 +12,7 @@ Created by AirGuanZ
 #include "SimShaderFatalError.h"
 #include "SimShaderReleaseCOMObjects.h"
 #include "SimShaderStage.h"
+#include "SimShaderUniforms.h"
 
 namespace _SimShaderAux
 {
@@ -115,6 +116,13 @@ namespace _SimShaderAux
         ID3D11DeviceContext *DC_;
     };
 
+    template<typename TStages, size_t...I>
+    inline auto _CreateShaderUniformManagerAux(const TStages &stages, std::index_sequence<I...>)
+    {
+        return new _ShaderUniformManager<std::remove_pointer_t<std::tuple_element_t<I, TStages>>::Stage...>
+                        ((*std::get<I>(stages))...);
+    }
+
     template<ShaderStageSelector...StageSelectors>
     class _Shader
     {
@@ -187,6 +195,13 @@ namespace _SimShaderAux
         _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void)
         {
             return GetStage<StageSelector>()->CreateShaderSamplerManager();
+        }
+
+        _ShaderUniformManager<StageSelectors...> *CreateUniformManager(void)
+        {
+            return _CreateShaderUniformManagerAux(stages_,
+                std::make_index_sequence<std::tuple_size_v<
+                    std::tuple<_ShaderStage<StageSelectors>*...>>>());
         }
 
         const void *GetShaderByteCodeWithInputSignature(void)

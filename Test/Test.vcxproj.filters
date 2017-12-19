@@ -17,6 +17,9 @@
     <Filter Include="Data\Test_MixTex">
       <UniqueIdentifier>{a2b42709-a5da-44df-9893-a04afe885bad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\Test_TextureCube">
+      <UniqueIdentifier>{ca01da64-84c0-4ac6-9181-688533715bd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestApp.cpp">
@@ -39,6 +42,9 @@
     <ClInclude Include="Test_TextureCube.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Test_HeightMap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Test_BasicShader\test.ps">
@@ -53,6 +59,12 @@
     <None Include="Data\Test_MixTex\test.vs">
       <Filter>Data\Test_MixTex</Filter>
     </None>
+    <None Include="Data\Test_TextureCube\test.ps">
+      <Filter>Data\Test_TextureCube</Filter>
+    </None>
+    <None Include="Data\Test_TextureCube\test.vs">
+      <Filter>Data\Test_TextureCube</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Test_MixTex\tex1.dds">
@@ -60,6 +72,9 @@
     </Image>
     <Image Include="Data\Test_MixTex\tex2.dds">
       <Filter>Data\Test_MixTex</Filter>
+    </Image>
+    <Image Include="Data\Test_TextureCube\tex.dds">
+      <Filter>Data\Test_TextureCube</Filter>
     </Image>
   </ItemGroup>
 </Project>

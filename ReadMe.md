@@ -60,17 +60,17 @@ bool InitInputLayout(void)
 //渲染前将Shader绑定到渲染管线
 void RenderObject(void)
 {
-    shader.BindStages(myD3DDeviceContext);
+    shader.Bind(myD3DDeviceContext);
     
     //...draw calls
     
-    shader.UnbindStages(myD3DDeviceContext);
+    shader.Unbind(myD3DDeviceContext);
 }
 
 //销毁着色器
 void DestroyShader(void)
 {
-    shader.DestroyAllStages();
+    shader.Destroy();
 }
 ```
 
@@ -116,7 +116,7 @@ void InitConstantBufferManagers(void)
 
 void Render(void)
 {
-    shader.BindStages(myD3DDeviceContext);
+    shader.Bind(myD3DDeviceContext);
   
     //渲染第一组物体
     
@@ -130,7 +130,7 @@ void Render(void)
     //...draw calls
     cbMgr2->Unbind(myD3DDeviceContext);
   
-    shader.UnbindStages(myD3DDeviceContext);
+    shader.Unbind(myD3DDeviceContext);
 }
 
 void DestroyConstantBufferManagers(void)
@@ -154,7 +154,7 @@ void DestroyConstantBufferManagers(void)
 ```cpp
 void Render(void)
 {
-    shader.BindStages(myD3DDeviceContext);
+    shader.Bind(myD3DDeviceContext);
   
     //渲染第一组物体
   
@@ -172,7 +172,7 @@ void Render(void)
     //...draw calls
     cbMgr->Unbind(myD3DDeviceContext);
   
-    shader.UnbindStages(myD3DDeviceContext);
+    shader.Unbind(myD3DDeviceContext);
 }
 ```
 

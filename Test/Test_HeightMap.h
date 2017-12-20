@@ -10,6 +10,7 @@ Created by AirGuanZ
 #include <string>
 
 #include <d3d11.h>
+#include <DDSTextureLoader.h>
 #include <SimpleMath.h>
 #include <SimShader.hpp>
 
@@ -47,6 +48,8 @@ namespace Test_HeightMap
         ID3D11ShaderResourceView *texView_ = nullptr;
 
         ID3D11SamplerState *sampler_ = nullptr;
+        
+        int vtxCount_ = 0;
 
         template<typename ClassType, typename MemType>
         static size_t _MemOffset(MemType ClassType::* pMem)
@@ -106,6 +109,7 @@ namespace Test_HeightMap
                         Vector2(xIdx / (VERTEX_GRID_COUNT - 1.0f), yIdx / (VERTEX_GRID_COUNT - 1.0f));
                 }
             }
+            vtxCount_ = VERTEX_GRID_COUNT * VERTEX_GRID_COUNT;
 
             std::vector<UINT> idxBufData(6 * (VERTEX_GRID_COUNT - 1) * (VERTEX_GRID_COUNT - 1));
             int idxBufIdx = 0;
@@ -145,6 +149,32 @@ namespace Test_HeightMap
             hr = D3D_->CreateBuffer(&idxBufDesc, &idxBufInitData, &idxBuf_);
             if(FAILED(hr))
                 throw Error("Failed to create index buffer");
+
+            //============= Textures =============
+
+            if(FAILED(DirectX::CreateDDSTextureFromFile(
+                D3D_, L"Data\\Test_HeightMap\\tex.dds", &tex_, &texView_)) ||
+               FAILED(DirectX::CreateDDSTextureFromFile(
+                   D3D_, L"Data\\Test_HeightMap\\heightMap.dds", &heightMap_, &heightMapView_)))
+                throw Error("Failed to load textures from file");
+
+            //============= Sampler State =============
+
+            D3D11_SAMPLER_DESC samplerDesc;
+            samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+            samplerDesc.MipLODBias = 0.0f;
+            samplerDesc.MaxAnisotropy = 1;
+            samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+            samplerDesc.MinLOD = -FLT_MAX;
+            samplerDesc.MaxLOD = FLT_MAX;
+            ZeroMemory(samplerDesc.BorderColor, 4 * sizeof(FLOAT));
+
+            hr = D3D_->CreateSamplerState(&samplerDesc, &sampler_);
+            if(FAILED(hr))
+                throw Error("Failed to create sampler state");
         }
 
         void DestroyScene(void)
@@ -155,11 +185,72 @@ namespace Test_HeightMap
             ReleaseCOMObjects(heightMap_, heightMapView_, tex_, texView_);
             ReleaseCOMObjects(sampler_);
             SafeDeleteObjects(uniforms_);
-            shader_.DestroyAllStages();
+            shader_.Destroy();
         }
 
     public:
+        void Run(void)
+        {
+            try
+            {
+                if(!InitD3DContext())
+                    throw Error("Failed to initialize D3D context");
+                InitScene();
+            }
+            catch(const Error &err)
+            {
+                DestroyScene();
+                DestroyD3DContext();
+                throw err;
+            }
 
+            uniforms_->GetShaderResource<SS_VS>("heightMap")->SetShaderResource(heightMapView_);
+            uniforms_->GetShaderSampler<SS_VS>("sampler")->SetSampler(sampler_);
+
+            uniforms_->GetShaderResource<SS_VS>("tex")->SetShaderResource(texView_);
+            uniforms_->GetShaderSampler<SS_PS>("sampler")->SetSampler(sampler_);
+
+            Matrix world = Matrix::Identity;
+            Matrix view = Matrix::CreateLookAt({ 0.0f, 20.0f, 0.0f },
+                                               { 20.0f, 0.0f, 20.0f },
+                                               { 0.0f, 1.0f, 0.0f });
+            Matrix proj = Matrix::CreatePerspectiveFieldOfView(
+                                    3.14159f * 45 / 180, 1.0f, 0.1f, 100.0f);
+            VSCB VSCBData = { (world * view * proj).Transpose() };
+            uniforms_->GetConstantBuffer<SS_VS, VSCB>(D3D_, "Trans")->SetBufferData(DC_, VSCBData);
+            
+            while(!(GetKeyState(VK_ESCAPE) & 0x8000))
+            {
+                float backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+                DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
+                DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+                UINT vtxStride = sizeof(Vertex), vtxOffset = 0;
+                DC_->IASetInputLayout(inputLayout_);
+                DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+                DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &vtxOffset);
+
+                shader_.Bind(DC_);
+                uniforms_->Bind(DC_);
+                
+                DC_->Draw(vtxCount_, 0);
+                
+                uniforms_->Unbind(DC_);
+                shader_.Unbind(DC_);
+                
+                swapChain_->Present(1, 0);
+
+                MSG msg;
+                while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+            }
+
+            DestroyScene();
+            DestroyD3DContext();
+        }
     };
 }
 

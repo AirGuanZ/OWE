@@ -123,7 +123,7 @@ namespace Test_BasicShader
         {
             using namespace _SimShaderAux;
             ReleaseCOMObjects(inputLayout_, vtxBuf_);
-            shader_.DestroyAllStages();
+            shader_.Destroy();
             SafeDeleteObjects(VSCBs_);
         }
 
@@ -154,14 +154,14 @@ namespace Test_BasicShader
                 UINT vtxStride = sizeof(DirectX::XMFLOAT2), vtxOffset = 0;
                 DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &vtxOffset);
 
-                shader_.BindStages(DC_);
+                shader_.Bind(DC_);
                 VSCBs_->Bind(DC_);
 
                 DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                 DC_->Draw(3, 0);
 
                 VSCBs_->Unbind(DC_);
-                shader_.UnbindStages(DC_);
+                shader_.Unbind(DC_);
 
                 swapChain_->Present(1, 0);
 

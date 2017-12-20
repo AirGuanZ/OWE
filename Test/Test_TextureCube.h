@@ -206,7 +206,7 @@ namespace Test_TextureCube
             ReleaseCOMObjects(tex_, texView_, sampler_);
             ReleaseCOMObjects(raster_);
             SafeDeleteObjects(VSCBs_, PSSRs_, PSSSs_);
-            shader_.DestroyAllStages();
+            shader_.Destroy();
         }
 
     public:
@@ -244,14 +244,14 @@ namespace Test_TextureCube
                 DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                 DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &offset);
 
-                shader_.BindStages(DC_);
+                shader_.Bind(DC_);
                 VSCBs_->Bind(DC_); PSSRs_->Bind(DC_); PSSSs_->Bind(DC_);
 
                 DC_->RSSetState(raster_);
                 DC_->Draw(36, 0);
 
                 VSCBs_->Unbind(DC_); PSSRs_->Unbind(DC_); PSSSs_->Unbind(DC_);
-                shader_.UnbindStages(DC_);
+                shader_.Unbind(DC_);
 
                 swapChain_->Present(1, 0);
 

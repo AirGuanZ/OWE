@@ -139,7 +139,7 @@ namespace _SimShaderAux
 
         ~_Shader(void)
         {
-            DestroyAllStages();
+            Destroy();
         }
 
         template<ShaderStageSelector StageSelector>
@@ -160,7 +160,7 @@ namespace _SimShaderAux
             pStage = new _ShaderStage<StageSelector>(dev, shaderByteCode);
         }
 
-        void DestroyAllStages(void)
+        void Destroy(void)
         {
             _ShaderStageDeleter deleter;
             DoForTupleElements(deleter, stages_);
@@ -214,13 +214,13 @@ namespace _SimShaderAux
             return GetStage<SS_VS>()->GetShaderByteCodeSize();
         }
 
-        void BindStages(ID3D11DeviceContext *DC)
+        void Bind(ID3D11DeviceContext *DC)
         {
             _ShaderStageBinder binder = { DC };
             DoForTupleElements(binder, stages_);
         }
 
-        void UnbindStages(ID3D11DeviceContext *DC)
+        void Unbind(ID3D11DeviceContext *DC)
         {
             _ShaderStageUnbinder unbinder = { DC };
             DoForTupleElements(unbinder, stages_);

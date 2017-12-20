@@ -113,9 +113,9 @@ namespace Test_MixTex
             //=============Textures=============
 
             if(FAILED(DirectX::CreateDDSTextureFromFile(
-                D3D_, L"Data\\Test_MixTex\\tex1.dds", &tex1_, &tex1View_) ||
+                D3D_, L"Data\\Test_MixTex\\tex1.dds", &tex1_, &tex1View_)) ||
                 FAILED(DirectX::CreateDDSTextureFromFile(
-                    D3D_, L"Data\\Test_MixTex\\tex2.dds", &tex2_, &tex2View_))))
+                    D3D_, L"Data\\Test_MixTex\\tex2.dds", &tex2_, &tex2View_)))
                 return false;
 
             //=============Sampler state=============
@@ -146,7 +146,7 @@ namespace Test_MixTex
             ReleaseCOMObjects(inputLayout_, vtxBuf_);
             ReleaseCOMObjects(tex1_, tex2_);
             ReleaseCOMObjects(tex1View_, tex2View_);
-            shader_.DestroyAllStages();
+            shader_.Destroy();
             SafeDeleteObjects(PSSRs_, PSSSs_);
         }
 
@@ -175,7 +175,7 @@ namespace Test_MixTex
                 DC_->IASetInputLayout(inputLayout_);
                 DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &offset);
 
-                shader_.BindStages(DC_);
+                shader_.Bind(DC_);
                 PSSRs_->Bind(DC_);
                 PSSSs_->Bind(DC_);
 
@@ -184,7 +184,7 @@ namespace Test_MixTex
 
                 PSSRs_->Unbind(DC_);
                 PSSSs_->Unbind(DC_);
-                shader_.UnbindStages(DC_);
+                shader_.Unbind(DC_);
 
                 swapChain_->Present(1, 0);
 

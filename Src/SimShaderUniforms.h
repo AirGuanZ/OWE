@@ -6,10 +6,34 @@ Created by AirGuanZ
 #ifndef __SIMSHADER_UNIFORMS_H__
 #define __SIMSHADER_UNIFORMS_H__
 
+#include <cassert>
+
 #include "SimShaderStage.h"
 
 namespace _SimShaderAux
 {
+    struct _ShaderStageUniformsBinder
+    {
+        template<typename T>
+        void operator()(T &ref)
+        {
+            ref.Bind(DC);
+        }
+        
+        ID3D11DeviceContext *DC;
+    };
+    
+    struct _ShaderStageUniformsUnbinder
+    {
+        template<typename T>
+        void operator()(T &ref)
+        {
+            ref.Unbind(DC);
+        }
+        
+        ID3D11DeviceContext *DC;
+    };
+    
     template<ShaderStageSelector StageSelector>
     class _ShaderStageUniforms
     {
@@ -39,6 +63,28 @@ namespace _SimShaderAux
         _ShaderSamplerManager<StageSelector> *GetShaderSamplerManager(void)
         {
             return SSMgr_;
+        }
+        
+        void Bind(ID3D11DeviceContext *DC)
+        {
+            assert(DC != nullptr);
+            if(CBMgr_)
+                CBMgr_->Bind(DC);
+            if(SRMgr_)
+                SRMgr_->Bind(DC);
+            if(SSMgr_)
+                SSMgr_->Bind(DC);
+        }
+        
+        void Unbind(ID3D11DeviceContext *DC)
+        {
+            assert(DC != nullptr);
+            if(CBMgr_)
+                CBMgr_->Unbind(DC);
+            if(SRMgr_)
+                SRMgr_->Unbind(DC);
+            if(SSMgr_)
+                SSMgr_->Unbind(DC);
         }
 
         template<typename BufferType, bool Dynamic>
@@ -120,9 +166,19 @@ namespace _SimShaderAux
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderSamplerObject<StageSelector> *GetShaderSamplerManager(const std::string &name)
+        _ShaderSamplerObject<StageSelector> *GetShaderSampler(const std::string &name)
         {
             return GetStageUniforms<StageSelector>()->GetShaderSampler(name);
+        }
+        
+        void Bind(ID3D11DeviceContext *DC)
+        {
+            DoForTupleElements(_ShaderStageUniformsBinder{ DC }, stageUniforms_);
+        }
+        
+        void Unbind(ID3D11DeviceContext *DC)
+        {
+            DoForTupleElements(_ShaderStageUniformsUnbinder{ DC }, stageUniforms_);
         }
 
     private:

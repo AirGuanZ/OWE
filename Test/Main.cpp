@@ -12,7 +12,7 @@ int main(void)
 {
     try
     {
-        Test_TextureCube::App app;
+        Test_HeightMap::App app;
         app.Run();
     }
     catch(const SimShader::Error &err)

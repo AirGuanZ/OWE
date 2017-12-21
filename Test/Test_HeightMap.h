@@ -48,6 +48,7 @@ namespace Test_HeightMap
         ID3D11ShaderResourceView *texView_ = nullptr;
 
         ID3D11SamplerState *sampler_ = nullptr;
+        ID3D11RasterizerState *raster_ = nullptr;
         
         int vtxCount_ = 0;
 
@@ -96,7 +97,7 @@ namespace Test_HeightMap
             //============= Vertex & Index Buffer =============
 
             constexpr float VERTEX_GRID_SIZE = 1.0f;
-            constexpr int VERTEX_GRID_COUNT = 100;
+            constexpr int VERTEX_GRID_COUNT = 40;
 
             std::vector<Vertex> vtxBufData(VERTEX_GRID_COUNT * VERTEX_GRID_COUNT);
             for(int yIdx = 0; yIdx != VERTEX_GRID_COUNT; ++yIdx)
@@ -109,9 +110,8 @@ namespace Test_HeightMap
                         Vector2(xIdx / (VERTEX_GRID_COUNT - 1.0f), yIdx / (VERTEX_GRID_COUNT - 1.0f));
                 }
             }
-            vtxCount_ = VERTEX_GRID_COUNT * VERTEX_GRID_COUNT;
 
-            std::vector<UINT> idxBufData(6 * (VERTEX_GRID_COUNT - 1) * (VERTEX_GRID_COUNT - 1));
+            std::vector<uint16_t> idxBufData(6 * (VERTEX_GRID_COUNT - 1) * (VERTEX_GRID_COUNT - 1));
             int idxBufIdx = 0;
             for(int yIdx = 0; yIdx != VERTEX_GRID_COUNT - 1; ++yIdx)
             {
@@ -125,6 +125,7 @@ namespace Test_HeightMap
                     idxBufData[idxBufIdx++] = yIdx * VERTEX_GRID_COUNT + xIdx + 1;
                 }
             }
+            vtxCount_ = idxBufData.size();
 
             D3D11_BUFFER_DESC vtxBufDesc;
             vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -175,6 +176,23 @@ namespace Test_HeightMap
             hr = D3D_->CreateSamplerState(&samplerDesc, &sampler_);
             if(FAILED(hr))
                 throw Error("Failed to create sampler state");
+
+            //============= Rasterizer State =============
+
+            D3D11_RASTERIZER_DESC rasDesc;
+            rasDesc.AntialiasedLineEnable = FALSE;
+            rasDesc.CullMode = D3D11_CULL_BACK;
+            rasDesc.DepthBias = 0;
+            rasDesc.DepthBiasClamp = 0.0f;
+            rasDesc.FillMode = D3D11_FILL_WIREFRAME;
+            rasDesc.FrontCounterClockwise = TRUE;
+            rasDesc.MultisampleEnable = FALSE;
+            rasDesc.ScissorEnable = FALSE;
+            rasDesc.SlopeScaledDepthBias = 0.0f;
+
+            hr = D3D_->CreateRasterizerState(&rasDesc, &raster_);
+            if(FAILED(hr))
+                throw Error("Failed to create rasterizer state");
         }
 
         void DestroyScene(void)
@@ -183,7 +201,7 @@ namespace Test_HeightMap
 
             ReleaseCOMObjects(vtxBuf_, idxBuf_, inputLayout_);
             ReleaseCOMObjects(heightMap_, heightMapView_, tex_, texView_);
-            ReleaseCOMObjects(sampler_);
+            ReleaseCOMObjects(sampler_, raster_);
             SafeDeleteObjects(uniforms_);
             shader_.Destroy();
         }
@@ -205,17 +223,17 @@ namespace Test_HeightMap
             }
 
             uniforms_->GetShaderResource<SS_VS>("heightMap")->SetShaderResource(heightMapView_);
-            uniforms_->GetShaderSampler<SS_VS>("sampler")->SetSampler(sampler_);
+            uniforms_->GetShaderSampler<SS_VS>("sam")->SetSampler(sampler_);
 
-            uniforms_->GetShaderResource<SS_VS>("tex")->SetShaderResource(texView_);
-            uniforms_->GetShaderSampler<SS_PS>("sampler")->SetSampler(sampler_);
+            uniforms_->GetShaderResource<SS_PS>("tex")->SetShaderResource(texView_);
+            uniforms_->GetShaderSampler<SS_PS>("sam")->SetSampler(sampler_);
 
             Matrix world = Matrix::Identity;
-            Matrix view = Matrix::CreateLookAt({ 0.0f, 20.0f, 0.0f },
+            Matrix view = Matrix::CreateLookAt({ -10.0f, 20.0f, -10.0f },
                                                { 20.0f, 0.0f, 20.0f },
                                                { 0.0f, 1.0f, 0.0f });
             Matrix proj = Matrix::CreatePerspectiveFieldOfView(
-                                    3.14159f * 45 / 180, 1.0f, 0.1f, 100.0f);
+                                    3.14159f * 45 / 180, 1.0f, 0.1f, 1000.0f);
             VSCB VSCBData = { (world * view * proj).Transpose() };
             uniforms_->GetConstantBuffer<SS_VS, VSCB>(D3D_, "Trans")->SetBufferData(DC_, VSCBData);
             
@@ -229,11 +247,13 @@ namespace Test_HeightMap
                 DC_->IASetInputLayout(inputLayout_);
                 DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
                 DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &vtxOffset);
+                DC_->IASetIndexBuffer(idxBuf_, DXGI_FORMAT_R16_UINT, 0);
 
                 shader_.Bind(DC_);
                 uniforms_->Bind(DC_);
                 
-                DC_->Draw(vtxCount_, 0);
+                DC_->RSSetState(raster_);
+                DC_->DrawIndexed(vtxCount_, 0, 0);
                 
                 uniforms_->Unbind(DC_);
                 shader_.Unbind(DC_);

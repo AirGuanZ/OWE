@@ -65,6 +65,7 @@
     <None Include="Data\Test_TextureCube\test.vs">
       <Filter>Data\Test_TextureCube</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Test_MixTex\tex1.dds">

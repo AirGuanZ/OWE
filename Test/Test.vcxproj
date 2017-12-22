@@ -19,19 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TestApp.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Test_BasicShader.h" />
-    <ClInclude Include="Test_HeightMap.h" />
-    <ClInclude Include="Test_TextureCube.h" />
-    <ClInclude Include="Test_MixTex.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TestApp.h" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Data\Test_BasicShader\test.ps" />
     <None Include="Data\Test_BasicShader\test.vs" />
     <None Include="Data\Test_MixTex\test.ps" />
@@ -44,6 +31,17 @@
     <Image Include="Data\Test_MixTex\tex1.dds" />
     <Image Include="Data\Test_MixTex\tex2.dds" />
     <Image Include="Data\Test_TextureCube\tex.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Src\Test\TestApp.h" />
+    <ClInclude Include="..\Src\Test\Test_BasicShader.h" />
+    <ClInclude Include="..\Src\Test\Test_HeightMap.h" />
+    <ClInclude Include="..\Src\Test\Test_MixTex.h" />
+    <ClInclude Include="..\Src\Test\Test_TextureCube.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Src\Test\Main.cpp" />
+    <ClCompile Include="..\Src\Test\TestApp.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

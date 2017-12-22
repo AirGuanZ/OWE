@@ -12,14 +12,14 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
-#include <SimShader.hpp>
+#include <OWEShader.hpp>
 
 #include "TestApp.h"
 
 namespace Test_HeightMap
 {
     using namespace DirectX::SimpleMath;
-    using namespace SimShader;
+    using namespace OWEShader;
 
     class App : public TestApp
     {
@@ -62,7 +62,7 @@ namespace Test_HeightMap
         {
             std::ifstream fin(filename, std::ifstream::in);
             if(!fin)
-                throw SimShader::Error(("Failed to open file: " + filename).c_str());
+                throw OWEShader::Error(("Failed to open file: " + filename).c_str());
             return std::string(std::istreambuf_iterator<char>(fin),
                                std::istreambuf_iterator<char>());
         }
@@ -92,7 +92,7 @@ namespace Test_HeightMap
                 shader_.GetShaderByteCodeSizeWithInputSignature(),
                 &inputLayout_);
             if(FAILED(hr))
-                throw SimShader::Error("Failed to create input layout");
+                throw OWEShader::Error("Failed to create input layout");
 
             //============= Vertex & Index Buffer =============
 
@@ -197,7 +197,7 @@ namespace Test_HeightMap
 
         void DestroyScene(void)
         {
-            using namespace _SimShaderAux;
+            using namespace _OWEShaderAux;
 
             ReleaseCOMObjects(vtxBuf_, idxBuf_, inputLayout_);
             ReleaseCOMObjects(heightMap_, heightMapView_, tex_, texView_);

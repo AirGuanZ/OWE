@@ -15,7 +15,7 @@ int main(void)
         Test_HeightMap::App app;
         app.Run();
     }
-    catch(const SimShader::Error &err)
+    catch(const OWEShader::Error &err)
     {
         std::cout << err.what() << std::endl;
     }

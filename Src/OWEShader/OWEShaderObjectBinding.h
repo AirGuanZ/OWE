@@ -1,15 +1,15 @@
 /*================================================================
-Filename: SimShaderObjectBinding.h
+Filename: OWEShaderObjectBinding.h
 Date: 2017.11.23
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_OBJECT_BINDING_H__
-#define __SIMSHADER_OBJECT_BINDING_H__
+#ifndef __OWESHADER_OBJECT_BINDING_H__
+#define __OWESHADER_OBJECT_BINDING_H__
 
 #include <cassert>
 #include <d3d11.h>
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     using ShaderStageSelector = int;
 
@@ -69,4 +69,4 @@ namespace _SimShaderAux
     }
 }
 
-#endif //__SIMSHADER_OBJECT_BINDING_H__
+#endif //__OWESHADER_OBJECT_BINDING_H__

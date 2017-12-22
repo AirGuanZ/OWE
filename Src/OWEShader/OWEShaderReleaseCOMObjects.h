@@ -1,12 +1,12 @@
 /*================================================================
-Filename: SimShaderReleaseCOMObjects.h
+Filename: OWEShaderReleaseCOMObjects.h
 Date: 2017.12.6
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_RELEASE_COM_OBJECTS_H__
-#define __SIMSHADER_RELEASE_COM_OBJECTS_H__
+#ifndef __OWESHADER_RELEASE_COM_OBJECTS_H__
+#define __OWESHADER_RELEASE_COM_OBJECTS_H__
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     template<typename T>
     void SafeDeleteObjects(T &ptr)
@@ -43,4 +43,4 @@ namespace _SimShaderAux
     }
 }
 
-#endif //__SIMSHADER_RELEASE_COM_OBJECTS_H__
+#endif //__OWESHADER_RELEASE_COM_OBJECTS_H__

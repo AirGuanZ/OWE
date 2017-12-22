@@ -1,16 +1,16 @@
 /*================================================================
-Filename: SimShaderUniforms.h
+Filename: OWEShaderUniforms.h
 Date: 2017.12.18
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_UNIFORMS_H__
-#define __SIMSHADER_UNIFORMS_H__
+#ifndef __OWESHADER_UNIFORMS_H__
+#define __OWESHADER_UNIFORMS_H__
 
 #include <cassert>
 
-#include "SimShaderStage.h"
+#include "OWEShaderStage.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     struct _ShaderStageUniformsBinder
     {
@@ -186,10 +186,10 @@ namespace _SimShaderAux
     };
 }
 
-namespace SimShader
+namespace OWEShader
 {
-    template<_SimShaderAux::ShaderStageSelector...StageSelectors>
-    using ShaderUniforms = _SimShaderAux::_ShaderUniformManager<StageSelectors...>;
+    template<_OWEShaderAux::ShaderStageSelector...StageSelectors>
+    using ShaderUniforms = _OWEShaderAux::_ShaderUniformManager<StageSelectors...>;
 }
 
-#endif //__SIMSHADER_UNIFORMS_H__
+#endif //__OWESHADER_UNIFORMS_H__

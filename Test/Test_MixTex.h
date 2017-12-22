@@ -11,7 +11,7 @@ Created by AirGuanZ
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
-#include <SimShader.hpp>
+#include <OWEShader.hpp>
 
 #include "TestApp.h"
 
@@ -22,7 +22,7 @@ namespace Test_MixTex
         ID3D11InputLayout *inputLayout_ = nullptr;
         ID3D11Buffer *vtxBuf_ = nullptr;
 
-        SimShader::Shader<SS_VS, SS_PS> shader_;
+        OWEShader::Shader<SS_VS, SS_PS> shader_;
 
         ID3D11Resource *tex1_ = nullptr;
         ID3D11Resource *tex2_ = nullptr;
@@ -32,8 +32,8 @@ namespace Test_MixTex
 
         ID3D11SamplerState *sampler_ = nullptr;
 
-        SimShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
-        SimShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
+        OWEShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
+        OWEShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
 
         struct Vertex
         {
@@ -45,7 +45,7 @@ namespace Test_MixTex
         {
             std::ifstream fin(filename, std::ifstream::in);
             if(!fin)
-                throw SimShader::Error(("Failed to open file: " + filename).c_str());
+                throw OWEShader::Error(("Failed to open file: " + filename).c_str());
             return std::string(std::istreambuf_iterator<char>(fin),
                 std::istreambuf_iterator<char>());
         }
@@ -61,7 +61,7 @@ namespace Test_MixTex
                 shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.vs"));
                 shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.ps"));
             }
-            catch(const SimShader::Error &err)
+            catch(const OWEShader::Error &err)
             {
                 std::cout << err.what() << std::endl;
             }
@@ -141,7 +141,7 @@ namespace Test_MixTex
 
         void DestroyScene(void)
         {
-            using namespace _SimShaderAux;
+            using namespace _OWEShaderAux;
 
             ReleaseCOMObjects(inputLayout_, vtxBuf_);
             ReleaseCOMObjects(tex1_, tex2_);

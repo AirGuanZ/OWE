@@ -1,20 +1,20 @@
 /*================================================================
-Filename: SimShader.h
+Filename: OWEShader.h
 Date: 2017.12.6
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_H__
-#define __SIMSHADER_H__
+#ifndef __OWESHADER_H__
+#define __OWESHADER_H__
 
 #include <tuple>
 #include <utility>
 
-#include "SimShaderFatalError.h"
-#include "SimShaderReleaseCOMObjects.h"
-#include "SimShaderStage.h"
-#include "SimShaderUniforms.h"
+#include "OWEShaderFatalError.h"
+#include "OWEShaderReleaseCOMObjects.h"
+#include "OWEShaderStage.h"
+#include "OWEShaderUniforms.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     template<typename Func, typename Tu, size_t FI>
     inline void _DoForTupleElements(Func func, Tu &tu, std::index_sequence<FI>)
@@ -231,38 +231,38 @@ namespace _SimShaderAux
     };
 }
 
-namespace SimShader
+namespace OWEShader
 {
-    using Error = _SimShaderAux::SimShaderError;
+    using Error = _OWEShaderAux::OWEShaderError;
 
-    using ShaderStageSelector = _SimShaderAux::ShaderStageSelector;
+    using ShaderStageSelector = _OWEShaderAux::ShaderStageSelector;
 
     template<ShaderStageSelector StageSelector, typename BufferType, bool Dynamic = true>
-    using ConstantBufferObject = _SimShaderAux::_ConstantBufferObject<BufferType, StageSelector, Dynamic>;
+    using ConstantBufferObject = _OWEShaderAux::_ConstantBufferObject<BufferType, StageSelector, Dynamic>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderResourceObject = _SimShaderAux::_ShaderResourceObject<StageSelector>;
+    using ShaderResourceObject = _OWEShaderAux::_ShaderResourceObject<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderSamplerObject = _SimShaderAux::_ShaderSamplerObject<StageSelector>;
+    using ShaderSamplerObject = _OWEShaderAux::_ShaderSamplerObject<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ConstantBufferManager = _SimShaderAux::_ConstantBufferManager<StageSelector>;
+    using ConstantBufferManager = _OWEShaderAux::_ConstantBufferManager<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderResourceManager = _SimShaderAux::_ShaderResourceManager<StageSelector>;
+    using ShaderResourceManager = _OWEShaderAux::_ShaderResourceManager<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderSamplerManager = _SimShaderAux::_ShaderSamplerManager<StageSelector>;
+    using ShaderSamplerManager = _OWEShaderAux::_ShaderSamplerManager<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderStage = _SimShaderAux::_ShaderStage<StageSelector>;
+    using ShaderStage = _OWEShaderAux::_ShaderStage<StageSelector>;
 
     template<ShaderStageSelector...StageSelectors>
-    using Shader = _SimShaderAux::_Shader<StageSelectors...>;
+    using Shader = _OWEShaderAux::_Shader<StageSelectors...>;
 }
 
-using _SimShaderAux::SS_VS;
-using _SimShaderAux::SS_PS;
+using _OWEShaderAux::SS_VS;
+using _OWEShaderAux::SS_PS;
 
-#endif //__SIMSHADER_H__
+#endif //__OWESHADER_H__

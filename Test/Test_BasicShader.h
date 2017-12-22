@@ -10,7 +10,7 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-#include <SimShader.hpp>
+#include <OWEShader.hpp>
 
 #include "TestApp.h"
 
@@ -21,7 +21,7 @@ namespace Test_BasicShader
         ID3D11InputLayout *inputLayout_ = nullptr;
         ID3D11Buffer *vtxBuf_ = nullptr;
 
-        SimShader::Shader<SS_VS, SS_PS> shader_;
+        OWEShader::Shader<SS_VS, SS_PS> shader_;
 
         struct VSCBSize
         {
@@ -30,7 +30,7 @@ namespace Test_BasicShader
             float pad1;
         };
 
-        SimShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
+        OWEShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
 
         bool InitScene(void)
         {
@@ -121,7 +121,7 @@ namespace Test_BasicShader
 
         void DestroyScene(void)
         {
-            using namespace _SimShaderAux;
+            using namespace _OWEShaderAux;
             ReleaseCOMObjects(inputLayout_, vtxBuf_);
             shader_.Destroy();
             SafeDeleteObjects(VSCBs_);

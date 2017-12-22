@@ -11,7 +11,7 @@ Created by AirGuanZ
 #include <string>
 
 #include <DDSTextureLoader.h>
-#include <SimShader.hpp>
+#include <OWEShader.hpp>
 #include <SimpleMath.h>
 
 #include "TestApp.h"
@@ -34,11 +34,11 @@ namespace Test_TextureCube
         ID3D11Buffer *vtxBuf_ = nullptr;
         ID3D11InputLayout *inputLayout_ = nullptr;
 
-        SimShader::Shader<SS_VS, SS_PS> shader_;
+        OWEShader::Shader<SS_VS, SS_PS> shader_;
 
-        SimShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
-        SimShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
-        SimShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
+        OWEShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
+        OWEShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
+        OWEShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
 
         ID3D11ShaderResourceView *texView_ = nullptr;
         ID3D11Resource *tex_ = nullptr;
@@ -57,7 +57,7 @@ namespace Test_TextureCube
         {
             std::ifstream fin(filename, std::ifstream::in);
             if(!fin)
-                throw SimShader::Error(("Failed to open file: " + filename).c_str());
+                throw OWEShader::Error(("Failed to open file: " + filename).c_str());
             return std::string(std::istreambuf_iterator<char>(fin),
                 std::istreambuf_iterator<char>());
         }
@@ -86,7 +86,7 @@ namespace Test_TextureCube
             hr = D3D_->CreateInputLayout(inputDesc, 2, shader_.GetShaderByteCodeWithInputSignature(),
                 shader_.GetShaderByteCodeSizeWithInputSignature(), &inputLayout_);
             if(FAILED(hr))
-                throw SimShader::Error("Failed to create input layout");
+                throw OWEShader::Error("Failed to create input layout");
 
             //=============Vertex Buffer=============
 
@@ -201,7 +201,7 @@ namespace Test_TextureCube
 
         void DestroyScene(void)
         {
-            using namespace _SimShaderAux;
+            using namespace _OWEShaderAux;
             ReleaseCOMObjects(vtxBuf_, inputLayout_);
             ReleaseCOMObjects(tex_, texView_, sampler_);
             ReleaseCOMObjects(raster_);
@@ -216,7 +216,7 @@ namespace Test_TextureCube
             {
                 DestroyScene();
                 DestroyD3DContext();
-                throw SimShader::Error("Failed to initialize render context");
+                throw OWEShader::Error("Failed to initialize render context");
             }
 
             float horRad = 0.0f;

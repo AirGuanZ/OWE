@@ -1,12 +1,12 @@
 /*================================================================
-Filename: SimShaderUncopiable.h
+Filename: OWEShaderUncopiable.h
 Date: 2017.11.24
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_UNCOPIABLE_H__
-#define __SIMSHADER_UNCOPIABLE_H__
+#ifndef __OWESHADER_UNCOPIABLE_H__
+#define __OWESHADER_UNCOPIABLE_H__
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     class _Uncopiable
     {
@@ -17,4 +17,4 @@ namespace _SimShaderAux
     };
 }
 
-#endif //__SIMSHADER_UNCOPIABLE_H__
+#endif //__OWESHADER_UNCOPIABLE_H__

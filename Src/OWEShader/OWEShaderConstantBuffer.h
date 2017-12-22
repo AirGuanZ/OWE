@@ -1,23 +1,23 @@
 /*================================================================
-Filename: SimShaderConstantBuffer.h
+Filename: OWEShaderConstantBuffer.h
 Date: 2017.11.23
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_CONSTANT_BUFFER_H__
-#define __SIMSHADER_CONSTANT_BUFFER_H__
+#ifndef __OWESHADER_CONSTANT_BUFFER_H__
+#define __OWESHADER_CONSTANT_BUFFER_H__
 
 #include <cstring>
 #include <map>
 #include <typeinfo>
 #include <vector>
 
-#include "SimShaderFatalError.h"
-#include "SimShaderGenBuffer.h"
-#include "SimShaderObjectBinding.h"
-#include "SimShaderReleaseCOMObjects.h"
-#include "SimShaderUncopiable.h"
+#include "OWEShaderFatalError.h"
+#include "OWEShaderGenBuffer.h"
+#include "OWEShaderObjectBinding.h"
+#include "OWEShaderReleaseCOMObjects.h"
+#include "OWEShaderUncopiable.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     template<ShaderStageSelector _ShaderSelector>
     class _ConstantBufferObjectBase;
@@ -94,7 +94,7 @@ namespace _SimShaderAux
             D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
             buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), false, &dataDesc);
             if(!buf_)
-                throw SimShaderError("Failed to create constant buffer");
+                throw OWEShaderError("Failed to create constant buffer");
         }
 
         ~_ConstantBufferObject(void)
@@ -135,7 +135,7 @@ namespace _SimShaderAux
             else
                 buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, nullptr);
             if(!buf_)
-                throw SimShaderError("Failed to create constant buffer");
+                throw OWEShaderError("Failed to create constant buffer");
         }
 
         ~_ConstantBufferObject(void)
@@ -160,7 +160,7 @@ namespace _SimShaderAux
         {
             assert(!name.empty() && byteSize > 0);
             if(CBs_.find(name) != CBs_.end())
-                throw SimShaderError("Constant buffer name repeated: " + name);
+                throw OWEShaderError("Constant buffer name repeated: " + name);
             CBs_[name] = _CBRec{ slot, byteSize, nullptr };
         }
 
@@ -175,18 +175,18 @@ namespace _SimShaderAux
 
             auto &it = CBs_.find(name);
             if(it == CBs_.end())
-                throw SimShaderError(("Constant buffer not found: " + name).c_str());
+                throw OWEShaderError(("Constant buffer not found: " + name).c_str());
             _CBRec &rec = it->second;
 
             if(rec.obj)
             {
                 if(typeid(*rec.obj) != typeid(_ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
-                    throw SimShaderError("Inconsistent constant buffer type");
+                    throw OWEShaderError("Inconsistent constant buffer type");
                 return reinterpret_cast<ResultType*>(rec.obj);
             }
 
             if(sizeof(BufferType) != rec.byteSize)
-                throw SimShaderError("Inconstent constant buffer size");
+                throw OWEShaderError("Inconstent constant buffer size");
 
             rec.obj = new ResultType(dev, rec.slot, data);
             return reinterpret_cast<ResultType*>(rec.obj);
@@ -232,4 +232,4 @@ namespace _SimShaderAux
     };
 }
 
-#endif //__SIMSHADER_CONSTANT_BUFFER_H__
+#endif //__OWESHADER_CONSTANT_BUFFER_H__

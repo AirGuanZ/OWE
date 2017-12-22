@@ -1,19 +1,19 @@
 /*================================================================
-Filename: SimShaderResource.h
+Filename: OWEShaderResource.h
 Date: 2017.11.24
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_RESOURCE_H__
-#define __SIMSHADER_RESOURCE_H__
+#ifndef __OWESHADER_RESOURCE_H__
+#define __OWESHADER_RESOURCE_H__
 
 #include <map>
 
-#include "SimShaderFatalError.h"
-#include "SimShaderObjectBinding.h"
-#include "SimShaderReleaseCOMObjects.h"
-#include "SimShaderUncopiable.h"
+#include "OWEShaderFatalError.h"
+#include "OWEShaderObjectBinding.h"
+#include "OWEShaderReleaseCOMObjects.h"
+#include "OWEShaderUncopiable.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     template<ShaderStageSelector StageSelector>
     class _ShaderResourceObject;
@@ -87,7 +87,7 @@ namespace _SimShaderAux
         {
             auto it = SRs_.find(name);
             if(it != SRs_.end())
-                throw SimShaderError("Shader resource name repeated: " + name);
+                throw OWEShaderError("Shader resource name repeated: " + name);
             SRs_[name] = _SRRec{ slot, new RscObj(slot, initSRV) };
         }
 
@@ -95,7 +95,7 @@ namespace _SimShaderAux
         {
             auto it = SRs_.find(name);
             if(it == SRs_.end())
-                throw SimShaderError("Shader resource not found: " + name);
+                throw OWEShaderError("Shader resource not found: " + name);
             
             assert(it->second.obj != nullptr);
             return it->second.obj;
@@ -140,4 +140,4 @@ namespace _SimShaderAux
     };
 }
 
-#endif //__SIMSHADER_RESOURCE_H__
+#endif //__OWESHADER_RESOURCE_H__

@@ -1,10 +1,10 @@
 /*================================================================
-Filename: SimShaderReflection.h
+Filename: OWEShaderReflection.h
 Date: 2017.11.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_REFLECTION_H__
-#define __SIMSHADER_REFLECTION_H__
+#ifndef __OWESHADER_REFLECTION_H__
+#define __OWESHADER_REFLECTION_H__
 
 #include <cassert>
 #include <cstring>
@@ -13,9 +13,9 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-#include "SimShaderConstantBuffer.h"
+#include "OWEShaderConstantBuffer.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     inline ID3D11ShaderReflection *_GetShaderReflection(void *shaderData, SIZE_T length)
     {
@@ -95,4 +95,4 @@ namespace _SimShaderAux
     }
 }
 
-#endif //__SIMSHADER_REFLECTION_H__
+#endif //__OWESHADER_REFLECTION_H__

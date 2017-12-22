@@ -1,19 +1,19 @@
 /*================================================================
-Filename: SimShaderSampler.h
+Filename: OWEShaderSampler.h
 Date: 2017.11.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_SAMPLER_H__
-#define __SIMSHADER_SAMPLER_H__
+#ifndef __OWESHADER_SAMPLER_H__
+#define __OWESHADER_SAMPLER_H__
 
 #include <map>
 
-#include "SimShaderFatalError.h"
-#include "SimShaderObjectBinding.h"
-#include "SimShaderReleaseCOMObjects.h"
-#include "SimShaderUncopiable.h"
+#include "OWEShaderFatalError.h"
+#include "OWEShaderObjectBinding.h"
+#include "OWEShaderReleaseCOMObjects.h"
+#include "OWEShaderUncopiable.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     template<ShaderStageSelector StageSelector>
     class _ShaderSamplerObject;
@@ -87,7 +87,7 @@ namespace _SimShaderAux
         {
             auto it = SSs_.find(name);
             if(it != SSs_.end())
-                throw SimShaderError("Shader sampler name repeated: " + name);
+                throw OWEShaderError("Shader sampler name repeated: " + name);
             SSs_[name] = _SSRec{ slot, new SSobj(slot, initSampler) };
         }
 
@@ -95,7 +95,7 @@ namespace _SimShaderAux
         {
             auto it = SSs_.find(name);
             if(it == SSs_.end())
-                throw SimShaderError(("Shader sampler not found: " + name).c_str());
+                throw OWEShaderError(("Shader sampler not found: " + name).c_str());
 
             assert(it->second.obj != nullptr);
             return it->second.obj;
@@ -141,4 +141,4 @@ namespace _SimShaderAux
     };
 }
 
-#endif //__SIMSHADER_SAMPLER_H__
+#endif //__OWESHADER_SAMPLER_H__

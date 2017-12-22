@@ -1,24 +1,24 @@
 /*================================================================
-Filename: SimShaderStage.h
+Filename: OWEShaderStage.h
 Date: 2017.11.26
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_STAGE_H__
-#define __SIMSHADER_STAGE_H__
+#ifndef __OWESHADER_STAGE_H__
+#define __OWESHADER_STAGE_H__
 
 #include <cassert>
 #include <d3d11.h>
 
-#include "SimShaderObjectBinding.h"
-#include "SimShaderReflection.h"
-#include "SimShaderReleaseCOMObjects.h"
-#include "SimShaderUncopiable.h"
+#include "OWEShaderObjectBinding.h"
+#include "OWEShaderReflection.h"
+#include "OWEShaderReleaseCOMObjects.h"
+#include "OWEShaderUncopiable.h"
 
-#include "SimShaderConstantBuffer.h"
-#include "SimShaderSampler.h"
-#include "SimShaderResource.h"
+#include "OWEShaderConstantBuffer.h"
+#include "OWEShaderSampler.h"
+#include "OWEShaderResource.h"
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     template<ShaderStageSelector>
     class _ShaderStageSpec;
@@ -140,14 +140,14 @@ namespace _SimShaderAux
             std::string dummyErrMsg;
             shaderByteCode_ = StageSpec::CompileShader(src, &dummyErrMsg, target, entry);
             if(!shaderByteCode_)
-                throw SimShaderError(dummyErrMsg.c_str());
+                throw OWEShaderError(dummyErrMsg.c_str());
 
             shader_ = StageSpec::InitShader(dev, shaderByteCode_->GetBufferPointer(),
                                                  shaderByteCode_->GetBufferSize());
             if(!shader_)
             {
                 ReleaseCOMObjects(shaderByteCode_);
-                throw SimShaderError("Failed to create D3D shader object");
+                throw OWEShaderError("Failed to create D3D shader object");
             }
 
             InitializeShaderRecords();
@@ -165,7 +165,7 @@ namespace _SimShaderAux
             if(!shader_)
             {
                 ReleaseCOMObjects(shaderByteCode_);
-                throw SimShaderError("Failed to create D3D shader object");
+                throw OWEShaderError("Failed to create D3D shader object");
             }
 
             InitializeShaderRecords();
@@ -236,7 +236,7 @@ namespace _SimShaderAux
             ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode_->GetBufferPointer(),
                                                                shaderByteCode_->GetBufferSize());
             if(!ref)
-                throw SimShaderError("Failed to initialize shader reflection");
+                throw OWEShaderError("Failed to initialize shader reflection");
 
             std::map<std::string, _CBInfo> CBInfos;
             _GetConstantBuffers(ref, &CBInfos);
@@ -269,4 +269,4 @@ namespace _SimShaderAux
     };
 }
 
-#endif //__SIMSHADER_STAGE_H__
+#endif //__OWESHADER_STAGE_H__

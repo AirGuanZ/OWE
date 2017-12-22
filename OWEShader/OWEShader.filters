@@ -10,43 +10,43 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Src\SimShaderObjectBinding.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderConstantBuffer.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderGenBuffer.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderUncopiable.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderFatalError.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderResource.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderReflection.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderSampler.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderStage.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShaderReleaseCOMObjects.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Src\SimShader.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Inc\SimShader.hpp">
+    <ClInclude Include="..\Inc\OWEShader.hpp">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\SimShaderUniforms.h">
+    <ClInclude Include="..\Src\OWEShader.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderConstantBuffer.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderFatalError.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderGenBuffer.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderObjectBinding.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderReflection.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderReleaseCOMObjects.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderResource.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderSampler.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderStage.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderUncopiable.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\OWEShaderUniforms.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>

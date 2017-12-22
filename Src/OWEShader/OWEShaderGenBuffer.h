@@ -1,15 +1,15 @@
 /*================================================================
-Filename: SimShaderGenBuffer.h
+Filename: OWEShaderGenBuffer.h
 Date: 2017.11.23
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SIMSHADER_GEN_BUFFER_H__
-#define __SIMSHADER_GEN_BUFFER_H__
+#ifndef __OWESHADER_GEN_BUFFER_H__
+#define __OWESHADER_GEN_BUFFER_H__
 
 #include <cassert>
 #include <d3d11.h>
 
-namespace _SimShaderAux
+namespace _OWEShaderAux
 {
     inline ID3D11Buffer *_GenConstantBuffer(ID3D11Device *dev, size_t byteSize,
                                             bool dynamic, const D3D11_SUBRESOURCE_DATA *data)
@@ -40,4 +40,4 @@ namespace _SimShaderAux
     }
 }
 
-#endif //__SIMSHADER_GEN_BUFFER_H__
+#endif //__OWESHADER_GEN_BUFFER_H__

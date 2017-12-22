@@ -4,7 +4,7 @@ Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/\
 #include <stdexcept>
-#include <SimShader.hpp>
+#include <OWEShader.hpp>
 
 #include "TestApp.h"
 
@@ -174,7 +174,7 @@ bool TestApp::InitD3DContext(void)
 
 void TestApp::DestroyD3DContext(void)
 {
-    using namespace _SimShaderAux;
+    using namespace _OWEShaderAux;
 
     ReleaseCOMObjects(renderTargetView_, depthStencilView_, depthStencilState_, depthStencilBuffer_);
     ReleaseCOMObjects(D3D_, DC_);

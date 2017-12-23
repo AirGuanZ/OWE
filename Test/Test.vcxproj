@@ -37,6 +37,7 @@
     <ClInclude Include="..\Src\Test\Test_BasicShader.h" />
     <ClInclude Include="..\Src\Test\Test_HeightMap.h" />
     <ClInclude Include="..\Src\Test\Test_MixTex.h" />
+    <ClInclude Include="..\Src\Test\Test_NormalMap.h" />
     <ClInclude Include="..\Src\Test\Test_TextureCube.h" />
   </ItemGroup>
   <ItemGroup>

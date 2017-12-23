@@ -11,7 +11,7 @@ Created by AirGuanZ
 #include <string>
 
 #include <DDSTextureLoader.h>
-#include <OWEShader.hpp>
+#include <OWEShader.h>
 #include <SimpleMath.h>
 
 #include "TestApp.h"
@@ -34,11 +34,11 @@ namespace Test_TextureCube
         ID3D11Buffer *vtxBuf_ = nullptr;
         ID3D11InputLayout *inputLayout_ = nullptr;
 
-        OWEShader::Shader<SS_VS, SS_PS> shader_;
+        OWE::Shader<SS_VS, SS_PS> shader_;
 
-        OWEShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
-        OWEShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
-        OWEShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
+        OWE::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
+        OWE::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
+        OWE::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
 
         ID3D11ShaderResourceView *texView_ = nullptr;
         ID3D11Resource *tex_ = nullptr;
@@ -46,21 +46,6 @@ namespace Test_TextureCube
         ID3D11SamplerState *sampler_ = nullptr;
 
         ID3D11RasterizerState *raster_ = nullptr;
-
-        template<typename ClassType, typename MemType>
-        static size_t _MemOffset(MemType ClassType::* pMem)
-        {
-            return reinterpret_cast<size_t>(&(reinterpret_cast<ClassType*>(0)->*pMem));
-        }
-
-        static std::string _ReadFile(const std::string &filename)
-        {
-            std::ifstream fin(filename, std::ifstream::in);
-            if(!fin)
-                throw OWEShader::Error(("Failed to open file: " + filename).c_str());
-            return std::string(std::istreambuf_iterator<char>(fin),
-                std::istreambuf_iterator<char>());
-        }
 
         bool InitScene(void)
         {
@@ -86,7 +71,7 @@ namespace Test_TextureCube
             hr = D3D_->CreateInputLayout(inputDesc, 2, shader_.GetShaderByteCodeWithInputSignature(),
                 shader_.GetShaderByteCodeSizeWithInputSignature(), &inputLayout_);
             if(FAILED(hr))
-                throw OWEShader::Error("Failed to create input layout");
+                throw OWE::Error("Failed to create input layout");
 
             //=============Vertex Buffer=============
 
@@ -216,7 +201,7 @@ namespace Test_TextureCube
             {
                 DestroyScene();
                 DestroyD3DContext();
-                throw OWEShader::Error("Failed to initialize render context");
+                throw OWE::Error("Failed to initialize render context");
             }
 
             float horRad = 0.0f;

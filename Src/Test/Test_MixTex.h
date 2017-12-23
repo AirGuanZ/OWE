@@ -11,7 +11,7 @@ Created by AirGuanZ
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
-#include <OWEShader.hpp>
+#include <OWEShader.h>
 
 #include "TestApp.h"
 
@@ -22,7 +22,7 @@ namespace Test_MixTex
         ID3D11InputLayout *inputLayout_ = nullptr;
         ID3D11Buffer *vtxBuf_ = nullptr;
 
-        OWEShader::Shader<SS_VS, SS_PS> shader_;
+        OWE::Shader<SS_VS, SS_PS> shader_;
 
         ID3D11Resource *tex1_ = nullptr;
         ID3D11Resource *tex2_ = nullptr;
@@ -32,23 +32,14 @@ namespace Test_MixTex
 
         ID3D11SamplerState *sampler_ = nullptr;
 
-        OWEShader::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
-        OWEShader::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
+        OWE::ShaderResourceManager<SS_PS> *PSSRs_ = nullptr;
+        OWE::ShaderSamplerManager<SS_PS> *PSSSs_ = nullptr;
 
         struct Vertex
         {
             DirectX::SimpleMath::Vector2 pos;
             DirectX::SimpleMath::Vector2 uv;
         };
-
-        static std::string _ReadFile(const std::string &filename)
-        {
-            std::ifstream fin(filename, std::ifstream::in);
-            if(!fin)
-                throw OWEShader::Error(("Failed to open file: " + filename).c_str());
-            return std::string(std::istreambuf_iterator<char>(fin),
-                std::istreambuf_iterator<char>());
-        }
 
         bool InitScene(void)
         {
@@ -61,7 +52,7 @@ namespace Test_MixTex
                 shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.vs"));
                 shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.ps"));
             }
-            catch(const OWEShader::Error &err)
+            catch(const OWE::Error &err)
             {
                 std::cout << err.what() << std::endl;
             }

@@ -186,7 +186,7 @@ namespace _OWEShaderAux
     };
 }
 
-namespace OWEShader
+namespace OWE
 {
     template<_OWEShaderAux::ShaderStageSelector...StageSelectors>
     using ShaderUniforms = _OWEShaderAux::_ShaderUniformManager<StageSelectors...>;

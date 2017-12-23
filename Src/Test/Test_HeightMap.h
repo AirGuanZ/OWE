@@ -12,14 +12,14 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
-#include <OWEShader.hpp>
+#include <OWEShader.h>
 
 #include "TestApp.h"
 
 namespace Test_HeightMap
 {
     using namespace DirectX::SimpleMath;
-    using namespace OWEShader;
+    using namespace OWE;
 
     class App : public TestApp
     {
@@ -52,20 +52,6 @@ namespace Test_HeightMap
         
         int vtxCount_ = 0;
 
-        template<typename ClassType, typename MemType>
-        static size_t _MemOffset(MemType ClassType::* pMem)
-        {
-            return reinterpret_cast<size_t>(&(reinterpret_cast<ClassType*>(0)->*pMem));
-        }
-
-        static std::string _ReadFile(const std::string &filename)
-        {
-            std::ifstream fin(filename, std::ifstream::in);
-            if(!fin)
-                throw OWEShader::Error(("Failed to open file: " + filename).c_str());
-            return std::string(std::istreambuf_iterator<char>(fin),
-                               std::istreambuf_iterator<char>());
-        }
     public:
 
         void InitScene(void)
@@ -92,7 +78,7 @@ namespace Test_HeightMap
                 shader_.GetShaderByteCodeSizeWithInputSignature(),
                 &inputLayout_);
             if(FAILED(hr))
-                throw OWEShader::Error("Failed to create input layout");
+                throw OWE::Error("Failed to create input layout");
 
             //============= Vertex & Index Buffer =============
 
@@ -154,9 +140,9 @@ namespace Test_HeightMap
             //============= Textures =============
 
             if(FAILED(DirectX::CreateDDSTextureFromFile(
-                D3D_, L"Data\\Test_HeightMap\\tex.dds", &tex_, &texView_)) ||
+                    D3D_, L"Data\\Test_HeightMap\\tex.dds", &tex_, &texView_)) ||
                FAILED(DirectX::CreateDDSTextureFromFile(
-                   D3D_, L"Data\\Test_HeightMap\\heightMap.dds", &heightMap_, &heightMapView_)))
+                    D3D_, L"Data\\Test_HeightMap\\heightMap.dds", &heightMap_, &heightMapView_)))
                 throw Error("Failed to load textures from file");
 
             //============= Sampler State =============

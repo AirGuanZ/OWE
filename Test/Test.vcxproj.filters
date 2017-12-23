@@ -69,6 +69,9 @@
     <ClInclude Include="..\Src\Test\TestApp.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\Test\Test_NormalMap.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Test\Main.cpp">

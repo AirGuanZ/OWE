@@ -10,7 +10,7 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-#include <OWEShader.hpp>
+#include <OWEShader.h>
 
 #include "TestApp.h"
 
@@ -21,7 +21,7 @@ namespace Test_BasicShader
         ID3D11InputLayout *inputLayout_ = nullptr;
         ID3D11Buffer *vtxBuf_ = nullptr;
 
-        OWEShader::Shader<SS_VS, SS_PS> shader_;
+        OWE::Shader<SS_VS, SS_PS> shader_;
 
         struct VSCBSize
         {
@@ -30,7 +30,7 @@ namespace Test_BasicShader
             float pad1;
         };
 
-        OWEShader::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
+        OWE::ConstantBufferManager<SS_VS> *VSCBs_ = nullptr;
 
         bool InitScene(void)
         {

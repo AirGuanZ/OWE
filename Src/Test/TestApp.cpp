@@ -2,9 +2,11 @@
 Filename: TestApp.cpp
 Date: 2017.12.10
 Created by AirGuanZ
-================================================================*/\
+================================================================*/
+#include <fstream>
+#include <iterator>
 #include <stdexcept>
-#include <OWEShader.hpp>
+#include <OWEShader.h>
 
 #include "TestApp.h"
 
@@ -185,4 +187,13 @@ void TestApp::DestroyD3DContext(void)
         DestroyWindow(hWnd_);
         UnregisterClass(L"TestWindowClass", hInstance_);
     }
+}
+
+std::string TestApp::_ReadFile(const std::string &filename)
+{
+    std::ifstream fin(filename, std::ifstream::in);
+    if(!fin)
+        throw OWE::Error(("Failed to open file: " + filename).c_str());
+    return std::string(std::istreambuf_iterator<char>(fin),
+                       std::istreambuf_iterator<char>());
 }

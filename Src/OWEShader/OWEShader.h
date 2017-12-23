@@ -231,7 +231,7 @@ namespace _OWEShaderAux
     };
 }
 
-namespace OWEShader
+namespace OWE
 {
     using Error = _OWEShaderAux::OWEShaderError;
 

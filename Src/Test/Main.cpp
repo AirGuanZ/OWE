@@ -7,12 +7,13 @@ Created by AirGuanZ
 #include "Test_HeightMap.h"
 #include "Test_MixTex.h"
 #include "Test_TextureCube.h"
+#include "Test_NormalMap.h"
 
 int main(void)
 {
     try
     {
-        Test_HeightMap::App app;
+        Test_NormalMap::App app;
         app.Run();
     }
     catch(const OWE::Error &err)

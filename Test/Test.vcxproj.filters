@@ -20,6 +20,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Data\Test_NormalMap">
+      <UniqueIdentifier>{534421f2-055f-4651-97f7-c6181eed971c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Test_HeightMap">
+      <UniqueIdentifier>{6c9cc757-89d4-48ae-8ae0-b1cf598070cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Test_BasicShader\test.ps">
@@ -41,6 +47,18 @@
       <Filter>Data\Test_TextureCube</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="Data\Test_HeightMap\test.ps">
+      <Filter>Data\Test_HeightMap</Filter>
+    </None>
+    <None Include="Data\Test_HeightMap\test.vs">
+      <Filter>Data\Test_HeightMap</Filter>
+    </None>
+    <None Include="Data\Test_NormalMap\test_vs.hlsl">
+      <Filter>Data\Test_NormalMap</Filter>
+    </None>
+    <None Include="Data\Test_NormalMap\test_ps.hlsl">
+      <Filter>Data\Test_NormalMap</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Test_MixTex\tex1.dds">
@@ -51,6 +69,18 @@
     </Image>
     <Image Include="Data\Test_TextureCube\tex.dds">
       <Filter>Data\Test_TextureCube</Filter>
+    </Image>
+    <Image Include="Data\Test_HeightMap\heightMap.dds">
+      <Filter>Data\Test_HeightMap</Filter>
+    </Image>
+    <Image Include="Data\Test_HeightMap\tex.dds">
+      <Filter>Data\Test_HeightMap</Filter>
+    </Image>
+    <Image Include="Data\Test_NormalMap\normalMap.dds">
+      <Filter>Data\Test_NormalMap</Filter>
+    </Image>
+    <Image Include="Data\Test_NormalMap\tex.dds">
+      <Filter>Data\Test_NormalMap</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

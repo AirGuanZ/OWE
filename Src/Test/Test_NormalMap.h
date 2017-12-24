@@ -33,14 +33,12 @@ namespace Test_NormalMap
             Matrix WVP;
         };
 
-        struct VSCB_PointLight
+        struct PSCB_DirectionalLight
         {
             Vector3 pos;
             float pad0;
             Vector3 color;
             float pad1;
-            Vector3 disFactor;
-            float pad2;
         };
 
         Shader<SS_VS, SS_PS> shader_;
@@ -63,8 +61,8 @@ namespace Test_NormalMap
 
             //============ Shader ============
 
-            shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_NormalMap\\test.vs"));
-            shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_NormalMap\\test.ps"));
+            shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_NormalMap\\test_vs.hlsl"));
+            shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_NormalMap\\test_ps.hlsl"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -170,6 +168,69 @@ namespace Test_NormalMap
                 DestroyD3DContext();
                 throw err;
             }
+
+            Matrix world = Matrix::Identity;
+            Matrix view = Matrix::CreateLookAt(
+                { 0.0f, 0.0f, 2.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f });
+            Matrix proj = Matrix::CreatePerspectiveFieldOfView(
+                3.14159f * 45 / 180, 1.0f, 0.1f, 1000.0f);
+            Matrix WVP = world * view * proj;
+            VSCB_Trans trans =
+            {
+                world.Transpose(),
+                WVP.Transpose()
+            };
+
+            uniforms_->GetConstantBuffer<SS_VS, VSCB_Trans>(D3D_, "Trans")->SetBufferData(DC_, trans);
+
+            uniforms_->GetShaderResource<SS_PS>("normalMap")->SetShaderResource(normalMapView_);
+            uniforms_->GetShaderResource<SS_PS>("tex")->SetShaderResource(texView_);
+
+            uniforms_->GetShaderSampler<SS_PS>("sam")->SetSampler(sampler_);
+
+            float lightT = 0.0f;
+
+            while(!(GetKeyState(VK_ESCAPE) & 0x8000))
+            {
+                float backgroundColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+                DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
+                DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+                lightT += 0.008f;
+                Vector3 lightPos(1.0f * std::sin(lightT), 0.0f, 0.4f);
+                PSCB_DirectionalLight light =
+                {
+                    lightPos, 0.0f,
+                    Vector3(1.0f, 1.0f, 1.0f), 0.0f
+                };
+                uniforms_->GetConstantBuffer<SS_PS, PSCB_DirectionalLight>(D3D_, "DirectionalLight")->SetBufferData(DC_, light);
+
+                UINT vtxStride = sizeof(Vertex), vtxOffset = 0;
+                DC_->IASetInputLayout(inputLayout_);
+                DC_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+                DC_->IASetVertexBuffers(0, 1, &vtxBuf_, &vtxStride, &vtxOffset);
+
+                shader_.Bind(DC_);
+                uniforms_->Bind(DC_);
+
+                DC_->Draw(6, 0);
+
+                uniforms_->Unbind(DC_);
+                shader_.Unbind(DC_);
+
+                swapChain_->Present(1, 0);
+
+                MSG msg;
+                while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+
+            }
+            
+            DestroyScene();
+            DestroyD3DContext();
         }
     };
 }

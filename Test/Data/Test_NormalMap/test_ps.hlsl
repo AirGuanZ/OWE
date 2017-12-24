@@ -25,6 +25,6 @@ float4 main(PSInput input) : SV_TARGET
     float3 finalNor = normalize(norV.x * input.worldAxisU +
                                 norV.y * input.worldAxisV +
                                 norV.z * input.worldNor);
-    float lightFactor = max(0.0f, dot(finalNor, lightPos - input.worldPos));
+    float lightFactor = max(0.0f, dot(finalNor, normalize(lightPos - input.worldPos)));
     return float4(lightFactor * lightColor * tex.Sample(sam, input.uv), 1.0f);
 }

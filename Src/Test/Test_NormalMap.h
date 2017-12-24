@@ -196,8 +196,8 @@ namespace Test_NormalMap
                 DC_->ClearRenderTargetView(renderTargetView_, backgroundColor);
                 DC_->ClearDepthStencilView(depthStencilView_, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-                lightT += 0.008f;
-                Vector3 lightPos(1.0f * std::sin(lightT), 0.0f, 0.4f);
+                lightT += 0.012f;
+                Vector3 lightPos(0.5f * std::sin(lightT), 0.5f * std::cos(1.347f * lightT), 0.4f);
                 PSCB_DirectionalLight light =
                 {
                     lightPos, 0.0f,

@@ -74,6 +74,56 @@ namespace _OWEShaderAux
     };
 
     template<>
+    class _ShaderStageSpec<SS_GS>
+    {
+    public:
+        using D3DShaderType = ID3D11GeometryShader;
+
+        static std::string DefaultCompileTarget(void)
+        {
+            return "gs_5_0";
+        }
+
+        static ID3D10Blob *CompileShader(
+            const std::string &src, std::string *errMsg,
+            const std::string &target, const std::string &entry)
+        {
+            if(errMsg)
+                *errMsg = "";
+
+            ID3D10Blob *rt = nullptr, *err = nullptr;
+            HRESULT hr = D3DCompile(src.data(), src.size(),
+                                    nullptr, nullptr, nullptr, entry.c_str(),
+                                    target.c_str(), 0, 0, &rt, &err);
+            if(FAILED(hr))
+            {
+                if(err && errMsg)
+                    *errMsg = reinterpret_cast<char*>(err->GetBufferPointer());
+                ReleaseCOMObjects(rt);
+            }
+
+            ReleaseCOMObjects(err);
+            return rt;
+        }
+
+        static D3DShaderType *InitShader(ID3D11Device *dev, void *shaderCompiled, SIZE_T length)
+        {
+            assert(dev != nullptr);
+            assert(shaderCompiled != nullptr && length > 0);
+            D3DShaderType *rt = nullptr;
+            if(FAILED(dev->CreateGeometryShader(shaderCompiled, length, nullptr, &rt)))
+                return nullptr;
+            return rt;
+        }
+
+        static void BindShader(ID3D11DeviceContext *DC, D3DShaderType *shader)
+        {
+            assert(DC != nullptr);
+            DC->GSSetShader(shader, nullptr, 0);
+        }
+    };
+
+    template<>
     class _ShaderStageSpec<SS_PS>
     {
     public:

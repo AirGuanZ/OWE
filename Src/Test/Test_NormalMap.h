@@ -35,10 +35,8 @@ namespace Test_NormalMap
 
         struct PSCB_DirectionalLight
         {
-            Vector3 pos;
-            float pad0;
-            Vector3 color;
-            float pad1;
+            alignas(16) Vector3 pos;
+            alignas(16) Vector3 color;
         };
 
         Shader<SS_VS, SS_PS> shader_;
@@ -200,8 +198,7 @@ namespace Test_NormalMap
                 Vector3 lightPos(0.5f * std::sin(lightT), 0.5f * std::cos(1.347f * lightT), 0.4f);
                 PSCB_DirectionalLight light =
                 {
-                    lightPos, 0.0f,
-                    Vector3(1.0f, 1.0f, 1.0f), 0.0f
+                    lightPos, Vector3(1.0f, 1.0f, 1.0f)
                 };
                 uniforms_->GetConstantBuffer<SS_PS, PSCB_DirectionalLight>(D3D_, "DirectionalLight")->SetBufferData(DC_, light);
 

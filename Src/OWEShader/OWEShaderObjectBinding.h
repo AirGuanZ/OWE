@@ -13,9 +13,10 @@ namespace _OWEShaderAux
 {
     using ShaderStageSelector = int;
 
-    constexpr ShaderStageSelector SS_Ukn = 0;
+    constexpr ShaderStageSelector SS_US = 0;
     constexpr ShaderStageSelector SS_VS  = 1;
-    constexpr ShaderStageSelector SS_PS  = 2;
+    constexpr ShaderStageSelector SS_GS  = 2;
+    constexpr ShaderStageSelector SS_PS  = 3;
 
     template<ShaderStageSelector StageSelector>
     inline void _BindConstantBuffer(ID3D11DeviceContext *devCon, UINT slot, ID3D11Buffer *buf);
@@ -25,6 +26,13 @@ namespace _OWEShaderAux
     {
         assert(devCon != nullptr);
         devCon->VSSetConstantBuffers(slot, 1, &buf);
+    }
+
+    template<>
+    inline void _BindConstantBuffer<SS_GS>(ID3D11DeviceContext *DC, UINT slot, ID3D11Buffer *buf)
+    {
+        assert(DC != nullptr);
+        DC->GSSetConstantBuffers(slot, 1, &buf);
     }
 
     template<>
@@ -45,6 +53,13 @@ namespace _OWEShaderAux
     }
 
     template<>
+    inline void _BindShaderResource<SS_GS>(ID3D11DeviceContext *DC, UINT slot, ID3D11ShaderResourceView *rsc)
+    {
+        assert(DC != nullptr);
+        DC->GSSetShaderResources(slot, 1, &rsc);
+    }
+
+    template<>
     inline void _BindShaderResource<SS_PS>(ID3D11DeviceContext *devCon, UINT slot, ID3D11ShaderResourceView *rsc)
     {
         assert(devCon != nullptr);
@@ -59,6 +74,13 @@ namespace _OWEShaderAux
     {
         assert(devCon != nullptr);
         devCon->VSSetSamplers(slot, 1, &sampler);
+    }
+
+    template<>
+    inline void _BindShaderSampler<SS_GS>(ID3D11DeviceContext *DC, UINT slot, ID3D11SamplerState *sampler)
+    {
+        assert(DC != nullptr);
+        DC->GSSetSamplers(slot, 1, &sampler);
     }
 
     template<>

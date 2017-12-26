@@ -263,6 +263,7 @@ namespace OWE
 }
 
 using _OWEShaderAux::SS_VS;
+using _OWEShaderAux::SS_GS;
 using _OWEShaderAux::SS_PS;
 
 #endif //__OWESHADER_H__

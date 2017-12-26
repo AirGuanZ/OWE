@@ -26,6 +26,9 @@
     <Filter Include="Data\Test_HeightMap">
       <UniqueIdentifier>{6c9cc757-89d4-48ae-8ae0-b1cf598070cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\Test_GeometryShader">
+      <UniqueIdentifier>{e2a05c95-f67f-4d4d-b620-f72d6fa76fa0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Test_BasicShader\test.ps">
@@ -58,6 +61,15 @@
     </None>
     <None Include="Data\Test_NormalMap\test_ps.hlsl">
       <Filter>Data\Test_NormalMap</Filter>
+    </None>
+    <None Include="Data\Test_GeometryShader\gs.hlsl">
+      <Filter>Data\Test_GeometryShader</Filter>
+    </None>
+    <None Include="Data\Test_GeometryShader\ps.hlsl">
+      <Filter>Data\Test_GeometryShader</Filter>
+    </None>
+    <None Include="Data\Test_GeometryShader\vs.hlsl">
+      <Filter>Data\Test_GeometryShader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +112,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Test\Test_NormalMap.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Test\Test_GeometryShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -294,10 +294,16 @@ namespace _OWEShaderAux
                 emptyCBRec_[it.first] = { it.second.slot, it.second.byteSize, nullptr };
             CBInfos.clear();
 
-            std::map<std::string, UINT> STexInfos;
+            //将形如name[cnt]的名字删减为name本身
+            auto delLexArr = [](const std::string &name)->std::string
+            {
+                return name.substr(0, name.find('['));
+            };
+
+            std::map<std::string, _SRInfo> STexInfos;
             _GetShaderTextures(ref, &STexInfos);
             for(auto &it : STexInfos)
-                emptySRRec_[it.first] = { it.second, nullptr };
+                emptySRRec_[delLexArr(it.first)] = { it.second.slot, it.second.cnt, nullptr };
             STexInfos.clear();
 
             std::map<std::string, UINT> SSamInfos;

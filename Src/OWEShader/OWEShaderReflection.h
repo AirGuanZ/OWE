@@ -49,7 +49,7 @@ namespace _OWEShaderAux
             {
                 D3D11_SHADER_INPUT_BIND_DESC bpDesc;
                 ref->GetResourceBindingDesc(bpIdx, &bpDesc);
-                if(std::strcmp(bpDesc.Name, bufDesc.Name) == 0)
+                if(std::strcmp(bpDesc.Name, bufDesc.Name) == 0 && bpDesc.Type == D3D_SIT_CBUFFER)
                 {
                     regIdx = bpDesc.BindPoint;
                     break;
@@ -58,11 +58,16 @@ namespace _OWEShaderAux
 
             assert(regIdx != -1);
             rt->insert(std::make_pair(std::string(bufDesc.Name), _CBInfo{ static_cast<UINT>(regIdx), bufDesc.Size }));
-
         }
     }
 
-    inline void _GetShaderTextures(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
+    struct _SRInfo
+    {
+        UINT slot;
+        UINT cnt;
+    };
+
+    inline void _GetShaderTextures(ID3D11ShaderReflection *ref, std::map<std::string, _SRInfo> *rt)
     {
         assert(ref && rt);
         rt->clear();
@@ -74,7 +79,7 @@ namespace _OWEShaderAux
             D3D11_SHADER_INPUT_BIND_DESC bdDesc;
             ref->GetResourceBindingDesc(rscIdx, &bdDesc);
             if(bdDesc.Type == D3D_SIT_TEXTURE)
-                rt->insert(std::make_pair(std::string(bdDesc.Name), bdDesc.BindPoint));
+                rt->insert(std::make_pair(std::string(bdDesc.Name), _SRInfo{ bdDesc.BindPoint, bdDesc.BindCount }));
         }
     }
 

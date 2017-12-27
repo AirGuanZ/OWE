@@ -1,4 +1,4 @@
-Texture2D<float4> tex;
+Texture2D<float4> tex[2];
 SamplerState sam;
 
 struct PSInput
@@ -9,5 +9,5 @@ struct PSInput
 
 float4 main(PSInput input) : SV_TARGET
 {
-    return tex.Sample(sam, input.uv);
+    return tex[0].Sample(sam, input.uv);
 }

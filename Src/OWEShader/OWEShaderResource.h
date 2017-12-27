@@ -30,42 +30,77 @@ namespace _OWEShaderAux
     public:
         void SetShaderResource(ID3D11ShaderResourceView *SRV)
         {
-            ReleaseCOMObjects(SRV_);
-            SRV_ = SRV;
-            if(SRV_)
-                SRV_->AddRef();
+            assert(SRVs_.size() == 1);
+            SRVs_[0] = SRV;
+            if(SRV)
+                SRV->AddRef();
         }
 
-        void Bind(ID3D11DeviceContext *devCon)
+        void SetShaderResource(int idx, ID3D11ShaderResourceView *SRV)
         {
-            assert(devCon != nullptr);
-            _BindShaderResource<StageSelector>(devCon, slot_, SRV_);
+            assert(0 <= idx && idx < SRVs_.size());
+            SRVs_[idx] = SRV;
+            if(SRV)
+                SRV->AddRef();
         }
 
-        void Unbind(ID3D11DeviceContext *devCon)
+        void SetShaderResource(ID3D11ShaderResourceView **SRVs)
         {
-            assert(devCon != nullptr);
-            _BindShaderResource<StageSelector>(devCon, slot_, nullptr);
+            assert(SRVs != nullptr);
+            std::memcpy(SRVs_.data(), SRVs, sizeof(ID3D11ShaderResourceView*) * SRVs_.size());
+            for(UINT i = 0; i != SRVs_.size(); ++i)
+            {
+                if(SRVs_[i])
+                    SRVs_[i]->Release();
+                SRVs_[i] = SRVs[i];
+                if(SRVs_[i])
+                    SRVs_[i]->AddRef();
+            }
+        }
+
+        void Bind(ID3D11DeviceContext *DC)
+        {
+            assert(DC != nullptr);
+            _BindShaderResourceArray<StageSelector>(DC, slot_, SRVs_.size(), SRVs_.data());
+        }
+
+        void Unbind(ID3D11DeviceContext *DC)
+        {
+            assert(DC != nullptr);
+            std::vector<ID3D11ShaderResourceView*> emptySRVs(SRVs_.size(), nullptr);
+            _BindShaderResourceArray<StageSelector>(DC, slot_, emptySRVs.size(), emptySRVs.data());
         }
 
     private:
         friend class _ShaderResourceManager<StageSelector>;
 
-        _ShaderResourceObject(UINT slot, ID3D11ShaderResourceView *SRV = nullptr)
-            : slot_(slot), SRV_(SRV)
+        _ShaderResourceObject(UINT slot, UINT cnt, ID3D11ShaderResourceView **SRVs = nullptr)
+            : slot_(slot), SRVs_(cnt)
         {
-            if(SRV_)
-                SRV_->AddRef();
+            assert(cnt != 0);
+            if(SRVs)
+            {
+                for(UINT i = 0; i != cnt; ++i)
+                {
+                    SRVs_[i] = SRVs[i];
+                    if(SRVs[i])
+                        SRVs[i]->AddRef();
+                }
+            }
         }
-
+        
         ~_ShaderResourceObject(void)
         {
-            ReleaseCOMObjects(SRV_);
+            for(auto *p : SRVs_)
+            {
+                if(p)
+                    p->Release();
+            }
         }
 
     private:
         UINT slot_;
-        ID3D11ShaderResourceView *SRV_;
+        std::vector<ID3D11ShaderResourceView*> SRVs_;
     };
 
     template<ShaderStageSelector StageSelector>
@@ -77,20 +112,17 @@ namespace _OWEShaderAux
         ~_ShaderResourceManager(void)
         {
             for(auto it : SRs_)
-            {
-                if(it.second.obj)
-                    delete it.second.obj;
-            }
+                delete it.second.obj;
         }
 
-        void AddShaderResource(const std::string &name, UINT slot, ID3D11ShaderResourceView *initSRV = nullptr)
+        void AddShaderResource(const std::string &name, UINT slot, UINT cnt, ID3D11ShaderResourceView **initSRV = nullptr)
         {
             auto it = SRs_.find(name);
             if(it != SRs_.end())
                 throw OWEShaderError("Shader resource name repeated: " + name);
-            SRs_[name] = _SRRec{ slot, new RscObj(slot, initSRV) };
+            SRs_[name] = _SRRec{ slot, cnt, new RscObj(slot, cnt, initSRV) };
         }
-
+        
         RscObj *GetShaderResourceObject(const std::string &name)
         {
             auto it = SRs_.find(name);
@@ -105,7 +137,7 @@ namespace _OWEShaderAux
         {
             for(auto it : SRs_)
             {
-                assert(it.second.obj);
+                assert(it.second.obj != nullptr);
                 it.second.obj->Bind(DC);
             }
         }
@@ -114,7 +146,7 @@ namespace _OWEShaderAux
         {
             for(auto it : SRs_)
             {
-                assert(it.second.obj);
+                assert(it.second.obj != nullptr);
                 it.second.obj->Unbind(DC);
             }
         }
@@ -125,6 +157,7 @@ namespace _OWEShaderAux
         struct _SRRec
         {
             UINT slot;
+            UINT cnt;
             RscObj *obj;
         };
 
@@ -132,7 +165,7 @@ namespace _OWEShaderAux
             : SRs_(src)
         {
             for(auto &it : SRs_)
-                it.second.obj = new _ShaderResourceObject<StageSelector>(it.second.slot);
+                it.second.obj = new RscObj(it.second.slot, it.second.cnt);
         }
 
     private:

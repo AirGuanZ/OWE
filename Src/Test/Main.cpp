@@ -14,7 +14,7 @@ int main(void)
 {
     try
     {
-        Test_GeometryShader::App app;
+        Test_HeightMap::App app;
         app.Run();
     }
     catch(const OWE::Error &err)

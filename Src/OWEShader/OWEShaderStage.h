@@ -300,11 +300,11 @@ namespace _OWEShaderAux
                 return name.substr(0, name.find('['));
             };
 
-            std::map<std::string, _SRInfo> STexInfos;
-            _GetShaderTextures(ref, &STexInfos);
-            for(auto &it : STexInfos)
+            std::map<std::string, _SRInfo> SRInfos;
+            _GetShaderResources(ref, &SRInfos);
+            for(auto &it : SRInfos)
                 emptySRRec_[delLexArr(it.first)] = { it.second.slot, it.second.cnt, nullptr };
-            STexInfos.clear();
+            SRInfos.clear();
 
             std::map<std::string, UINT> SSamInfos;
             _GetShaderSamplers(ref, &SSamInfos);

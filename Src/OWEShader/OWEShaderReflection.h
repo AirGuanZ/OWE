@@ -67,7 +67,7 @@ namespace _OWEShaderAux
         UINT cnt;
     };
 
-    inline void _GetShaderTextures(ID3D11ShaderReflection *ref, std::map<std::string, _SRInfo> *rt)
+    inline void _GetShaderResources(ID3D11ShaderReflection *ref, std::map<std::string, _SRInfo> *rt)
     {
         assert(ref && rt);
         rt->clear();
@@ -78,7 +78,9 @@ namespace _OWEShaderAux
         {
             D3D11_SHADER_INPUT_BIND_DESC bdDesc;
             ref->GetResourceBindingDesc(rscIdx, &bdDesc);
-            if(bdDesc.Type == D3D_SIT_TEXTURE)
+            if(bdDesc.Type == D3D_SIT_TEXTURE ||
+               bdDesc.Type == D3D_SIT_STRUCTURED ||
+               bdDesc.Type == D3D_SIT_BYTEADDRESS)
                 rt->insert(std::make_pair(std::string(bdDesc.Name), _SRInfo{ bdDesc.BindPoint, bdDesc.BindCount }));
         }
     }

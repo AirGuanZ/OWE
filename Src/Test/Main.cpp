@@ -14,7 +14,7 @@ int main(void)
 {
     try
     {
-        Test_HeightMap::App app;
+        Test_NormalMap::App app;
         app.Run();
     }
     catch(const OWE::Error &err)

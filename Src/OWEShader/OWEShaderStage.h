@@ -181,44 +181,48 @@ namespace OWEShaderAux
 
         static constexpr ShaderStageSelector Stage = StageSelector;
 
-        ShaderStage(ID3D11Device *dev, const std::string &src,
-                     const std::string &target = StageSpec::DefaultCompileTarget(),
-                     const std::string &entry = "main")
+        ShaderStage(void)
+            : shaderByteCode_(nullptr), shader_(nullptr)
+        {
+
+        }
+
+        bool Initialize(ID3D11Device *dev, const std::string &src, std::string &errMsg,
+                        const std::string &target = StageSpec::DefaultCompileTarget(),
+                        const std::string &entry = "main")
         {
             assert(dev != nullptr);
 
-            std::string dummyErrMsg;
-            shaderByteCode_ = StageSpec::CompileShader(src, &dummyErrMsg, target, entry);
+            shaderByteCode_ = StageSpec::CompileShader(src, &errMsg, target, entry);
             if(!shaderByteCode_)
-                throw OWEShaderError(dummyErrMsg.c_str());
+                return false;
 
             shader_ = StageSpec::InitShader(dev, shaderByteCode_->GetBufferPointer(),
-                                                 shaderByteCode_->GetBufferSize());
+                shaderByteCode_->GetBufferSize());
             if(!shader_)
             {
                 ReleaseCOMObjects(shaderByteCode_);
-                throw OWEShaderError("Failed to create D3D shader object");
+                return false;
             }
 
-            InitializeShaderRecords();
+            return InitializeShaderRecords();
         }
 
-        ShaderStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
-            : shaderByteCode_(shaderByteCode)
+        bool Initialize(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
         {
             assert(dev != nullptr && shaderByteCode != nullptr);
 
             shaderByteCode_ = shaderByteCode;
             shaderByteCode_->AddRef();
             shader_ = StageSpec::InitShader(dev, shaderByteCode_->GetBufferPointer(),
-                                                 shaderByteCode_->GetBufferSize());
+                shaderByteCode_->GetBufferSize());
             if(!shader_)
             {
                 ReleaseCOMObjects(shaderByteCode_);
-                throw OWEShaderError("Failed to create D3D shader object");
+                return false;
             }
 
-            InitializeShaderRecords();
+            return InitializeShaderRecords();
         }
 
         ~ShaderStage(void)
@@ -281,12 +285,12 @@ namespace OWEShaderAux
         }
 
     private:
-        void InitializeShaderRecords(void)
+        bool InitializeShaderRecords(void)
         {
             ID3D11ShaderReflection *ref = GetShaderReflection(shaderByteCode_->GetBufferPointer(),
                                                                shaderByteCode_->GetBufferSize());
             if(!ref)
-                throw OWEShaderError("Failed to initialize shader reflection");
+                return false;
 
             std::map<std::string, CBInfo> CBInfos;
             GetConstantBuffers(ref, &CBInfos);
@@ -313,6 +317,7 @@ namespace OWEShaderAux
             SSamInfos.clear();
 
             ReleaseCOMObjects(ref);
+            return true;
         }
 
     private:

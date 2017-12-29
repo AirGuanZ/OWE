@@ -101,7 +101,7 @@ namespace Test_NormalMap
             D3D11_BUFFER_DESC vtxBufDesc;
             vtxBufDesc.ByteWidth = sizeof(vtxBufData);
             vtxBufDesc.Usage = D3D11_USAGE_IMMUTABLE;
-            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
             vtxBufDesc.StructureByteStride = 0;

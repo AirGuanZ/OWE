@@ -83,19 +83,26 @@ namespace OWEShaderAux
             }
         }
 
-        void AddShaderSampler(const std::string &name, UINT slot, ID3D11SamplerState *initSampler = nullptr)
+        bool AddShaderSampler(const std::string &name, UINT slot, ID3D11SamplerState *initSampler = nullptr)
         {
             auto it = SSs_.find(name);
             if(it != SSs_.end())
-                throw OWEShaderError("Shader sampler name repeated: " + name);
+                return false;
             SSs_[name] = _SSRec{ slot, new SSobj(slot, initSampler) };
+            return true;
         }
 
         SSObj *GetShaderSamplerObject(const std::string &name)
         {
             auto it = SSs_.find(name);
             if(it == SSs_.end())
+            {
+#ifdef OWE_NO_EXCEPTION
+                return nullptr;
+#else
                 throw OWEShaderError(("Shader sampler not found: " + name).c_str());
+#endif
+            }
 
             assert(it->second.obj != nullptr);
             return it->second.obj;

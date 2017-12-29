@@ -143,21 +143,42 @@ namespace OWEShaderAux
         }
 
         template<ShaderStageSelector StageSelector>
-        void InitStage(ID3D11Device *dev, const std::string &src,
+        bool InitStage(ID3D11Device *dev, const std::string &src, std::string *errMsg = nullptr,
                        const std::string &target = ShaderStage<StageSelector>::StageSpec::DefaultCompileTarget(),
                        const std::string &entry = "main")
         {
+            std::string dummyErrMsg, *tErrMsg = errMsg ? errMsg : &dummyErrMsg;
             auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
             SafeDeleteObjects(pStage);
-            pStage = new ShaderStage<StageSelector>(dev, src, target, entry);
+            pStage = new ShaderStage<StageSelector>;
+            if(!pStage->Initialize(dev, src, *tErrMsg, target, entry))
+            {
+                SafeDeleteObjects(pStage);
+#ifdef OWE_NO_EXCEPTION
+                return false;
+#else
+                throw OWEShaderError(*tErrMsg);
+#endif
+            }
+            return true;
         }
 
         template<ShaderStageSelector StageSelector>
-        void InitStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
+        bool InitStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
         {
             auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
             SafeDeleteObjects(pStage);
-            pStage = new ShaderStage<StageSelector>(dev, shaderByteCode);
+            pStage = new ShaderStage<StageSelector>;
+            if(!pStage->Initialize(dev, shaderByteCode))
+            {
+                SafeDeleteObjects(pStage);
+#ifdef OWE_NO_EXCEPTION
+                return false;
+#else
+                throw OWEShaderError("Failed to initialize shader from shader byte code");
+#endif
+            }
+            return true;
         }
 
         void Destroy(void)

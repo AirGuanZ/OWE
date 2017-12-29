@@ -115,19 +115,26 @@ namespace OWEShaderAux
                 delete it.second.obj;
         }
 
-        void AddShaderResource(const std::string &name, UINT slot, UINT cnt, ID3D11ShaderResourceView **initSRV = nullptr)
+        bool AddShaderResource(const std::string &name, UINT slot, UINT cnt, ID3D11ShaderResourceView **initSRV = nullptr)
         {
             auto it = SRs_.find(name);
             if(it != SRs_.end())
-                throw OWEShaderError("Shader resource name repeated: " + name);
+                return false;
             SRs_[name] = _SRRec{ slot, cnt, new RscObj(slot, cnt, initSRV) };
+            return true;
         }
         
         RscObj *GetShaderResourceObject(const std::string &name)
         {
             auto it = SRs_.find(name);
             if(it == SRs_.end())
+            {
+#ifdef OWE_NO_EXCEPTION
+                return nullptr;
+#else
                 throw OWEShaderError("Shader resource not found: " + name);
+#endif
+            }
             
             assert(it->second.obj != nullptr);
             return it->second.obj;

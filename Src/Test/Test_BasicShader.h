@@ -89,7 +89,7 @@ namespace Test_BasicShader
             };
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = sizeof(vtxBufData);
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;

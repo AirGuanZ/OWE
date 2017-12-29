@@ -19,7 +19,7 @@ namespace OWEShaderAux
 
         ID3D11Buffer *buf = nullptr;
         D3D11_BUFFER_DESC bufDesc;
-        bufDesc.BindFlags = D3D11Bind_CONSTANT_BUFFER;
+        bufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
         bufDesc.ByteWidth = byteSize;
         bufDesc.MiscFlags = 0;
         bufDesc.StructureByteStride = 0;

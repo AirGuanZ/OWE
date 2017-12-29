@@ -87,14 +87,19 @@ namespace OWEShaderAux
     private:
         friend class ConstantBufferManager<_StageSelector>;
 
-        ConstantBufferObject(ID3D11DeviceContext *devCon, UINT slot, const _BufferType *data)
-            : ConstantBufferObjectBase(slot, nullptr)
+        ConstantBufferObject(void)
+            : ConstantBufferObjectBase(0, nullptr)
+        {
+
+        }
+
+        bool Initialize(ID3D11DeviceContext *devCon, UINT slot, const _BufferType *data)
         {
             assert(devCon && data);
+            slot_ = slot;
             D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
             buf_ = GenConstantBuffer(dev, sizeof(_BufferType), false, &dataDesc);
-            if(!buf_)
-                throw OWEShaderError("Failed to create constant buffer");
+            return buf_ != nullptr;
         }
 
         ~ConstantBufferObject(void)
@@ -123,10 +128,16 @@ namespace OWEShaderAux
     private:
         friend class ConstantBufferManager<_StageSelector>;
 
-        ConstantBufferObject(ID3D11Device *dev, UINT slot, const _BufferType *data = nullptr)
-            : ConstantBufferObjectBase(slot, nullptr)
+        ConstantBufferObject(void)
+            : ConstantBufferObjectBase(0, nullptr)
+        {
+
+        }
+
+        bool Initialize(ID3D11Device *dev, UINT slot, const _BufferType *data = nullptr)
         {
             assert(dev);
+            slot_ = slot;
             if(data)
             {
                 D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
@@ -134,8 +145,7 @@ namespace OWEShaderAux
             }
             else
                 buf_ = GenConstantBuffer(dev, sizeof(_BufferType), true, nullptr);
-            if(!buf_)
-                throw OWEShaderError("Failed to create constant buffer");
+            return buf_ != nullptr;
         }
 
         ~ConstantBufferObject(void)
@@ -156,12 +166,13 @@ namespace OWEShaderAux
                 SafeDeleteObjects(it.second.obj);
         }
 
-        void AddBuffer(const std::string &name, UINT slot, UINT byteSize)
+        bool AddBuffer(const std::string &name, UINT slot, UINT byteSize)
         {
             assert(!name.empty() && byteSize > 0);
             if(CBs_.find(name) != CBs_.end())
-                throw OWEShaderError("Constant buffer name repeated: " + name);
+                return false;
             CBs_[name] = CBRec{ slot, byteSize, nullptr };
+            return true;
         }
 
         template<typename BufferType, bool IsDynamic = true>
@@ -175,21 +186,47 @@ namespace OWEShaderAux
 
             auto &it = CBs_.find(name);
             if(it == CBs_.end())
+#ifdef OWE_NO_EXCEPTION
+                return nullptr;
+#else
                 throw OWEShaderError(("Constant buffer not found: " + name).c_str());
+#endif
             CBRec &rec = it->second;
 
             if(rec.obj)
             {
                 if(typeid(*rec.obj) != typeid(ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
+                {
+#ifdef OWE_NO_EXCEPTION
+                    return nullptr;
+#else
                     throw OWEShaderError("Inconsistent constant buffer type");
+#endif
+                }
                 return reinterpret_cast<ResultType*>(rec.obj);
             }
 
             if(sizeof(BufferType) != rec.byteSize)
+            {
+#ifdef OWE_NO_EXCEPTION
+                return nullptr;
+#else
                 throw OWEShaderError("Inconstent constant buffer size");
+#endif
+            }
 
-            rec.obj = new ResultType(dev, rec.slot, data);
-            return reinterpret_cast<ResultType*>(rec.obj);
+            ResultType *rtObj = new ResultType;
+            if(!rtObj->Initialize(dev, rec.slot, data))
+            {
+                delete rtObj;
+#ifdef OWE_NO_EXCEPTION
+                return nullptr;
+#else
+                throw OWEShaderError("Failed to initialize constant buffer object: " + name);
+#endif
+            }
+            rec.obj = rtObj;
+            return rtObj;
         }
 
         void Bind(ID3D11DeviceContext *DC)

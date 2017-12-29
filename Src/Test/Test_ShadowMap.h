@@ -136,6 +136,23 @@ namespace Test_ShadowMap
                 { { -1.0f, +1.0f, -1.0f }, { 1.0f, 0.431f, 0.706f }, { 0.0f, 0.0f, +1.0f } },
                 { { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.431f, 0.706f }, { 0.0f, 0.0f, +1.0f } }
             };
+
+            D3D11_BUFFER_DESC vtxBufDesc;
+            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.ByteWidth = vtxBufData.size() * sizeof(Vertex);
+            vtxBufDesc.CPUAccessFlags = 0;
+            vtxBufDesc.MiscFlags = 0;
+            vtxBufDesc.StructureByteStride = 0;
+            vtxBufDesc.Usage = D3D11_USAGE_IMMUTABLE;
+            D3D11_SUBRESOURCE_DATA vtxBufInitData = { vtxBufData.data(), 0, 0 };
+            hr = D3D_->CreateBuffer(&vtxBufDesc, &vtxBufInitData, &vtxBuf_);
+            if(FAILED(hr))
+                throw Error("Failed to create vertex buffer");
+
+            //============ Shadow Map ============
+
+            D3D11_TEXTURE2D_DESC texDesc;
+            
         }
 
         ~App(void)

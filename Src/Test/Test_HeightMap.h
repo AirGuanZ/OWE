@@ -114,7 +114,7 @@ namespace Test_HeightMap
             vtxCount_ = idxBufData.size();
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = vtxBufData.size() * sizeof(Vertex);
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
@@ -126,7 +126,7 @@ namespace Test_HeightMap
                 throw Error("Failed to create vertex buffer");
 
             D3D11_BUFFER_DESC idxBufDesc;
-            idxBufDesc.BindFlags = D3D11Bind_INDEX_BUFFER;
+            idxBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
             idxBufDesc.ByteWidth = idxBufData.size() * sizeof(decltype(idxBufData)::value_type);
             idxBufDesc.CPUAccessFlags = 0;
             idxBufDesc.MiscFlags = 0;

@@ -15,9 +15,9 @@ Created by AirGuanZ
 
 #include "OWEShaderConstantBuffer.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
-    inline ID3D11ShaderReflection *_GetShaderReflection(void *shaderData, SIZE_T length)
+    inline ID3D11ShaderReflection *GetShaderReflection(void *shaderData, SIZE_T length)
     {
         assert(shaderData != nullptr && length > 0);
         ID3D11ShaderReflection *rt = nullptr;
@@ -26,17 +26,17 @@ namespace _OWEShaderAux
         return rt;
     }
 
-    struct _CBInfo
+    struct CBInfo
     {
         UINT slot;
         UINT byteSize;
     };
 
-    inline void _GetConstantBuffers(ID3D11ShaderReflection *ref, std::map<std::string, _CBInfo> *rt)
+    inline void GetConstantBuffers(ID3D11ShaderReflection *ref, std::map<std::string, CBInfo> *rt)
     {
         assert(ref && rt);
         rt->clear();
-
+        
         D3D11_SHADER_DESC shaderDesc;
         ref->GetDesc(&shaderDesc);
         for(int cbIdx = 0; cbIdx != shaderDesc.ConstantBuffers; ++cbIdx)
@@ -57,17 +57,17 @@ namespace _OWEShaderAux
             }
 
             assert(regIdx != -1);
-            rt->insert(std::make_pair(std::string(bufDesc.Name), _CBInfo{ static_cast<UINT>(regIdx), bufDesc.Size }));
+            rt->insert(std::make_pair(std::string(bufDesc.Name), CBInfo{ static_cast<UINT>(regIdx), bufDesc.Size }));
         }
     }
 
-    struct _SRInfo
+    struct SRInfo
     {
         UINT slot;
         UINT cnt;
     };
 
-    inline void _GetShaderResources(ID3D11ShaderReflection *ref, std::map<std::string, _SRInfo> *rt)
+    inline void GetShaderResources(ID3D11ShaderReflection *ref, std::map<std::string, SRInfo> *rt)
     {
         assert(ref && rt);
         rt->clear();
@@ -81,11 +81,11 @@ namespace _OWEShaderAux
             if(bdDesc.Type == D3D_SIT_TEXTURE ||
                bdDesc.Type == D3D_SIT_STRUCTURED ||
                bdDesc.Type == D3D_SIT_BYTEADDRESS)
-                rt->insert(std::make_pair(std::string(bdDesc.Name), _SRInfo{ bdDesc.BindPoint, bdDesc.BindCount }));
+                rt->insert(std::make_pair(std::string(bdDesc.Name), SRInfo{ bdDesc.BindPoint, bdDesc.BindCount }));
         }
     }
 
-    inline void _GetShaderSamplers(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
+    inline void GetShaderSamplers(ID3D11ShaderReflection *ref, std::map<std::string, UINT> *rt)
     {
         assert(ref && rt);
         rt->clear();

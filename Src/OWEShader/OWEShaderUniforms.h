@@ -10,9 +10,9 @@ Created by AirGuanZ
 
 #include "OWEShaderStage.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
-    struct _ShaderStageUniformsBinder
+    struct ShaderStageUniformsBinder
     {
         template<typename T>
         void operator()(T &ref)
@@ -23,7 +23,7 @@ namespace _OWEShaderAux
         ID3D11DeviceContext *DC;
     };
     
-    struct _ShaderStageUniformsUnbinder
+    struct ShaderStageUniformsUnbinder
     {
         template<typename T>
         void operator()(T &ref)
@@ -35,32 +35,32 @@ namespace _OWEShaderAux
     };
     
     template<ShaderStageSelector StageSelector>
-    class _ShaderStageUniforms
+    class ShaderStageUniforms
     {
     public:
-        _ShaderStageUniforms(const _ShaderStage<StageSelector> &stage)
+        ShaderStageUniforms(const ShaderStage<StageSelector> &stage)
         {
             CBMgr_ = stage.GetConstantBufferCount() ? stage.CreateConstantBufferManager() : nullptr;
             SRMgr_ = stage.GetShaderResourceCount() ? stage.CreateShaderResourceManager() : nullptr;
-            SSMgr_ = stage.GetShaderSamplerCount() ? stage.CreateShaderSamplerManager() : nullptr;
+            SSMgr_ = stage.GetShaderSamplerCount()  ? stage.CreateShaderSamplerManager()  : nullptr;
         }
 
-        ~_ShaderStageUniforms(void)
+        ~ShaderStageUniforms(void)
         {
             SafeDeleteObjects(CBMgr_, SRMgr_, SSMgr_);
         }
 
-        _ConstantBufferManager<StageSelector> *GetConstantBufferManager(void)
+        ConstantBufferManager<StageSelector> *GetConstantBufferManager(void)
         {
             return CBMgr_;
         }
 
-        _ShaderResourceManager<StageSelector> *GetShaderResourceManager(void)
+        ShaderResourceManager<StageSelector> *GetShaderResourceManager(void)
         {
             return SRMgr_;
         }
 
-        _ShaderSamplerManager<StageSelector> *GetShaderSamplerManager(void)
+        ShaderSamplerManager<StageSelector> *GetShaderSamplerManager(void)
         {
             return SSMgr_;
         }
@@ -88,108 +88,108 @@ namespace _OWEShaderAux
         }
 
         template<typename BufferType, bool Dynamic>
-        _ConstantBufferObject<BufferType, StageSelector, Dynamic>*
+        ConstantBufferObject<BufferType, StageSelector, Dynamic>*
         GetConstantBuffer(ID3D11Device *dev, const std::string &name, const BufferType *data)
         {
             assert(CBMgr_ != nullptr);
             return CBMgr_->GetConstantBuffer<BufferType, Dynamic>(dev, name, data);
         }
 
-        _ShaderResourceObject<StageSelector> *GetShaderResource(const std::string &name)
+        ShaderResourceObject<StageSelector> *GetShaderResource(const std::string &name)
         {
             assert(SRMgr_ != nullptr);
             return SRMgr_->GetShaderResourceObject(name);
         }
 
-        _ShaderSamplerObject<StageSelector> *GetShaderSampler(const std::string &name)
+        ShaderSamplerObject<StageSelector> *GetShaderSampler(const std::string &name)
         {
             assert(SSMgr_ != nullptr);
             return SSMgr_->GetShaderSamplerObject(name);
         }
 
     private:
-        _ConstantBufferManager<StageSelector> *CBMgr_;
-        _ShaderResourceManager<StageSelector> *SRMgr_;
-        _ShaderSamplerManager<StageSelector> *SSMgr_;
+        ConstantBufferManager<StageSelector> *CBMgr_;
+        ShaderResourceManager<StageSelector> *SRMgr_;
+        ShaderSamplerManager<StageSelector> *SSMgr_;
     };
 
     template<ShaderStageSelector...StageSelectors>
-    class _ShaderUniformManager
+    class ShaderUniformManager
     {
     public:
-        _ShaderUniformManager(const _ShaderStage<StageSelectors>&...stages)
+        ShaderUniformManager(const ShaderStage<StageSelectors>&...stages)
             : stageUniforms_(stages...)
         {
 
         }
 
-        ~_ShaderUniformManager(void)
+        ~ShaderUniformManager(void)
         {
 
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderStageUniforms<StageSelector> *GetStageUniforms(void)
+        ShaderStageUniforms<StageSelector> *GetStageUniforms(void)
         {
             return &std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stageUniforms_);
         }
 
         template<ShaderStageSelector StageSelector>
-        _ConstantBufferManager<StageSelector> *GetConstantBufferManager(void)
+        ConstantBufferManager<StageSelector> *GetConstantBufferManager(void)
         {
             return GetStageUniforms<StageSelector>()->GetConstantBufferManager();
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderResourceManager<StageSelector> *GetShaderResourceManager(void)
+        ShaderResourceManager<StageSelector> *GetShaderResourceManager(void)
         {
             return GetStageUniforms<StageSelector>()->GetShaderResourceManager();
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderSamplerManager<StageSelector> *GetShaderSamplerManager(void)
+        ShaderSamplerManager<StageSelector> *GetShaderSamplerManager(void)
         {
             return GetStageUniforms<StageSelector>()->GetShaderSamplerManager();
         }
 
         template<ShaderStageSelector StageSelector, typename BufferType, bool Dynamic = true>
-        _ConstantBufferObject<BufferType, StageSelector, Dynamic>*
+        ConstantBufferObject<BufferType, StageSelector, Dynamic>*
         GetConstantBuffer(ID3D11Device *dev, const std::string &name, const BufferType *data = nullptr)
         {
             return GetStageUniforms<StageSelector>()->GetConstantBuffer<BufferType, Dynamic>(dev, name, data);
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderResourceObject<StageSelector> *GetShaderResource(const std::string &name)
+        ShaderResourceObject<StageSelector> *GetShaderResource(const std::string &name)
         {
             return GetStageUniforms<StageSelector>()->GetShaderResource(name);
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderSamplerObject<StageSelector> *GetShaderSampler(const std::string &name)
+        ShaderSamplerObject<StageSelector> *GetShaderSampler(const std::string &name)
         {
             return GetStageUniforms<StageSelector>()->GetShaderSampler(name);
         }
         
         void Bind(ID3D11DeviceContext *DC)
         {
-            DoForTupleElements(_ShaderStageUniformsBinder{ DC }, stageUniforms_);
+            DoForTupleElements(ShaderStageUniformsBinder{ DC }, stageUniforms_);
         }
         
         void Unbind(ID3D11DeviceContext *DC)
         {
-            DoForTupleElements(_ShaderStageUniformsUnbinder{ DC }, stageUniforms_);
+            DoForTupleElements(ShaderStageUniformsUnbinder{ DC }, stageUniforms_);
         }
 
     private:
-        std::tuple<_ShaderStageUniforms<StageSelectors>...> stageUniforms_;
+        std::tuple<ShaderStageUniforms<StageSelectors>...> stageUniforms_;
     };
 }
 
 namespace OWE
 {
-    template<_OWEShaderAux::ShaderStageSelector...StageSelectors>
-    using ShaderUniforms = _OWEShaderAux::_ShaderUniformManager<StageSelectors...>;
+    template<OWEShaderAux::ShaderStageSelector...StageSelectors>
+    using ShaderUniforms = OWEShaderAux::ShaderUniformManager<StageSelectors...>;
 }
 
 #endif //__OWESHADER_UNIFORMS_H__

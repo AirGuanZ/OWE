@@ -114,7 +114,7 @@ bool TestApp::InitD3DContext(void)
 
     D3D11_TEXTURE2D_DESC depthStencilBufDesc;
     depthStencilBufDesc.ArraySize = 1;
-    depthStencilBufDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+    depthStencilBufDesc.BindFlags = D3D11Bind_DEPTH_STENCIL;
     depthStencilBufDesc.CPUAccessFlags = 0;
     depthStencilBufDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
     depthStencilBufDesc.Height = height;
@@ -176,7 +176,7 @@ bool TestApp::InitD3DContext(void)
 
 void TestApp::DestroyD3DContext(void)
 {
-    using namespace _OWEShaderAux;
+    using namespace OWEShaderAux;
 
     ReleaseCOMObjects(renderTargetView_, depthStencilView_, depthStencilState_, depthStencilBuffer_);
     ReleaseCOMObjects(D3D_, DC_);
@@ -189,7 +189,7 @@ void TestApp::DestroyD3DContext(void)
     }
 }
 
-std::string TestApp::_ReadFile(const std::string &filename)
+std::string TestApp::ReadFile(const std::string &filename)
 {
     std::ifstream fin(filename, std::ifstream::in);
     if(!fin)

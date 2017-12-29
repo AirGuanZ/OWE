@@ -9,7 +9,7 @@ Created by AirGuanZ
 #include <stdexcept>
 #include <string>
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
     class OWEShaderError : public std::exception
     {

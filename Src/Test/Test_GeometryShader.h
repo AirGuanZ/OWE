@@ -3,8 +3,8 @@ Filename: Test_GeometryShader.h
 Date: 2017.12.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_GEOMETRY_SHADER_H__
-#define __TEST_GEOMETRY_SHADER_H__
+#ifndef __TEST_GEOMETRYShader_H__
+#define __TEST_GEOMETRYShader_H__
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
@@ -44,9 +44,9 @@ namespace Test_GeometryShader
 
             //============ Shader ============
 
-            shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_GeometryShader\\vs.hlsl"));
-            shader_.InitStage<SS_GS>(D3D_, _ReadFile("Data\\Test_GeometryShader\\gs.hlsl"));
-            shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_GeometryShader\\ps.hlsl"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_GeometryShader\\vs.hlsl"));
+            shader_.InitStage<SS_GS>(D3D_, ReadFile("Data\\Test_GeometryShader\\gs.hlsl"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_GeometryShader\\ps.hlsl"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -54,8 +54,8 @@ namespace Test_GeometryShader
 
             D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[] =
             {
-                { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, _MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-                { "SIZE", 0, DXGI_FORMAT_R32_FLOAT, 0, _MemOffset(&Vertex::size), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+                { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "SIZE", 0, DXGI_FORMAT_R32_FLOAT, 0, MemOffset(&Vertex::size), D3D11_INPUT_PER_VERTEX_DATA, 0 }
             };
 
             hr = D3D_->CreateInputLayout(
@@ -90,7 +90,7 @@ namespace Test_GeometryShader
             }
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = sizeof(Vertex) * vtxData.size();
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
@@ -105,7 +105,7 @@ namespace Test_GeometryShader
 
         void DestroyScene(void)
         {
-            using namespace _OWEShaderAux;
+            using namespace OWEShaderAux;
 
             ReleaseCOMObjects(vtxBuf_, inputLayout_);
             SafeDeleteObjects(uniforms_);
@@ -171,4 +171,4 @@ namespace Test_GeometryShader
     };
 }
 
-#endif //__TEST_GEOMETRY_SHADER_H__
+#endif //__TEST_GEOMETRYShader_H__

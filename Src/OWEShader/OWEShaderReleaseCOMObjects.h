@@ -6,7 +6,7 @@ Created by AirGuanZ
 #ifndef __OWESHADER_RELEASE_COM_OBJECTS_H__
 #define __OWESHADER_RELEASE_COM_OBJECTS_H__
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
     template<typename T>
     void SafeDeleteObjects(T &ptr)

@@ -53,8 +53,8 @@ namespace Test_TextureCube
 
             //=============Shader=============
 
-            shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_TextureCube\\test.vs"));
-            shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_TextureCube\\test.ps"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_TextureCube\\test.vs"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_TextureCube\\test.ps"));
 
             VSCBs_ = shader_.CreateConstantBufferManager<SS_VS>();
             PSSRs_ = shader_.CreateShaderResourceManager<SS_PS>();
@@ -64,8 +64,8 @@ namespace Test_TextureCube
 
             D3D11_INPUT_ELEMENT_DESC inputDesc[] =
             {
-                { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, _MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-                { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, _MemOffset(&Vertex::uv), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+                { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, MemOffset(&Vertex::uv), D3D11_INPUT_PER_VERTEX_DATA, 0 }
             };
 
             hr = D3D_->CreateInputLayout(inputDesc, 2, shader_.GetShaderByteCodeWithInputSignature(),
@@ -127,7 +127,7 @@ namespace Test_TextureCube
             };
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = sizeof(vtxBufData);
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
@@ -186,7 +186,7 @@ namespace Test_TextureCube
 
         void DestroyScene(void)
         {
-            using namespace _OWEShaderAux;
+            using namespace OWEShaderAux;
             ReleaseCOMObjects(vtxBuf_, inputLayout_);
             ReleaseCOMObjects(tex_, texView_, sampler_);
             ReleaseCOMObjects(raster_);

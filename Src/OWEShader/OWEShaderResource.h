@@ -13,19 +13,19 @@ Created by AirGuanZ
 #include "OWEShaderReleaseCOMObjects.h"
 #include "OWEShaderUncopiable.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
     template<ShaderStageSelector StageSelector>
-    class _ShaderResourceObject;
+    class ShaderResourceObject;
 
     template<ShaderStageSelector>
-    class _ShaderStage;
+    class ShaderStage;
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderResourceManager;
+    class ShaderResourceManager;
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderResourceObject : public _Uncopiable
+    class ShaderResourceObject : public Uncopiable
     {
     public:
         void SetShaderResource(ID3D11ShaderResourceView *SRV)
@@ -61,20 +61,20 @@ namespace _OWEShaderAux
         void Bind(ID3D11DeviceContext *DC)
         {
             assert(DC != nullptr);
-            _BindShaderResourceArray<StageSelector>(DC, slot_, SRVs_.size(), SRVs_.data());
+            BindShaderResourceArray<StageSelector>(DC, slot_, SRVs_.size(), SRVs_.data());
         }
 
         void Unbind(ID3D11DeviceContext *DC)
         {
             assert(DC != nullptr);
             std::vector<ID3D11ShaderResourceView*> emptySRVs(SRVs_.size(), nullptr);
-            _BindShaderResourceArray<StageSelector>(DC, slot_, emptySRVs.size(), emptySRVs.data());
+            BindShaderResourceArray<StageSelector>(DC, slot_, emptySRVs.size(), emptySRVs.data());
         }
 
     private:
-        friend class _ShaderResourceManager<StageSelector>;
+        friend class ShaderResourceManager<StageSelector>;
 
-        _ShaderResourceObject(UINT slot, UINT cnt, ID3D11ShaderResourceView **SRVs = nullptr)
+        ShaderResourceObject(UINT slot, UINT cnt, ID3D11ShaderResourceView **SRVs = nullptr)
             : slot_(slot), SRVs_(cnt)
         {
             assert(cnt != 0);
@@ -89,7 +89,7 @@ namespace _OWEShaderAux
             }
         }
         
-        ~_ShaderResourceObject(void)
+        ~ShaderResourceObject(void)
         {
             for(auto *p : SRVs_)
             {
@@ -104,12 +104,12 @@ namespace _OWEShaderAux
     };
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderResourceManager : public _Uncopiable
+    class ShaderResourceManager : public Uncopiable
     {
     public:
-        using RscObj = _ShaderResourceObject<StageSelector>;
+        using RscObj = ShaderResourceObject<StageSelector>;
 
-        ~_ShaderResourceManager(void)
+        ~ShaderResourceManager(void)
         {
             for(auto it : SRs_)
                 delete it.second.obj;
@@ -152,7 +152,7 @@ namespace _OWEShaderAux
         }
 
     private:
-        friend class _ShaderStage<StageSelector>;
+        friend class ShaderStage<StageSelector>;
 
         struct _SRRec
         {
@@ -161,7 +161,7 @@ namespace _OWEShaderAux
             RscObj *obj;
         };
 
-        _ShaderResourceManager(const std::map<std::string, _SRRec> &src)
+        ShaderResourceManager(const std::map<std::string, _SRRec> &src)
             : SRs_(src)
         {
             for(auto &it : SRs_)

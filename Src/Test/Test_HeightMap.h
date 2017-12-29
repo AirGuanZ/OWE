@@ -60,8 +60,8 @@ namespace Test_HeightMap
 
             //============= Shader =============
             
-            shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_HeightMap\\test.vs"));
-            shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_HeightMap\\test.ps"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_HeightMap\\test.vs"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_HeightMap\\test.ps"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -69,8 +69,8 @@ namespace Test_HeightMap
 
             D3D11_INPUT_ELEMENT_DESC inputDesc[] =
             {
-                { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, _MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
-                { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, _MemOffset(&Vertex::uv), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+                { "POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, MemOffset(&Vertex::uv), D3D11_INPUT_PER_VERTEX_DATA, 0 }
             };
 
             hr = D3D_->CreateInputLayout(inputDesc, 2,
@@ -114,7 +114,7 @@ namespace Test_HeightMap
             vtxCount_ = idxBufData.size();
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = vtxBufData.size() * sizeof(Vertex);
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
@@ -126,7 +126,7 @@ namespace Test_HeightMap
                 throw Error("Failed to create vertex buffer");
 
             D3D11_BUFFER_DESC idxBufDesc;
-            idxBufDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+            idxBufDesc.BindFlags = D3D11Bind_INDEX_BUFFER;
             idxBufDesc.ByteWidth = idxBufData.size() * sizeof(decltype(idxBufData)::value_type);
             idxBufDesc.CPUAccessFlags = 0;
             idxBufDesc.MiscFlags = 0;
@@ -183,7 +183,7 @@ namespace Test_HeightMap
 
         void DestroyScene(void)
         {
-            using namespace _OWEShaderAux;
+            using namespace OWEShaderAux;
 
             ReleaseCOMObjects(vtxBuf_, idxBuf_, inputLayout_);
             ReleaseCOMObjects(heightMap_, heightMapView_, tex_, texView_);

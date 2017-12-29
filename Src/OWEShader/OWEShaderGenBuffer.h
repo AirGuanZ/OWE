@@ -9,9 +9,9 @@ Created by AirGuanZ
 #include <cassert>
 #include <d3d11.h>
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
-    inline ID3D11Buffer *_GenConstantBuffer(ID3D11Device *dev, size_t byteSize,
+    inline ID3D11Buffer *GenConstantBuffer(ID3D11Device *dev, size_t byteSize,
                                             bool dynamic, const D3D11_SUBRESOURCE_DATA *data)
     {
         assert(dev != nullptr && byteSize > 0);
@@ -19,7 +19,7 @@ namespace _OWEShaderAux
 
         ID3D11Buffer *buf = nullptr;
         D3D11_BUFFER_DESC bufDesc;
-        bufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bufDesc.BindFlags = D3D11Bind_CONSTANT_BUFFER;
         bufDesc.ByteWidth = byteSize;
         bufDesc.MiscFlags = 0;
         bufDesc.StructureByteStride = 0;

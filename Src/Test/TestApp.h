@@ -28,10 +28,10 @@ protected:
     bool InitD3DContext(void);
     void DestroyD3DContext(void);
 
-    static std::string _ReadFile(const std::string &filename);
+    static std::string ReadFile(const std::string &filename);
 
     template<typename ClassType, typename MemType>
-    static size_t _MemOffset(MemType ClassType::* pMem)
+    static size_t MemOffset(MemType ClassType::* pMem)
     {
         return reinterpret_cast<size_t>(&(reinterpret_cast<ClassType*>(0)->*pMem));
     }

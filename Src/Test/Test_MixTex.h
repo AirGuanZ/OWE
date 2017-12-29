@@ -49,8 +49,8 @@ namespace Test_MixTex
 
             try
             {
-                shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.vs"));
-                shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_MixTex\\test.ps"));
+                shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_MixTex\\test.vs"));
+                shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_MixTex\\test.ps"));
             }
             catch(const OWE::Error &err)
             {
@@ -73,7 +73,7 @@ namespace Test_MixTex
             };
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = sizeof(vtxBufData);
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
@@ -132,7 +132,7 @@ namespace Test_MixTex
 
         void DestroyScene(void)
         {
-            using namespace _OWEShaderAux;
+            using namespace OWEShaderAux;
 
             ReleaseCOMObjects(inputLayout_, vtxBuf_);
             ReleaseCOMObjects(tex1_, tex2_);

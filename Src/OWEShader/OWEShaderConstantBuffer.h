@@ -17,34 +17,34 @@ Created by AirGuanZ
 #include "OWEShaderReleaseCOMObjects.h"
 #include "OWEShaderUncopiable.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
-    template<ShaderStageSelector _ShaderSelector>
-    class _ConstantBufferObjectBase;
+    template<ShaderStageSelector ShaderSelector>
+    class ConstantBufferObjectBase;
 
     template<typename _BufferType, ShaderStageSelector _StageSelector, bool _IsDynamic>
-    class _ConstantBufferAttributes;
+    class ConstantBufferAttributes;
 
     template<typename _BufferType, ShaderStageSelector _StageSelector, bool _IsDynamic>
-    class _ConstantBufferObject;
+    class ConstantBufferObject;
 
     template<ShaderStageSelector>
-    class _ShaderStage;
+    class ShaderStage;
 
     template<ShaderStageSelector StageSelector>
-    class _ConstantBufferManager;
+    class ConstantBufferManager;
 
-    template<ShaderStageSelector _ShaderSelector>
-    class _ConstantBufferObjectBase
+    template<ShaderStageSelector ShaderSelector>
+    class ConstantBufferObjectBase
     {
     public:
-        _ConstantBufferObjectBase(UINT slot, ID3D11Buffer *buf)
+        ConstantBufferObjectBase(UINT slot, ID3D11Buffer *buf)
             : slot_(slot), buf_(buf)
         {
 
         }
 
-        virtual ~_ConstantBufferObjectBase(void)
+        virtual ~ConstantBufferObjectBase(void)
         {
 
         }
@@ -52,13 +52,13 @@ namespace _OWEShaderAux
         void Bind(ID3D11DeviceContext *devCon) const
         {
             assert(devCon);
-            _BindConstantBuffer<_ShaderSelector>(devCon, slot_, buf_);
+            BindConstantBuffer<ShaderSelector>(devCon, slot_, buf_);
         }
 
         void Unbind(ID3D11DeviceContext *devCon) const
         {
             assert(devCon);
-            _BindConstantBuffer<_ShaderSelector>(devCon, slot_, nullptr);
+            BindConstantBuffer<ShaderSelector>(devCon, slot_, nullptr);
         }
         
     protected:
@@ -67,10 +67,10 @@ namespace _OWEShaderAux
     };
 
     template<typename _BufferType, ShaderStageSelector _StageSelector, bool _IsDynamic>
-    class _ConstantBufferAttributes
+    class ConstantBufferAttributes
     {
     public:
-        using MyType = _ConstantBufferObject<_BufferType, _StageSelector, _IsDynamic>;
+        using MyType = ConstantBufferObject<_BufferType, _StageSelector, _IsDynamic>;
         using BufferType = _BufferType;
 
         static constexpr ShaderStageSelector ShaderStage = _StageSelector;
@@ -79,25 +79,25 @@ namespace _OWEShaderAux
 
     //Static constant buffer object
     template<typename _BufferType, ShaderStageSelector _StageSelector>
-    class _ConstantBufferObject<_BufferType, _StageSelector, false>
-        : public _ConstantBufferAttributes<_BufferType, _StageSelector, false>,
-          public _ConstantBufferObjectBase<_StageSelector>,
-          public _Uncopiable
+    class ConstantBufferObject<_BufferType, _StageSelector, false>
+        : public ConstantBufferAttributes<_BufferType, _StageSelector, false>,
+          public ConstantBufferObjectBase<_StageSelector>,
+          public Uncopiable
     {
     private:
-        friend class _ConstantBufferManager<_StageSelector>;
+        friend class ConstantBufferManager<_StageSelector>;
 
-        _ConstantBufferObject(ID3D11DeviceContext *devCon, UINT slot, const _BufferType *data)
-            : _ConstantBufferObjectBase(slot, nullptr)
+        ConstantBufferObject(ID3D11DeviceContext *devCon, UINT slot, const _BufferType *data)
+            : ConstantBufferObjectBase(slot, nullptr)
         {
             assert(devCon && data);
             D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
-            buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), false, &dataDesc);
+            buf_ = GenConstantBuffer(dev, sizeof(_BufferType), false, &dataDesc);
             if(!buf_)
                 throw OWEShaderError("Failed to create constant buffer");
         }
 
-        ~_ConstantBufferObject(void)
+        ~ConstantBufferObject(void)
         {
             ReleaseCOMObjects(buf_);
         }
@@ -105,10 +105,10 @@ namespace _OWEShaderAux
 
     //Dynamic constant buffer object
     template<typename _BufferType, ShaderStageSelector _StageSelector>
-    class _ConstantBufferObject<_BufferType, _StageSelector, true>
-        : public _ConstantBufferAttributes<_BufferType, _StageSelector, true>,
-          public _ConstantBufferObjectBase<_StageSelector>,
-          public _Uncopiable
+    class ConstantBufferObject<_BufferType, _StageSelector, true>
+        : public ConstantBufferAttributes<_BufferType, _StageSelector, true>,
+          public ConstantBufferObjectBase<_StageSelector>,
+          public Uncopiable
     {
     public:
         void SetBufferData(ID3D11DeviceContext *devCon, const BufferType &data)
@@ -121,36 +121,36 @@ namespace _OWEShaderAux
         }
 
     private:
-        friend class _ConstantBufferManager<_StageSelector>;
+        friend class ConstantBufferManager<_StageSelector>;
 
-        _ConstantBufferObject(ID3D11Device *dev, UINT slot, const _BufferType *data = nullptr)
-            : _ConstantBufferObjectBase(slot, nullptr)
+        ConstantBufferObject(ID3D11Device *dev, UINT slot, const _BufferType *data = nullptr)
+            : ConstantBufferObjectBase(slot, nullptr)
         {
             assert(dev);
             if(data)
             {
                 D3D11_SUBRESOURCE_DATA dataDesc = { &data, 0, 0 };
-                buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, &dataDesc);
+                buf_ = GenConstantBuffer(dev, sizeof(_BufferType), true, &dataDesc);
             }
             else
-                buf_ = _GenConstantBuffer(dev, sizeof(_BufferType), true, nullptr);
+                buf_ = GenConstantBuffer(dev, sizeof(_BufferType), true, nullptr);
             if(!buf_)
                 throw OWEShaderError("Failed to create constant buffer");
         }
 
-        ~_ConstantBufferObject(void)
+        ~ConstantBufferObject(void)
         {
             ReleaseCOMObjects(buf_);
         }
     };
 
     template<ShaderStageSelector StageSelector>
-    class _ConstantBufferManager : public _Uncopiable
+    class ConstantBufferManager : public Uncopiable
     {
     public:
-        _ConstantBufferManager(void) = default;
+        ConstantBufferManager(void) = default;
 
-        ~_ConstantBufferManager(void)
+        ~ConstantBufferManager(void)
         {
             for(auto &it : CBs_)
                 SafeDeleteObjects(it.second.obj);
@@ -161,14 +161,14 @@ namespace _OWEShaderAux
             assert(!name.empty() && byteSize > 0);
             if(CBs_.find(name) != CBs_.end())
                 throw OWEShaderError("Constant buffer name repeated: " + name);
-            CBs_[name] = _CBRec{ slot, byteSize, nullptr };
+            CBs_[name] = CBRec{ slot, byteSize, nullptr };
         }
 
         template<typename BufferType, bool IsDynamic = true>
-        _ConstantBufferObject<BufferType, StageSelector, IsDynamic> *
+        ConstantBufferObject<BufferType, StageSelector, IsDynamic> *
         GetConstantBuffer(ID3D11Device *dev, const std::string &name, const BufferType *data = nullptr)
         {
-            using ResultType = _ConstantBufferObject<BufferType, StageSelector, IsDynamic>;
+            using ResultType = ConstantBufferObject<BufferType, StageSelector, IsDynamic>;
 
             assert(dev);
             assert(IsDynamic || data);
@@ -176,11 +176,11 @@ namespace _OWEShaderAux
             auto &it = CBs_.find(name);
             if(it == CBs_.end())
                 throw OWEShaderError(("Constant buffer not found: " + name).c_str());
-            _CBRec &rec = it->second;
+            CBRec &rec = it->second;
 
             if(rec.obj)
             {
-                if(typeid(*rec.obj) != typeid(_ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
+                if(typeid(*rec.obj) != typeid(ConstantBufferObject<BufferType, StageSelector, IsDynamic>))
                     throw OWEShaderError("Inconsistent constant buffer type");
                 return reinterpret_cast<ResultType*>(rec.obj);
             }
@@ -211,17 +211,17 @@ namespace _OWEShaderAux
         }
 
     private:
-        friend class _ShaderStage<StageSelector>;
+        friend class ShaderStage<StageSelector>;
 
-        struct _CBRec
+        struct CBRec
         {
             UINT slot;
             UINT byteSize;
-            _ConstantBufferObjectBase<StageSelector> *obj;
+            ConstantBufferObjectBase<StageSelector> *obj;
         };
-        using CBTable = std::map<std::string, _CBRec>;
+        using CBTable = std::map<std::string, CBRec>;
         
-        _ConstantBufferManager(const CBTable &src)
+        ConstantBufferManager(const CBTable &src)
             : CBs_(src)
         {
 

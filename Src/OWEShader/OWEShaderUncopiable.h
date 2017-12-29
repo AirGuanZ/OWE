@@ -6,14 +6,14 @@ Created by AirGuanZ
 #ifndef __OWESHADER_UNCOPIABLE_H__
 #define __OWESHADER_UNCOPIABLE_H__
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
-    class _Uncopiable
+    class Uncopiable
     {
     public:
-        _Uncopiable(void) = default;
-        _Uncopiable(const _Uncopiable &) = delete;
-        _Uncopiable operator=(const _Uncopiable &) = delete;
+        Uncopiable(void) = default;
+        Uncopiable(const Uncopiable &) = delete;
+        Uncopiable operator=(const Uncopiable &) = delete;
     };
 }
 

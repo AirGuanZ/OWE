@@ -18,13 +18,13 @@ Created by AirGuanZ
 #include "OWEShaderSampler.h"
 #include "OWEShaderResource.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
     template<ShaderStageSelector>
-    class _ShaderStageSpec;
+    class ShaderStageSpec;
 
     template<>
-    class _ShaderStageSpec<SS_VS>
+    class ShaderStageSpec<SS_VS>
     {
     public:
         using D3DShaderType = ID3D11VertexShader;
@@ -74,7 +74,7 @@ namespace _OWEShaderAux
     };
 
     template<>
-    class _ShaderStageSpec<SS_GS>
+    class ShaderStageSpec<SS_GS>
     {
     public:
         using D3DShaderType = ID3D11GeometryShader;
@@ -124,7 +124,7 @@ namespace _OWEShaderAux
     };
 
     template<>
-    class _ShaderStageSpec<SS_PS>
+    class ShaderStageSpec<SS_PS>
     {
     public:
         using D3DShaderType = ID3D11PixelShader;
@@ -174,14 +174,14 @@ namespace _OWEShaderAux
     };
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderStage : public _Uncopiable
+    class ShaderStage : public Uncopiable
     {
     public:
-        using StageSpec = _ShaderStageSpec<StageSelector>;
+        using StageSpec = ShaderStageSpec<StageSelector>;
 
         static constexpr ShaderStageSelector Stage = StageSelector;
 
-        _ShaderStage(ID3D11Device *dev, const std::string &src,
+        ShaderStage(ID3D11Device *dev, const std::string &src,
                      const std::string &target = StageSpec::DefaultCompileTarget(),
                      const std::string &entry = "main")
         {
@@ -203,7 +203,7 @@ namespace _OWEShaderAux
             InitializeShaderRecords();
         }
 
-        _ShaderStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
+        ShaderStage(ID3D11Device *dev, ID3D10Blob *shaderByteCode)
             : shaderByteCode_(shaderByteCode)
         {
             assert(dev != nullptr && shaderByteCode != nullptr);
@@ -221,7 +221,7 @@ namespace _OWEShaderAux
             InitializeShaderRecords();
         }
 
-        ~_ShaderStage(void)
+        ~ShaderStage(void)
         {
             ReleaseCOMObjects(shader_, shaderByteCode_);
         }
@@ -238,19 +238,19 @@ namespace _OWEShaderAux
             StageSpec::BindShader(DC, nullptr);
         }
 
-        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void) const
+        ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void) const
         {
-            return new _ConstantBufferManager<StageSelector>(emptyCBRec_);
+            return new ConstantBufferManager<StageSelector>(emptyCBRec_);
         }
 
-        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void) const
+        ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void) const
         {
-            return new _ShaderResourceManager<StageSelector>(emptySRRec_);
+            return new ShaderResourceManager<StageSelector>(emptySRRec_);
         }
 
-        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void) const
+        ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void) const
         {
-            return new _ShaderSamplerManager<StageSelector>(emptySSRec_);
+            return new ShaderSamplerManager<StageSelector>(emptySSRec_);
         }
 
         size_t GetConstantBufferCount(void) const
@@ -283,13 +283,13 @@ namespace _OWEShaderAux
     private:
         void InitializeShaderRecords(void)
         {
-            ID3D11ShaderReflection *ref = _GetShaderReflection(shaderByteCode_->GetBufferPointer(),
+            ID3D11ShaderReflection *ref = GetShaderReflection(shaderByteCode_->GetBufferPointer(),
                                                                shaderByteCode_->GetBufferSize());
             if(!ref)
                 throw OWEShaderError("Failed to initialize shader reflection");
 
-            std::map<std::string, _CBInfo> CBInfos;
-            _GetConstantBuffers(ref, &CBInfos);
+            std::map<std::string, CBInfo> CBInfos;
+            GetConstantBuffers(ref, &CBInfos);
             for(auto &it : CBInfos)
                 emptyCBRec_[it.first] = { it.second.slot, it.second.byteSize, nullptr };
             CBInfos.clear();
@@ -300,14 +300,14 @@ namespace _OWEShaderAux
                 return name.substr(0, name.find('['));
             };
 
-            std::map<std::string, _SRInfo> SRInfos;
-            _GetShaderResources(ref, &SRInfos);
+            std::map<std::string, SRInfo> SRInfos;
+            GetShaderResources(ref, &SRInfos);
             for(auto &it : SRInfos)
                 emptySRRec_[delLexArr(it.first)] = { it.second.slot, it.second.cnt, nullptr };
             SRInfos.clear();
 
             std::map<std::string, UINT> SSamInfos;
-            _GetShaderSamplers(ref, &SSamInfos);
+            GetShaderSamplers(ref, &SSamInfos);
             for(auto &it : SSamInfos)
                 emptySSRec_[it.first] = { it.second, nullptr };
             SSamInfos.clear();
@@ -319,9 +319,9 @@ namespace _OWEShaderAux
         typename StageSpec::D3DShaderType *shader_;
         ID3D10Blob *shaderByteCode_;
 
-        std::map<std::string, typename _ConstantBufferManager<StageSelector>::_CBRec> emptyCBRec_;
-        std::map<std::string, typename _ShaderResourceManager<StageSelector>::_SRRec> emptySRRec_;
-        std::map<std::string, typename _ShaderSamplerManager<StageSelector>::_SSRec> emptySSRec_;
+        std::map<std::string, typename ConstantBufferManager<StageSelector>::CBRec> emptyCBRec_;
+        std::map<std::string, typename ShaderResourceManager<StageSelector>::_SRRec> emptySRRec_;
+        std::map<std::string, typename ShaderSamplerManager<StageSelector>::_SSRec> emptySSRec_;
     };
 }
 

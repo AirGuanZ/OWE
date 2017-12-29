@@ -14,29 +14,29 @@ Created by AirGuanZ
 #include "OWEShaderStage.h"
 #include "OWEShaderUniforms.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
     template<typename Func, typename Tu, size_t FI>
-    inline void _DoForTupleElements(Func func, Tu &tu, std::index_sequence<FI>)
+    inline void DoForTupleElementsAux(Func func, Tu &tu, std::index_sequence<FI>)
     {
         func(std::get<FI>(tu));
     }
 
     template<typename Func, typename Tu, size_t FI, size_t...OI>
-    inline void _DoForTupleElements(Func func, Tu &tu, std::index_sequence<FI, OI...>)
+    inline void DoForTupleElementsAux(Func func, Tu &tu, std::index_sequence<FI, OI...>)
     {
         func(std::get<FI>(tu));
-        _DoForTupleElements<Func, Tu, OI...>(func, tu, std::index_sequence<OI...>());
+        DoForTupleElementsAux<Func, Tu, OI...>(func, tu, std::index_sequence<OI...>());
     }
 
     template<typename Func, typename Tu>
     inline void DoForTupleElements(Func func, Tu &tu)
     {
-        _DoForTupleElements<Func, Tu>(func, tu, std::make_index_sequence<std::tuple_size<Tu>::value>());
+        DoForTupleElementsAux<Func, Tu>(func, tu, std::make_index_sequence<std::tuple_size<Tu>::value>());
     }
 
     template<int v>
-    inline constexpr int _FindInNumListAux(void)
+    inline constexpr int FindInNumListAux(void)
     {
         return v < 0 ? v : (v + 1);
     }
@@ -50,7 +50,7 @@ namespace _OWEShaderAux
     template<typename NumType, NumType Dst, NumType First, NumType...Others>
     inline constexpr int FindInNumList(void)
     {
-        return Dst == First ? 0 : _FindInNumListAux<FindInNumList<NumType, Dst, Others...>()>();
+        return Dst == First ? 0 : FindInNumListAux<FindInNumList<NumType, Dst, Others...>()>();
     }
 
     template<typename NumType>
@@ -65,7 +65,7 @@ namespace _OWEShaderAux
         return (FindInNumList<NumType, First, Others...>() >= 0) || IsRepeated<NumType, Others...>();
     }
 
-    struct _ShaderStagePtrInitializer
+    struct ShaderStagePtrInitializer
     {
         template<typename T>
         void operator()(T *&ptr)
@@ -74,7 +74,7 @@ namespace _OWEShaderAux
         }
     };
 
-    struct _ShaderStageDeleter
+    struct ShaderStageDeleter
     {
         template<typename T>
         void operator()(T *&ptr)
@@ -83,7 +83,7 @@ namespace _OWEShaderAux
         }
     };
 
-    struct _ShaderStageBinder
+    struct ShaderStageBinder
     {
         template<typename T>
         void operator()(T *pStage)
@@ -94,18 +94,18 @@ namespace _OWEShaderAux
         ID3D11DeviceContext *DC_;
     };
 
-    struct _ShaderStageAvailableRec
+    struct ShaderStageAvailableRec
     {
         template<typename T>
         void operator()(const T *ptr)
         {
-            available = available && (ptr != nullptr);
+            *available = *available && (ptr != nullptr);
         }
 
-        bool available = true;
+        bool *available;
     };
 
-    struct _ShaderStageUnbinder
+    struct ShaderStageUnbinder
     {
         template<typename T>
         void operator()(T *pStage)
@@ -117,39 +117,39 @@ namespace _OWEShaderAux
     };
 
     template<typename TStages, size_t...I>
-    inline auto _CreateShaderUniformManagerAux(const TStages &stages, std::index_sequence<I...>)
+    inline auto CreateShaderUniformManagerAux(const TStages &stages, std::index_sequence<I...>)
     {
-        return new _ShaderUniformManager<std::remove_pointer_t<std::tuple_element_t<I, TStages>>::Stage...>
+        return new ShaderUniformManager<std::remove_pointer_t<std::tuple_element_t<I, TStages>>::Stage...>
                         ((*std::get<I>(stages))...);
     }
 
     template<ShaderStageSelector...StageSelectors>
-    class _Shader
+    class Shader
     {
     public:
-        _Shader(void)
+        Shader(void)
         {
             static_assert((IsRepeated<ShaderStageSelector, StageSelectors...>() == false), "Shader stage repeated");
             static_assert((FindInNumList<ShaderStageSelector, SS_VS, StageSelectors...>() != -1), "Vertex shader not found");
             static_assert((FindInNumList<ShaderStageSelector, SS_PS, StageSelectors...>() != -1), "Pixel shader not found");
 
-            _ShaderStagePtrInitializer setter;
+            ShaderStagePtrInitializer setter;
             DoForTupleElements(setter, stages_);
         }
 
-        ~_Shader(void)
+        ~Shader(void)
         {
             Destroy();
         }
 
         template<ShaderStageSelector StageSelector>
         void InitStage(ID3D11Device *dev, const std::string &src,
-                       const std::string &target = _ShaderStage<StageSelector>::StageSpec::DefaultCompileTarget(),
+                       const std::string &target = ShaderStage<StageSelector>::StageSpec::DefaultCompileTarget(),
                        const std::string &entry = "main")
         {
             auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
             SafeDeleteObjects(pStage);
-            pStage = new _ShaderStage<StageSelector>(dev, src, target, entry);
+            pStage = new ShaderStage<StageSelector>(dev, src, target, entry);
         }
 
         template<ShaderStageSelector StageSelector>
@@ -157,51 +157,52 @@ namespace _OWEShaderAux
         {
             auto &pStage = std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
             SafeDeleteObjects(pStage);
-            pStage = new _ShaderStage<StageSelector>(dev, shaderByteCode);
+            pStage = new ShaderStage<StageSelector>(dev, shaderByteCode);
         }
 
         void Destroy(void)
         {
-            _ShaderStageDeleter deleter;
+            ShaderStageDeleter deleter;
             DoForTupleElements(deleter, stages_);
         }
 
         bool IsAllStagesAvailable(void) const
         {
-            _ShaderStageAvailableRec rec;
+            bool available = true;
+            ShaderStageAvailableRec rec = { &available };
             DoForTupleElements(rec, stages_);
-            return rec.available;
+            return available;
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderStage<StageSelector> *GetStage(void)
+        ShaderStage<StageSelector> *GetStage(void)
         {
             return std::get<FindInNumList<ShaderStageSelector, StageSelector, StageSelectors...>()>(stages_);
         }
 
         template<ShaderStageSelector StageSelector>
-        _ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void)
+        ConstantBufferManager<StageSelector> *CreateConstantBufferManager(void)
         {
             return GetStage<StageSelector>()->CreateConstantBufferManager();
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void)
+        ShaderResourceManager<StageSelector> *CreateShaderResourceManager(void)
         {
             return GetStage<StageSelector>()->CreateShaderResourceManager();
         }
 
         template<ShaderStageSelector StageSelector>
-        _ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void)
+        ShaderSamplerManager<StageSelector> *CreateShaderSamplerManager(void)
         {
             return GetStage<StageSelector>()->CreateShaderSamplerManager();
         }
 
-        _ShaderUniformManager<StageSelectors...> *CreateUniformManager(void)
+        ShaderUniformManager<StageSelectors...> *CreateUniformManager(void)
         {
-            return _CreateShaderUniformManagerAux(stages_,
+            return CreateShaderUniformManagerAux(stages_,
                 std::make_index_sequence<std::tuple_size_v<
-                    std::tuple<_ShaderStage<StageSelectors>*...>>>());
+                    std::tuple<ShaderStage<StageSelectors>*...>>>());
         }
 
         const void *GetShaderByteCodeWithInputSignature(void)
@@ -216,54 +217,54 @@ namespace _OWEShaderAux
 
         void Bind(ID3D11DeviceContext *DC)
         {
-            _ShaderStageBinder binder = { DC };
+            ShaderStageBinder binder = { DC };
             DoForTupleElements(binder, stages_);
         }
 
         void Unbind(ID3D11DeviceContext *DC)
         {
-            _ShaderStageUnbinder unbinder = { DC };
+            ShaderStageUnbinder unbinder = { DC };
             DoForTupleElements(unbinder, stages_);
         }
 
     private:
-        std::tuple<_ShaderStage<StageSelectors>*...> stages_;
+        std::tuple<ShaderStage<StageSelectors>*...> stages_;
     };
 }
 
 namespace OWE
 {
-    using Error = _OWEShaderAux::OWEShaderError;
+    using Error = OWEShaderAux::OWEShaderError;
 
-    using ShaderStageSelector = _OWEShaderAux::ShaderStageSelector;
+    using ShaderStageSelector = OWEShaderAux::ShaderStageSelector;
 
     template<ShaderStageSelector StageSelector, typename BufferType, bool Dynamic = true>
-    using ConstantBufferObject = _OWEShaderAux::_ConstantBufferObject<BufferType, StageSelector, Dynamic>;
+    using ConstantBufferObject = OWEShaderAux::ConstantBufferObject<BufferType, StageSelector, Dynamic>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderResourceObject = _OWEShaderAux::_ShaderResourceObject<StageSelector>;
+    using ShaderResourceObject = OWEShaderAux::ShaderResourceObject<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderSamplerObject = _OWEShaderAux::_ShaderSamplerObject<StageSelector>;
+    using ShaderSamplerObject = OWEShaderAux::ShaderSamplerObject<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ConstantBufferManager = _OWEShaderAux::_ConstantBufferManager<StageSelector>;
+    using ConstantBufferManager = OWEShaderAux::ConstantBufferManager<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderResourceManager = _OWEShaderAux::_ShaderResourceManager<StageSelector>;
+    using ShaderResourceManager = OWEShaderAux::ShaderResourceManager<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderSamplerManager = _OWEShaderAux::_ShaderSamplerManager<StageSelector>;
+    using ShaderSamplerManager = OWEShaderAux::ShaderSamplerManager<StageSelector>;
 
     template<ShaderStageSelector StageSelector>
-    using ShaderStage = _OWEShaderAux::_ShaderStage<StageSelector>;
+    using ShaderStage = OWEShaderAux::ShaderStage<StageSelector>;
 
     template<ShaderStageSelector...StageSelectors>
-    using Shader = _OWEShaderAux::_Shader<StageSelectors...>;
+    using Shader = OWEShaderAux::Shader<StageSelectors...>;
 }
 
-using _OWEShaderAux::SS_VS;
-using _OWEShaderAux::SS_GS;
-using _OWEShaderAux::SS_PS;
+using OWEShaderAux::SS_VS;
+using OWEShaderAux::SS_GS;
+using OWEShaderAux::SS_PS;
 
 #endif //__OWESHADER_H__

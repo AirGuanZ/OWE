@@ -59,8 +59,8 @@ namespace Test_NormalMap
 
             //============ Shader ============
 
-            shader_.InitStage<SS_VS>(D3D_, _ReadFile("Data\\Test_NormalMap\\test_vs.hlsl"));
-            shader_.InitStage<SS_PS>(D3D_, _ReadFile("Data\\Test_NormalMap\\test_ps.hlsl"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_NormalMap\\test_vs.hlsl"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_NormalMap\\test_ps.hlsl"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -69,13 +69,13 @@ namespace Test_NormalMap
             D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[] =
             {
                 { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-                    _MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                    MemOffset(&Vertex::pos), D3D11_INPUT_PER_VERTEX_DATA, 0 },
                 { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
-                    _MemOffset(&Vertex::uv), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                    MemOffset(&Vertex::uv), D3D11_INPUT_PER_VERTEX_DATA, 0 },
                 { "AXIS_U", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-                    _MemOffset(&Vertex::axisU), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+                    MemOffset(&Vertex::axisU), D3D11_INPUT_PER_VERTEX_DATA, 0 },
                 { "AXIS_V", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-                    _MemOffset(&Vertex::axisV), D3D11_INPUT_PER_VERTEX_DATA, 0 }
+                    MemOffset(&Vertex::axisV), D3D11_INPUT_PER_VERTEX_DATA, 0 }
             };
 
             hr = D3D_->CreateInputLayout(
@@ -101,7 +101,7 @@ namespace Test_NormalMap
             D3D11_BUFFER_DESC vtxBufDesc;
             vtxBufDesc.ByteWidth = sizeof(vtxBufData);
             vtxBufDesc.Usage = D3D11_USAGE_IMMUTABLE;
-            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
             vtxBufDesc.StructureByteStride = 0;
@@ -141,7 +141,7 @@ namespace Test_NormalMap
 
         void DestroyScene(void)
         {
-            using namespace _OWEShaderAux;
+            using namespace OWEShaderAux;
 
             ReleaseCOMObjects(vtxBuf_, inputLayout_);
             ReleaseCOMObjects(normalMap_, normalMapView_);

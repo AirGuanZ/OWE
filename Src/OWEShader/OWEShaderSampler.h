@@ -13,19 +13,19 @@ Created by AirGuanZ
 #include "OWEShaderReleaseCOMObjects.h"
 #include "OWEShaderUncopiable.h"
 
-namespace _OWEShaderAux
+namespace OWEShaderAux
 {
     template<ShaderStageSelector StageSelector>
-    class _ShaderSamplerObject;
+    class ShaderSamplerObject;
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderStage;
+    class ShaderStage;
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderSamplerManager;
+    class ShaderSamplerManager;
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderSamplerObject : public _Uncopiable
+    class ShaderSamplerObject : public Uncopiable
     {
     public:
         void SetSampler(ID3D11SamplerState *sampler)
@@ -39,26 +39,26 @@ namespace _OWEShaderAux
         void Bind(ID3D11DeviceContext *DC)
         {
             assert(DC != nullptr);
-            _BindShaderSampler<StageSelector>(DC, slot_, sampler_);
+            BindShaderSampler<StageSelector>(DC, slot_, sampler_);
         }
 
         void Unbind(ID3D11DeviceContext *DC)
         {
             assert(DC != nullptr);
-            _BindShaderSampler<StageSelector>(DC, slot_, nullptr);
+            BindShaderSampler<StageSelector>(DC, slot_, nullptr);
         }
 
     private:
-        friend class _ShaderSamplerManager<StageSelector>;
+        friend class ShaderSamplerManager<StageSelector>;
 
-        _ShaderSamplerObject(UINT slot, ID3D11SamplerState *sampler = nullptr)
+        ShaderSamplerObject(UINT slot, ID3D11SamplerState *sampler = nullptr)
             : slot_(slot), sampler_(sampler)
         {
             if(sampler)
                 sampler->AddRef();
         }
 
-        ~_ShaderSamplerObject(void)
+        ~ShaderSamplerObject(void)
         {
             ReleaseCOMObjects(sampler_);
         }
@@ -69,12 +69,12 @@ namespace _OWEShaderAux
     };
 
     template<ShaderStageSelector StageSelector>
-    class _ShaderSamplerManager : public _Uncopiable
+    class ShaderSamplerManager : public Uncopiable
     {
     public:
-        using SSObj = _ShaderSamplerObject<StageSelector>;
+        using SSObj = ShaderSamplerObject<StageSelector>;
 
-        ~_ShaderSamplerManager(void)
+        ~ShaderSamplerManager(void)
         {
             for(auto it : SSs_)
             {
@@ -122,18 +122,18 @@ namespace _OWEShaderAux
         }
 
     private:
-        friend class _ShaderStage<StageSelector>;
+        friend class ShaderStage<StageSelector>;
         struct _SSRec
         {
             UINT slot;
             SSObj *obj;
         };
 
-        _ShaderSamplerManager(const std::map<std::string, _SSRec> &src)
+        ShaderSamplerManager(const std::map<std::string, _SSRec> &src)
             : SSs_(src)
         {
             for(auto &it : SSs_)
-                it.second.obj = new _ShaderSamplerObject<StageSelector>(it.second.slot);
+                it.second.obj = new ShaderSamplerObject<StageSelector>(it.second.slot);
         }
 
     private:

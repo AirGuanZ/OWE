@@ -3,8 +3,8 @@ Filename: Test_BasicShader.h
 Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_BASIC_SHADER_H__
-#define __TEST_BASIC_SHADER_H__
+#ifndef __TEST_BASICShader_H__
+#define __TEST_BASICShader_H__
 
 #include <iostream>
 #include <d3d11.h>
@@ -89,7 +89,7 @@ namespace Test_BasicShader
             };
 
             D3D11_BUFFER_DESC vtxBufDesc;
-            vtxBufDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+            vtxBufDesc.BindFlags = D3D11Bind_VERTEX_BUFFER;
             vtxBufDesc.ByteWidth = sizeof(vtxBufData);
             vtxBufDesc.CPUAccessFlags = 0;
             vtxBufDesc.MiscFlags = 0;
@@ -121,7 +121,7 @@ namespace Test_BasicShader
 
         void DestroyScene(void)
         {
-            using namespace _OWEShaderAux;
+            using namespace OWEShaderAux;
             ReleaseCOMObjects(inputLayout_, vtxBuf_);
             shader_.Destroy();
             SafeDeleteObjects(VSCBs_);
@@ -178,4 +178,4 @@ namespace Test_BasicShader
     };
 }
 
-#endif //__TEST_BASIC_SHADER_H__
+#endif //__TEST_BASICShader_H__

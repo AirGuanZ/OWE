@@ -117,9 +117,6 @@
     <ClInclude Include="..\Src\Test\Test_GeometryShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\Test_ShadowMap.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Src\Test\Main.cpp">

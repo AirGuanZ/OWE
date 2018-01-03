@@ -1,10 +1,10 @@
 /*================================================================
-Filename: Test_HeightMap.h
+Filename: Sample_HeightMap.h
 Date: 2017.12.19
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_HEIGHT_MAP_H__
-#define __TEST_HEIGHT_MAP_H__
+#ifndef __SAMPLE_HEIGHT_MAP_H__
+#define __SAMPLE_HEIGHT_MAP_H__
 
 #include <fstream>
 #include <string>
@@ -14,14 +14,14 @@ Created by AirGuanZ
 #include <SimpleMath.h>
 #include <OWEShader.h>
 
-#include "TestApp.h"
+#include "SampleApp.h"
 
-namespace Test_HeightMap
+namespace Sample_HeightMap
 {
     using namespace DirectX::SimpleMath;
     using namespace OWE;
 
-    class App : public TestApp
+    class App : public SampleApp
     {
         struct Vertex
         {
@@ -60,8 +60,8 @@ namespace Test_HeightMap
 
             //============= Shader =============
             
-            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_HeightMap\\test.vs"));
-            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_HeightMap\\test.ps"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Sample_HeightMap\\test.vs"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Sample_HeightMap\\test.ps"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -140,9 +140,9 @@ namespace Test_HeightMap
             //============= Textures =============
 
             if(FAILED(DirectX::CreateDDSTextureFromFile(
-                    D3D_, L"Data\\Test_HeightMap\\tex.dds", &tex_, &texView_)) ||
+                    D3D_, L"Data\\Sample_HeightMap\\tex.dds", &tex_, &texView_)) ||
                FAILED(DirectX::CreateDDSTextureFromFile(
-                    D3D_, L"Data\\Test_HeightMap\\heightMap.dds", &heightMap_, &heightMapView_)))
+                    D3D_, L"Data\\Sample_HeightMap\\heightMap.dds", &heightMap_, &heightMapView_)))
                 throw Error("Failed to load textures from file");
 
             //============= Sampler State =============
@@ -260,4 +260,4 @@ namespace Test_HeightMap
     };
 }
 
-#endif //__TEST_HEIGHT_MAP_H__
+#endif //__SAMPLE_HEIGHT_MAP_H__

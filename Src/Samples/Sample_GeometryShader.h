@@ -1,23 +1,23 @@
 /*================================================================
-Filename: Test_GeometryShader.h
+Filename: Sample_GeometryShader.h
 Date: 2017.12.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_GEOMETRYShader_H__
-#define __TEST_GEOMETRYShader_H__
+#ifndef __SAMPLE_GEOMETRYShader_H__
+#define __SAMPLE_GEOMETRYShader_H__
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
 
 #include <OWEShader.h>
-#include "TestApp.h"
+#include "SampleApp.h"
 
-namespace Test_GeometryShader
+namespace Sample_GeometryShader
 {
     using namespace OWE;
     using namespace DirectX::SimpleMath;
 
-    class App : public TestApp
+    class App : public SampleApp
     {
         struct Vertex
         {
@@ -44,9 +44,9 @@ namespace Test_GeometryShader
 
             //============ Shader ============
 
-            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_GeometryShader\\vs.hlsl"));
-            shader_.InitStage<SS_GS>(D3D_, ReadFile("Data\\Test_GeometryShader\\gs.hlsl"));
-            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_GeometryShader\\ps.hlsl"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Sample_GeometryShader\\vs.hlsl"));
+            shader_.InitStage<SS_GS>(D3D_, ReadFile("Data\\Sample_GeometryShader\\gs.hlsl"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Sample_GeometryShader\\ps.hlsl"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -171,4 +171,4 @@ namespace Test_GeometryShader
     };
 }
 
-#endif //__TEST_GEOMETRYShader_H__
+#endif //__SAMPLE_GEOMETRYShader_H__

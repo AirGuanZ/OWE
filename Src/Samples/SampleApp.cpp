@@ -1,5 +1,5 @@
 /*================================================================
-Filename: TestApp.cpp
+Filename: SampleApp.cpp
 Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/
@@ -8,7 +8,7 @@ Created by AirGuanZ
 #include <stdexcept>
 #include <OWEShader.h>
 
-#include "TestApp.h"
+#include "SampleApp.h"
 
 constexpr UINT CLIENT_WIDTH = 480;
 constexpr UINT CLIENT_HEIGHT = 480;
@@ -24,7 +24,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-bool TestApp::InitD3DContext(void)
+bool SampleApp::InitD3DContext(void)
 {
     //=================´´½¨äÖÈ¾´°¿Ú=================
 
@@ -174,7 +174,7 @@ bool TestApp::InitD3DContext(void)
     return true;
 }
 
-void TestApp::DestroyD3DContext(void)
+void SampleApp::DestroyD3DContext(void)
 {
     using namespace OWEShaderAux;
 
@@ -189,7 +189,7 @@ void TestApp::DestroyD3DContext(void)
     }
 }
 
-std::string TestApp::ReadFile(const std::string &filename)
+std::string SampleApp::ReadFile(const std::string &filename)
 {
     std::ifstream fin(filename, std::ifstream::in);
     if(!fin)

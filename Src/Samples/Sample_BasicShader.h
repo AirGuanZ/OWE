@@ -1,10 +1,10 @@
 /*================================================================
-Filename: Test_BasicShader.h
+Filename: Sample_BasicShader.h
 Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_BASICShader_H__
-#define __TEST_BASICShader_H__
+#ifndef __SAMPLE_BASICShader_H__
+#define __SAMPLE_BASICShader_H__
 
 #include <iostream>
 #include <d3d11.h>
@@ -12,11 +12,11 @@ Created by AirGuanZ
 
 #include <OWEShader.h>
 
-#include "TestApp.h"
+#include "SampleApp.h"
 
-namespace Test_BasicShader
+namespace Sample_BasicShader
 {
-    class App : public TestApp
+    class App : public SampleApp
     {
         ID3D11InputLayout *inputLayout_ = nullptr;
         ID3D11Buffer *vtxBuf_ = nullptr;
@@ -41,7 +41,7 @@ namespace Test_BasicShader
             ID3D10Blob *shaderByteCode = nullptr;
             ID3D10Blob *shaderErr = nullptr;
             hr = D3DCompileFromFile(
-                L"Data\\Test_BasicShader\\test.vs",
+                L"Data\\Sample_BasicShader\\test.vs",
                 nullptr, nullptr, "main",
                 "vs_5_0", 0, 0, &shaderByteCode, &shaderErr);
             if(FAILED(hr))
@@ -60,7 +60,7 @@ namespace Test_BasicShader
 
             shaderErr = nullptr;
             hr = D3DCompileFromFile(
-                L"Data\\Test_BasicShader\\test.ps",
+                L"Data\\Sample_BasicShader\\test.ps",
                 nullptr, nullptr, "main",
                 "ps_5_0", 0, 0, &shaderByteCode, &shaderErr);
             if(FAILED(hr))
@@ -178,4 +178,4 @@ namespace Test_BasicShader
     };
 }
 
-#endif //__TEST_BASICShader_H__
+#endif //__SAMPLE_BASICShader_H__

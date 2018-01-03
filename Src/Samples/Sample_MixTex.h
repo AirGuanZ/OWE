@@ -1,10 +1,10 @@
 /*================================================================
-Filename: Test_MixTex.h
+Filename: Sample_MixTex.h
 Date: 2017.12.11
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_MIX_TEX_H__
-#define __TEST_MIX_TEX_H__
+#ifndef __SAMPLE_MIX_TEX_H__
+#define __SAMPLE_MIX_TEX_H__
 
 #include <fstream>
 #include <string>
@@ -13,11 +13,11 @@ Created by AirGuanZ
 #include <SimpleMath.h>
 #include <OWEShader.h>
 
-#include "TestApp.h"
+#include "SampleApp.h"
 
-namespace Test_MixTex
+namespace Sample_MixTex
 {
-    class App : public TestApp
+    class App : public SampleApp
     {
         ID3D11InputLayout *inputLayout_ = nullptr;
         ID3D11Buffer *vtxBuf_ = nullptr;
@@ -49,8 +49,8 @@ namespace Test_MixTex
 
             try
             {
-                shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_MixTex\\test.vs"));
-                shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_MixTex\\test.ps"));
+                shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Sample_MixTex\\test.vs"));
+                shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Sample_MixTex\\test.ps"));
             }
             catch(const OWE::Error &err)
             {
@@ -104,9 +104,9 @@ namespace Test_MixTex
             //=============Textures=============
 
             if(FAILED(DirectX::CreateDDSTextureFromFile(
-                D3D_, L"Data\\Test_MixTex\\tex1.dds", &tex1_, &tex1View_)) ||
+                D3D_, L"Data\\Sample_MixTex\\tex1.dds", &tex1_, &tex1View_)) ||
                 FAILED(DirectX::CreateDDSTextureFromFile(
-                    D3D_, L"Data\\Test_MixTex\\tex2.dds", &tex2_, &tex2View_)))
+                    D3D_, L"Data\\Sample_MixTex\\tex2.dds", &tex2_, &tex2View_)))
                 return false;
 
             //=============Sampler state=============
@@ -193,4 +193,4 @@ namespace Test_MixTex
     };
 }
 
-#endif //__TEST_MIX_TEX_H__
+#endif //__SAMPLE_MIX_TEX_H__

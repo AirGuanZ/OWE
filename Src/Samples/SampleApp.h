@@ -1,15 +1,17 @@
 /*================================================================
-Filename: TestApp.h
+Filename: SampleApp.h
 Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_APP_H__
-#define __TEST_APP_H__
+#ifndef __SAMPLE_APP_H__
+#define __SAMPLE_APP_H__
+
+#include <string>
 
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-class TestApp
+class SampleApp
 {
 protected:
     HINSTANCE hInstance_ = NULL;
@@ -37,4 +39,4 @@ protected:
     }
 };
 
-#endif //__TEST_APP_H__
+#endif //__SAMPLE_APP_H__

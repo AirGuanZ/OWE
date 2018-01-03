@@ -39,19 +39,6 @@
     <Image Include="Data\Test_TextureCube\tex.dds" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Src\Test\TestApp.h" />
-    <ClInclude Include="..\Src\Test\Test_BasicShader.h" />
-    <ClInclude Include="..\Src\Test\Test_GeometryShader.h" />
-    <ClInclude Include="..\Src\Test\Test_HeightMap.h" />
-    <ClInclude Include="..\Src\Test\Test_MixTex.h" />
-    <ClInclude Include="..\Src\Test\Test_NormalMap.h" />
-    <ClInclude Include="..\Src\Test\Test_TextureCube.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Src\Test\Main.cpp" />
-    <ClCompile Include="..\Src\Test\TestApp.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Data\Test_NormalMap\test_ps.hlsl">
       <FileType>Document</FileType>
     </None>
@@ -70,12 +57,26 @@
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Src\Samples\SampleApp.h" />
+    <ClInclude Include="..\Src\Samples\Sample_BasicShader.h" />
+    <ClInclude Include="..\Src\Samples\Sample_GeometryShader.h" />
+    <ClInclude Include="..\Src\Samples\Sample_HeightMap.h" />
+    <ClInclude Include="..\Src\Samples\Sample_MixTex.h" />
+    <ClInclude Include="..\Src\Samples\Sample_NormalMap.h" />
+    <ClInclude Include="..\Src\Samples\Sample_TextureCube.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Src\Samples\Main.cpp" />
+    <ClCompile Include="..\Src\Samples\SampleApp.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{C7064CFF-2EE1-483A-8E65-6CB5A33DB201}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <ProjectName>Samples</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -1,10 +1,10 @@
 /*================================================================
-Filename: Test_TextureCube
+Filename: Sample_TextureCube
 Date: 2017.12.12
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_TEXTURE_CUBE_H__
-#define __TEST_TEXTURE_CUBE_H__
+#ifndef __SAMPLE_TEXTURE_CUBE_H__
+#define __SAMPLE_TEXTURE_CUBE_H__
 
 #include <fstream>
 #include <iterator>
@@ -14,11 +14,11 @@ Created by AirGuanZ
 #include <OWEShader.h>
 #include <SimpleMath.h>
 
-#include "TestApp.h"
+#include "SampleApp.h"
 
-namespace Test_TextureCube
+namespace Sample_TextureCube
 {
-    class App : public TestApp
+    class App : public SampleApp
     {
         struct Vertex
         {
@@ -53,8 +53,8 @@ namespace Test_TextureCube
 
             //=============Shader=============
 
-            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_TextureCube\\test.vs"));
-            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_TextureCube\\test.ps"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Sample_TextureCube\\test.vs"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Sample_TextureCube\\test.ps"));
 
             VSCBs_ = shader_.CreateConstantBufferManager<SS_VS>();
             PSSRs_ = shader_.CreateShaderResourceManager<SS_PS>();
@@ -142,7 +142,7 @@ namespace Test_TextureCube
             //=============Texture=============
 
             if(FAILED(DirectX::CreateDDSTextureFromFile(
-                D3D_, L"Data\\Test_TextureCube\\tex.dds",
+                D3D_, L"Data\\Sample_TextureCube\\tex.dds",
                 &tex_, &texView_)))
                 return false;
 
@@ -254,4 +254,4 @@ namespace Test_TextureCube
     };
 }
 
-#endif //__TEST_TEXTURE_CUBE_H__
+#endif //__SAMPLE_TEXTURE_CUBE_H__

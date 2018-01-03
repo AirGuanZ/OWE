@@ -96,33 +96,33 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Src\Test\Test_BasicShader.h">
+    <ClInclude Include="..\Src\Samples\Sample_BasicShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\Test_HeightMap.h">
+    <ClInclude Include="..\Src\Samples\Sample_GeometryShader.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\Test_MixTex.h">
+    <ClInclude Include="..\Src\Samples\Sample_HeightMap.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\Test_TextureCube.h">
+    <ClInclude Include="..\Src\Samples\Sample_MixTex.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\TestApp.h">
+    <ClInclude Include="..\Src\Samples\Sample_NormalMap.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\Test_NormalMap.h">
+    <ClInclude Include="..\Src\Samples\Sample_TextureCube.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Src\Test\Test_GeometryShader.h">
+    <ClInclude Include="..\Src\Samples\SampleApp.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Src\Test\Main.cpp">
+    <ClCompile Include="..\Src\Samples\Main.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\Src\Test\TestApp.cpp">
+    <ClCompile Include="..\Src\Samples\SampleApp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

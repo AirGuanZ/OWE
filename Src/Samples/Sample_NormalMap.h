@@ -1,23 +1,23 @@
 /*================================================================
-Filename: Test_NormalMap.h
+Filename: Sample_NormalMap.h
 Date: 2017.12.22
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_NORMAL_MAP_H__
-#define __TEST_NORMAL_MAP_H__
+#ifndef __SAMPLE_NORMAL_MAP_H__
+#define __SAMPLE_NORMAL_MAP_H__
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
 
 #include <OWEShader.h>
-#include "TestApp.h"
+#include "SampleApp.h"
 
-namespace Test_NormalMap
+namespace Sample_NormalMap
 {
     using namespace OWE;
     using namespace DirectX::SimpleMath;
 
-    class App : public TestApp
+    class App : public SampleApp
     {
         struct Vertex
         {
@@ -59,8 +59,8 @@ namespace Test_NormalMap
 
             //============ Shader ============
 
-            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Test_NormalMap\\test_vs.hlsl"));
-            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Test_NormalMap\\test_ps.hlsl"));
+            shader_.InitStage<SS_VS>(D3D_, ReadFile("Data\\Sample_NormalMap\\test_vs.hlsl"));
+            shader_.InitStage<SS_PS>(D3D_, ReadFile("Data\\Sample_NormalMap\\test_ps.hlsl"));
 
             uniforms_ = shader_.CreateUniformManager();
 
@@ -115,9 +115,9 @@ namespace Test_NormalMap
             //============= Textures =============
 
             if(FAILED(DirectX::CreateDDSTextureFromFile(
-                    D3D_, L"Data\\Test_NormalMap\\tex.dds", &tex_, &texView_)) ||
+                    D3D_, L"Data\\Sample_NormalMap\\tex.dds", &tex_, &texView_)) ||
                FAILED(DirectX::CreateDDSTextureFromFile(
-                    D3D_, L"Data\\Test_NormalMap\\normalMap.dds", &normalMap_, &normalMapView_)))
+                    D3D_, L"Data\\Sample_NormalMap\\normalMap.dds", &normalMap_, &normalMapView_)))
                 throw Error("Failed to load textures from file");
 
             //============= Sampler State =============
@@ -232,4 +232,4 @@ namespace Test_NormalMap
     };
 }
 
-#endif //__TEST_NORMAL_MAP_H__
+#endif //__SAMPLE_NORMAL_MAP_H__

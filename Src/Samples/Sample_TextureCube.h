@@ -11,7 +11,7 @@ Created by AirGuanZ
 #include <string>
 
 #include <DDSTextureLoader.h>
-#include <OWEShader.h>
+#include <OWEShader.hpp>
 #include <SimpleMath.h>
 
 #include "SampleApp.h"

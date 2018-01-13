@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Inc\OWEShader.h" />
+    <ClInclude Include="..\Inc\OWEShader.hpp" />
     <ClInclude Include="..\Src\OWEShader\OWEShader.h" />
     <ClInclude Include="..\Src\OWEShader\OWEShaderConstantBuffer.h" />
     <ClInclude Include="..\Src\OWEShader\OWEShaderFatalError.h" />

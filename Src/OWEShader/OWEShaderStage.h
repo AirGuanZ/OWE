@@ -3,8 +3,8 @@ Filename: OWEShaderStage.h
 Date: 2017.11.26
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_STAGE_H__
-#define __OWESHADER_STAGE_H__
+#ifndef OWESHADER_STAGE_H
+#define OWESHADER_STAGE_H
 
 #include <cassert>
 #include <d3d11.h>
@@ -330,4 +330,4 @@ namespace OWEShaderAux
     };
 }
 
-#endif //__OWESHADER_STAGE_H__
+#endif //OWESHADER_STAGE_H

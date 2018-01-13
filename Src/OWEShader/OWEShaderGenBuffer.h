@@ -3,8 +3,8 @@ Filename: OWEShaderGenBuffer.h
 Date: 2017.11.23
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_GEN_BUFFER_H__
-#define __OWESHADER_GEN_BUFFER_H__
+#ifndef OWESHADER_GEN_BUFFER_H
+#define OWESHADER_GEN_BUFFER_H
 
 #include <cassert>
 #include <d3d11.h>
@@ -40,4 +40,4 @@ namespace OWEShaderAux
     }
 }
 
-#endif //__OWESHADER_GEN_BUFFER_H__
+#endif //OWESHADER_GEN_BUFFER_H

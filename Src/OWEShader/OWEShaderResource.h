@@ -3,8 +3,8 @@ Filename: OWEShaderResource.h
 Date: 2017.11.24
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_RESOURCE_H__
-#define __OWESHADER_RESOURCE_H__
+#ifndef OWESHADER_RESOURCE_H
+#define OWESHADER_RESOURCE_H
 
 #include <map>
 
@@ -180,4 +180,4 @@ namespace OWEShaderAux
     };
 }
 
-#endif //__OWESHADER_RESOURCE_H__
+#endif //OWESHADER_RESOURCE_H

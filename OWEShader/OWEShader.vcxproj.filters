@@ -45,7 +45,7 @@
     <ClInclude Include="..\Src\OWEShader\OWEShaderUniforms.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\OWEShader.h">
+    <ClInclude Include="..\Inc\OWEShader.hpp">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>

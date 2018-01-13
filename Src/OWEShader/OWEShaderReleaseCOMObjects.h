@@ -3,8 +3,8 @@ Filename: OWEShaderReleaseCOMObjects.h
 Date: 2017.12.6
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_RELEASE_COM_OBJECTS_H__
-#define __OWESHADER_RELEASE_COM_OBJECTS_H__
+#ifndef OWESHADER_RELEASE_COM_OBJECTS_H
+#define OWESHADER_RELEASE_COM_OBJECTS_H
 
 namespace OWEShaderAux
 {
@@ -43,4 +43,4 @@ namespace OWEShaderAux
     }
 }
 
-#endif //__OWESHADER_RELEASE_COM_OBJECTS_H__
+#endif //OWESHADER_RELEASE_COM_OBJECTS_H

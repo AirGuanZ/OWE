@@ -6,7 +6,7 @@ Created by AirGuanZ
 #include <fstream>
 #include <iterator>
 #include <stdexcept>
-#include <OWEShader.h>
+#include <OWEShader.hpp>
 
 #include "SampleApp.h"
 

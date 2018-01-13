@@ -3,8 +3,8 @@ Filename: OWEShaderUncopiable.h
 Date: 2017.11.24
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_UNCOPIABLE_H__
-#define __OWESHADER_UNCOPIABLE_H__
+#ifndef OWESHADER_UNCOPIABLE_H
+#define OWESHADER_UNCOPIABLE_H
 
 namespace OWEShaderAux
 {
@@ -17,4 +17,4 @@ namespace OWEShaderAux
     };
 }
 
-#endif //__OWESHADER_UNCOPIABLE_H__
+#endif //OWESHADER_UNCOPIABLE_H

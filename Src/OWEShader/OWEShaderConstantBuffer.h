@@ -3,8 +3,8 @@ Filename: OWEShaderConstantBuffer.h
 Date: 2017.11.23
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_CONSTANT_BUFFER_H__
-#define __OWESHADER_CONSTANT_BUFFER_H__
+#ifndef OWESHADER_CONSTANT_BUFFER_H
+#define OWESHADER_CONSTANT_BUFFER_H
 
 #include <cstring>
 #include <map>
@@ -269,4 +269,4 @@ namespace OWEShaderAux
     };
 }
 
-#endif //__OWESHADER_CONSTANT_BUFFER_H__
+#endif //OWESHADER_CONSTANT_BUFFER_H

@@ -3,8 +3,8 @@ Filename: OWEShaderReflection.h
 Date: 2017.11.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_REFLECTION_H__
-#define __OWESHADER_REFLECTION_H__
+#ifndef OWESHADER_REFLECTION_H
+#define OWESHADER_REFLECTION_H
 
 #include <cassert>
 #include <cstring>
@@ -102,4 +102,4 @@ namespace OWEShaderAux
     }
 }
 
-#endif //__OWESHADER_REFLECTION_H__
+#endif //OWESHADER_REFLECTION_H

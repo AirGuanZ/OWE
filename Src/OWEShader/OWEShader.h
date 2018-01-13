@@ -3,8 +3,8 @@ Filename: OWEShader.h
 Date: 2017.12.6
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_H__
-#define __OWESHADER_H__
+#ifndef OWESHADER_H
+#define OWESHADER_H
 
 #include <tuple>
 #include <utility>
@@ -288,4 +288,4 @@ using OWEShaderAux::SS_VS;
 using OWEShaderAux::SS_GS;
 using OWEShaderAux::SS_PS;
 
-#endif //__OWESHADER_H__
+#endif //OWESHADER_H

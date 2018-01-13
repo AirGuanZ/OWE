@@ -3,8 +3,8 @@ Filename: OWEShaderObjectBinding.h
 Date: 2017.11.23
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_OBJECTBindING_H__
-#define __OWESHADER_OBJECTBindING_H__
+#ifndef OWESHADER_OBJECTBindING_H
+#define OWESHADER_OBJECTBindING_H
 
 #include <cassert>
 #include <d3d11.h>
@@ -115,4 +115,4 @@ namespace OWEShaderAux
     }
 }
 
-#endif //__OWESHADER_OBJECTBindING_H__
+#endif //OWESHADER_OBJECTBindING_H

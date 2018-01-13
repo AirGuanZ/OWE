@@ -3,8 +3,8 @@ Filename: OWEShaderSampler.h
 Date: 2017.11.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_SAMPLER_H__
-#define __OWESHADER_SAMPLER_H__
+#ifndef OWESHADER_SAMPLER_H
+#define OWESHADER_SAMPLER_H
 
 #include <map>
 
@@ -148,4 +148,4 @@ namespace OWEShaderAux
     };
 }
 
-#endif //__OWESHADER_SAMPLER_H__
+#endif //OWESHADER_SAMPLER_H

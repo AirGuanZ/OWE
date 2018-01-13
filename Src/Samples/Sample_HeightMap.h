@@ -12,7 +12,7 @@ Created by AirGuanZ
 #include <d3d11.h>
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
-#include <OWEShader.h>
+#include <OWEShader.hpp>
 
 #include "SampleApp.h"
 

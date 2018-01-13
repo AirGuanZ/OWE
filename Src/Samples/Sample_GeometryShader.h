@@ -9,7 +9,7 @@ Created by AirGuanZ
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
 
-#include <OWEShader.h>
+#include <OWEShader.hpp>
 #include "SampleApp.h"
 
 namespace Sample_GeometryShader

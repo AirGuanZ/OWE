@@ -3,8 +3,8 @@ Filename: OWEShaderUniforms.h
 Date: 2017.12.18
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_UNIFORMS_H__
-#define __OWESHADER_UNIFORMS_H__
+#ifndef OWESHADER_UNIFORMS_H
+#define OWESHADER_UNIFORMS_H
 
 #include <cassert>
 
@@ -192,4 +192,4 @@ namespace OWE
     using ShaderUniforms = OWEShaderAux::ShaderUniformManager<StageSelectors...>;
 }
 
-#endif //__OWESHADER_UNIFORMS_H__
+#endif //OWESHADER_UNIFORMS_H

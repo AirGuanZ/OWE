@@ -3,8 +3,8 @@ Filename: OWEShaderFatalError.h
 Date: 2017.11.24
 Created by AirGuanZ
 ================================================================*/
-#ifndef __OWESHADER_FATAL_ERROR_H__
-#define __OWESHADER_FATAL_ERROR_H__
+#ifndef OWESHADER_FATAL_ERROR_H
+#define OWESHADER_FATAL_ERROR_H
 
 #include <stdexcept>
 #include <string>
@@ -33,4 +33,4 @@ namespace OWEShaderAux
     };
 }
 
-#endif //__OWESHADER_FATAL_ERROR_H__
+#endif //OWESHADER_FATAL_ERROR_H

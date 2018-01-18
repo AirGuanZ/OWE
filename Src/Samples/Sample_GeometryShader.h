@@ -3,8 +3,8 @@ Filename: Sample_GeometryShader.h
 Date: 2017.12.25
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_GEOMETRYShader_H__
-#define __SAMPLE_GEOMETRYShader_H__
+#ifndef SAMPLE_GEOMETRYShader_H
+#define SAMPLE_GEOMETRYShader_H
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
@@ -171,4 +171,4 @@ namespace Sample_GeometryShader
     };
 }
 
-#endif //__SAMPLE_GEOMETRYShader_H__
+#endif //SAMPLE_GEOMETRYShader_H

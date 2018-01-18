@@ -3,8 +3,8 @@ Filename: Sample_MixTex.h
 Date: 2017.12.11
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_MIX_TEX_H__
-#define __SAMPLE_MIX_TEX_H__
+#ifndef SAMPLE_MIX_TEX_H
+#define SAMPLE_MIX_TEX_H
 
 #include <fstream>
 #include <string>
@@ -193,4 +193,4 @@ namespace Sample_MixTex
     };
 }
 
-#endif //__SAMPLE_MIX_TEX_H__
+#endif //SAMPLE_MIX_TEX_H

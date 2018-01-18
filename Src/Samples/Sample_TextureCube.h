@@ -3,8 +3,8 @@ Filename: Sample_TextureCube
 Date: 2017.12.12
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_TEXTURE_CUBE_H__
-#define __SAMPLE_TEXTURE_CUBE_H__
+#ifndef SAMPLE_TEXTURE_CUBE_H
+#define SAMPLE_TEXTURE_CUBE_H
 
 #include <fstream>
 #include <iterator>
@@ -254,4 +254,4 @@ namespace Sample_TextureCube
     };
 }
 
-#endif //__SAMPLE_TEXTURE_CUBE_H__
+#endif //SAMPLE_TEXTURE_CUBE_H

@@ -3,8 +3,8 @@ Filename: Sample_HeightMap.h
 Date: 2017.12.19
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_HEIGHT_MAP_H__
-#define __SAMPLE_HEIGHT_MAP_H__
+#ifndef SAMPLE_HEIGHT_MAP_H
+#define SAMPLE_HEIGHT_MAP_H
 
 #include <fstream>
 #include <string>
@@ -260,4 +260,4 @@ namespace Sample_HeightMap
     };
 }
 
-#endif //__SAMPLE_HEIGHT_MAP_H__
+#endif //SAMPLE_HEIGHT_MAP_H

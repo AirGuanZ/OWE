@@ -3,8 +3,8 @@ Filename: SampleApp.h
 Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_APP_H__
-#define __SAMPLE_APP_H__
+#ifndef SAMPLE_APP_H
+#define SAMPLE_APP_H
 
 #include <string>
 
@@ -39,4 +39,4 @@ protected:
     }
 };
 
-#endif //__SAMPLE_APP_H__
+#endif //SAMPLE_APP_H

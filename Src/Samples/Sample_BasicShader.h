@@ -3,8 +3,8 @@ Filename: Sample_BasicShader.h
 Date: 2017.12.10
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_BASICShader_H__
-#define __SAMPLE_BASICShader_H__
+#ifndef SAMPLE_BASICShader_H
+#define SAMPLE_BASICShader_H
 
 #include <iostream>
 #include <d3d11.h>
@@ -178,4 +178,4 @@ namespace Sample_BasicShader
     };
 }
 
-#endif //__SAMPLE_BASICShader_H__
+#endif //SAMPLE_BASICShader_H

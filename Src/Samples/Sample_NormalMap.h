@@ -3,8 +3,8 @@ Filename: Sample_NormalMap.h
 Date: 2017.12.22
 Created by AirGuanZ
 ================================================================*/
-#ifndef __SAMPLE_NORMAL_MAP_H__
-#define __SAMPLE_NORMAL_MAP_H__
+#ifndef SAMPLE_NORMAL_MAP_H
+#define SAMPLE_NORMAL_MAP_H
 
 #include <DDSTextureLoader.h>
 #include <SimpleMath.h>
@@ -232,4 +232,4 @@ namespace Sample_NormalMap
     };
 }
 
-#endif //__SAMPLE_NORMAL_MAP_H__
+#endif //SAMPLE_NORMAL_MAP_H

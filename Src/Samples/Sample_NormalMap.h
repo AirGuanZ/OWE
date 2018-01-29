@@ -223,7 +223,6 @@ namespace Sample_NormalMap
                     TranslateMessage(&msg);
                     DispatchMessage(&msg);
                 }
-
             }
             
             DestroyScene();

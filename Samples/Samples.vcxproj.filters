@@ -4,15 +4,6 @@
     <Filter Include="Data">
       <UniqueIdentifier>{2c65ade6-2d75-4bec-9ec5-65106156745e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data\Test_BasicShader">
-      <UniqueIdentifier>{a92cc96a-20b2-4c79-be2e-efae8afb9873}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Test_MixTex">
-      <UniqueIdentifier>{a2b42709-a5da-44df-9893-a04afe885bad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Test_TextureCube">
-      <UniqueIdentifier>{ca01da64-84c0-4ac6-9181-688533715bd7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headers">
       <UniqueIdentifier>{6421be69-6464-4d8b-a6d0-62be82cda5c8}</UniqueIdentifier>
     </Filter>
@@ -20,80 +11,51 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Data\Test_NormalMap">
-      <UniqueIdentifier>{534421f2-055f-4651-97f7-c6181eed971c}</UniqueIdentifier>
+    <Filter Include="Data\Sample_BasicShader">
+      <UniqueIdentifier>{a92cc96a-20b2-4c79-be2e-efae8afb9873}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Data\Test_HeightMap">
-      <UniqueIdentifier>{6c9cc757-89d4-48ae-8ae0-b1cf598070cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Data\Test_GeometryShader">
+    <Filter Include="Data\Sample_GeometryShader">
       <UniqueIdentifier>{e2a05c95-f67f-4d4d-b620-f72d6fa76fa0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data\Sample_HeightMap">
+      <UniqueIdentifier>{6c9cc757-89d4-48ae-8ae0-b1cf598070cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Sample_MixTex">
+      <UniqueIdentifier>{a2b42709-a5da-44df-9893-a04afe885bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Sample_NormalMap">
+      <UniqueIdentifier>{534421f2-055f-4651-97f7-c6181eed971c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data\Sample_TextureCube">
+      <UniqueIdentifier>{ca01da64-84c0-4ac6-9181-688533715bd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Test_BasicShader\test.ps">
-      <Filter>Data\Test_BasicShader</Filter>
-    </None>
-    <None Include="Data\Test_BasicShader\test.vs">
-      <Filter>Data\Test_BasicShader</Filter>
-    </None>
-    <None Include="Data\Test_MixTex\test.ps">
-      <Filter>Data\Test_MixTex</Filter>
-    </None>
-    <None Include="Data\Test_MixTex\test.vs">
-      <Filter>Data\Test_MixTex</Filter>
-    </None>
-    <None Include="Data\Test_TextureCube\test.ps">
-      <Filter>Data\Test_TextureCube</Filter>
-    </None>
-    <None Include="Data\Test_TextureCube\test.vs">
-      <Filter>Data\Test_TextureCube</Filter>
-    </None>
     <None Include="packages.config" />
-    <None Include="Data\Test_HeightMap\test.ps">
-      <Filter>Data\Test_HeightMap</Filter>
+    <None Include="Data\Sample_BasicShader\test.ps">
+      <Filter>Data\Sample_BasicShader</Filter>
     </None>
-    <None Include="Data\Test_HeightMap\test.vs">
-      <Filter>Data\Test_HeightMap</Filter>
+    <None Include="Data\Sample_BasicShader\test.vs">
+      <Filter>Data\Sample_BasicShader</Filter>
     </None>
-    <None Include="Data\Test_NormalMap\test_vs.hlsl">
-      <Filter>Data\Test_NormalMap</Filter>
+    <None Include="Data\Sample_HeightMap\test.ps">
+      <Filter>Data\Sample_HeightMap</Filter>
     </None>
-    <None Include="Data\Test_NormalMap\test_ps.hlsl">
-      <Filter>Data\Test_NormalMap</Filter>
+    <None Include="Data\Sample_HeightMap\test.vs">
+      <Filter>Data\Sample_HeightMap</Filter>
     </None>
-    <None Include="Data\Test_GeometryShader\gs.hlsl">
-      <Filter>Data\Test_GeometryShader</Filter>
+    <None Include="Data\Sample_MixTex\test.ps">
+      <Filter>Data\Sample_MixTex</Filter>
     </None>
-    <None Include="Data\Test_GeometryShader\ps.hlsl">
-      <Filter>Data\Test_GeometryShader</Filter>
+    <None Include="Data\Sample_MixTex\test.vs">
+      <Filter>Data\Sample_MixTex</Filter>
     </None>
-    <None Include="Data\Test_GeometryShader\vs.hlsl">
-      <Filter>Data\Test_GeometryShader</Filter>
+    <None Include="Data\Sample_TextureCube\test.ps">
+      <Filter>Data\Sample_TextureCube</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Data\Test_MixTex\tex1.dds">
-      <Filter>Data\Test_MixTex</Filter>
-    </Image>
-    <Image Include="Data\Test_MixTex\tex2.dds">
-      <Filter>Data\Test_MixTex</Filter>
-    </Image>
-    <Image Include="Data\Test_TextureCube\tex.dds">
-      <Filter>Data\Test_TextureCube</Filter>
-    </Image>
-    <Image Include="Data\Test_HeightMap\heightMap.dds">
-      <Filter>Data\Test_HeightMap</Filter>
-    </Image>
-    <Image Include="Data\Test_HeightMap\tex.dds">
-      <Filter>Data\Test_HeightMap</Filter>
-    </Image>
-    <Image Include="Data\Test_NormalMap\normalMap.dds">
-      <Filter>Data\Test_NormalMap</Filter>
-    </Image>
-    <Image Include="Data\Test_NormalMap\tex.dds">
-      <Filter>Data\Test_NormalMap</Filter>
-    </Image>
+    <None Include="Data\Sample_TextureCube\test.vs">
+      <Filter>Data\Sample_TextureCube</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Samples\Sample_BasicShader.h">
@@ -125,5 +87,45 @@
     <ClCompile Include="..\Src\Samples\SampleApp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Data\Sample_GeometryShader\gs.hlsl">
+      <Filter>Data\Sample_GeometryShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Data\Sample_GeometryShader\ps.hlsl">
+      <Filter>Data\Sample_GeometryShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Data\Sample_GeometryShader\vs.hlsl">
+      <Filter>Data\Sample_GeometryShader</Filter>
+    </FxCompile>
+    <FxCompile Include="Data\Sample_NormalMap\test_ps.hlsl">
+      <Filter>Data\Sample_NormalMap</Filter>
+    </FxCompile>
+    <FxCompile Include="Data\Sample_NormalMap\test_vs.hlsl">
+      <Filter>Data\Sample_NormalMap</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Sample_HeightMap\heightMap.dds">
+      <Filter>Data\Sample_HeightMap</Filter>
+    </Image>
+    <Image Include="Data\Sample_HeightMap\tex.dds">
+      <Filter>Data\Sample_HeightMap</Filter>
+    </Image>
+    <Image Include="Data\Sample_MixTex\tex1.dds">
+      <Filter>Data\Sample_MixTex</Filter>
+    </Image>
+    <Image Include="Data\Sample_MixTex\tex2.dds">
+      <Filter>Data\Sample_MixTex</Filter>
+    </Image>
+    <Image Include="Data\Sample_NormalMap\normalMap.dds">
+      <Filter>Data\Sample_NormalMap</Filter>
+    </Image>
+    <Image Include="Data\Sample_NormalMap\tex.dds">
+      <Filter>Data\Sample_NormalMap</Filter>
+    </Image>
+    <Image Include="Data\Sample_TextureCube\tex.dds">
+      <Filter>Data\Sample_TextureCube</Filter>
+    </Image>
   </ItemGroup>
 </Project>

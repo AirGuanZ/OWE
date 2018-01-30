@@ -19,43 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Test_BasicShader\test.ps" />
-    <None Include="Data\Test_BasicShader\test.vs" />
-    <None Include="Data\Test_HeightMap\test.ps" />
-    <None Include="Data\Test_HeightMap\test.vs" />
-    <None Include="Data\Test_MixTex\test.ps" />
-    <None Include="Data\Test_MixTex\test.vs" />
-    <None Include="Data\Test_TextureCube\test.ps" />
-    <None Include="Data\Test_TextureCube\test.vs" />
+    <None Include="Data\Sample_BasicShader\test.ps" />
+    <None Include="Data\Sample_BasicShader\test.vs" />
+    <None Include="Data\Sample_HeightMap\test.ps" />
+    <None Include="Data\Sample_HeightMap\test.vs" />
+    <None Include="Data\Sample_MixTex\test.ps" />
+    <None Include="Data\Sample_MixTex\test.vs" />
+    <None Include="Data\Sample_TextureCube\test.ps" />
+    <None Include="Data\Sample_TextureCube\test.vs" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Data\Test_HeightMap\heightMap.dds" />
-    <Image Include="Data\Test_HeightMap\tex.dds" />
-    <Image Include="Data\Test_MixTex\tex1.dds" />
-    <Image Include="Data\Test_MixTex\tex2.dds" />
-    <Image Include="Data\Test_NormalMap\normalMap.dds" />
-    <Image Include="Data\Test_NormalMap\tex.dds" />
-    <Image Include="Data\Test_TextureCube\tex.dds" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data\Test_NormalMap\test_ps.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Data\Test_NormalMap\test_vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data\Test_GeometryShader\gs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Data\Test_GeometryShader\ps.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Data\Test_GeometryShader\vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Samples\SampleApp.h" />
@@ -69,6 +41,22 @@
   <ItemGroup>
     <ClCompile Include="..\Src\Samples\Main.cpp" />
     <ClCompile Include="..\Src\Samples\SampleApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Data\Sample_GeometryShader\gs.hlsl" />
+    <FxCompile Include="Data\Sample_GeometryShader\ps.hlsl" />
+    <FxCompile Include="Data\Sample_GeometryShader\vs.hlsl" />
+    <FxCompile Include="Data\Sample_NormalMap\test_ps.hlsl" />
+    <FxCompile Include="Data\Sample_NormalMap\test_vs.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Sample_HeightMap\heightMap.dds" />
+    <Image Include="Data\Sample_HeightMap\tex.dds" />
+    <Image Include="Data\Sample_MixTex\tex1.dds" />
+    <Image Include="Data\Sample_MixTex\tex2.dds" />
+    <Image Include="Data\Sample_NormalMap\normalMap.dds" />
+    <Image Include="Data\Sample_NormalMap\tex.dds" />
+    <Image Include="Data\Sample_TextureCube\tex.dds" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

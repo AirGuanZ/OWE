@@ -43,11 +43,21 @@
     <ClCompile Include="..\Src\Samples\SampleApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Data\Sample_GeometryShader\gs.hlsl" />
-    <FxCompile Include="Data\Sample_GeometryShader\ps.hlsl" />
-    <FxCompile Include="Data\Sample_GeometryShader\vs.hlsl" />
-    <FxCompile Include="Data\Sample_NormalMap\test_ps.hlsl" />
-    <FxCompile Include="Data\Sample_NormalMap\test_vs.hlsl" />
+    <None Include="Data\Sample_GeometryShader\gs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Data\Sample_GeometryShader\ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Data\Sample_GeometryShader\vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Data\Sample_NormalMap\test_ps.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Data\Sample_NormalMap\test_vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Sample_HeightMap\heightMap.dds" />

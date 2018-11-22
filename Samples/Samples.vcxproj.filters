@@ -56,6 +56,11 @@
     <None Include="Data\Sample_TextureCube\test.vs">
       <Filter>Data\Sample_TextureCube</Filter>
     </None>
+    <None Include="Data\Sample_GeometryShader\gs.hlsl" />
+    <None Include="Data\Sample_GeometryShader\ps.hlsl" />
+    <None Include="Data\Sample_GeometryShader\vs.hlsl" />
+    <None Include="Data\Sample_NormalMap\test_ps.hlsl" />
+    <None Include="Data\Sample_NormalMap\test_vs.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Samples\Sample_BasicShader.h">
@@ -87,23 +92,6 @@
     <ClCompile Include="..\Src\Samples\SampleApp.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Data\Sample_GeometryShader\gs.hlsl">
-      <Filter>Data\Sample_GeometryShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Data\Sample_GeometryShader\ps.hlsl">
-      <Filter>Data\Sample_GeometryShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Data\Sample_GeometryShader\vs.hlsl">
-      <Filter>Data\Sample_GeometryShader</Filter>
-    </FxCompile>
-    <FxCompile Include="Data\Sample_NormalMap\test_ps.hlsl">
-      <Filter>Data\Sample_NormalMap</Filter>
-    </FxCompile>
-    <FxCompile Include="Data\Sample_NormalMap\test_vs.hlsl">
-      <Filter>Data\Sample_NormalMap</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Data\Sample_HeightMap\heightMap.dds">
